@@ -1,9 +1,0 @@
-#!/bin/sh
-
-APP_JAR="AiGIS.jar"
-APP_NAME="AiGIS"
-
-# Set the working directory
-DIR=$(cd "$(dirname "$0")"; pwd)
-
-exec $DIR/jre/home/bin/java -Dapple.laf.useScreenMenuBar=true -Dcom.apple.macos.use-file-dialog-packages=true -Dcom.apple.mrj.application.apple.menu.about.name=AiGIS -Xdock:name="$APP_NAME" -Xdock:icon="$DIR/../Resources/application.icns" -Djava.library.path="$DIR/libs/mac/" -Xmx4096m -jar "$DIR/$APP_JAR" mac
