@@ -26,9 +26,9 @@ public class ButtonCellEditor extends AbstractCellEditor implements TableCellRen
 		public void actionPerformed(JTable table, int row, int column, boolean check);
 	}
 
-	public static final String NORMAL = "[BUTTON]";
-	public static final String DISABLED = "[BUTTON-D]";
-	public static final String CHECKED = "[BUTTON-C]";
+	public static final String NORMAL = "[ボタン]";
+	public static final String DISABLED = "[ボタンD]";
+	public static final String CHECKED = "[ボタンC]";
 	private final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 	private JButton renderButton = null;
 	private JCheckBox renderCheck = null;
