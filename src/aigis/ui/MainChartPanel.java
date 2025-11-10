@@ -68,7 +68,7 @@ public class MainChartPanel extends JPanel implements ChartMouseListener, Action
 	private List<String[]> xColumnsList = new ArrayList<>();
 	private List<String[]> yRowsList = new ArrayList<>();
 
-	private JButton jbuttonChart = new JButton("save chart");
+	private JButton jbuttonChart = new JButton("図表を保存");
 
 	/** 情報Window表示用のデータ */
 	class InfoValue {
@@ -229,7 +229,7 @@ public class MainChartPanel extends JPanel implements ChartMouseListener, Action
 			if (dataset == null) {
 				dataset = new TimeSeriesCollection();
 			}
-			@SuppressWarnings("deprecation")
+			@SuppressWarnings("非推奨")
 			TimeSeries series2 = new TimeSeries("", Second.class);
 			xColumns = new String[data.timeRange[polygonID].length];
 			yRows = new String[data.timeRange[polygonID].length];
@@ -333,12 +333,12 @@ public class MainChartPanel extends JPanel implements ChartMouseListener, Action
 
 			filewriter.close();
 
-			JOptionPane.showMessageDialog(this, "The chart data was saved successfully.\n'" + path + "'", "Done",
+			JOptionPane.showMessageDialog(this, "図表データが保存されました\n'" + path + "'", "完了",
 					JOptionPane.INFORMATION_MESSAGE);
 
 		} catch (Exception e) {
 			Logger.Error(e);
-			JOptionPane.showMessageDialog(this, "Failed to save the chart data. \n[" + e.getMessage() + "]", "Error",
+			JOptionPane.showMessageDialog(this, "図表データを保存できません\n[" + e.getMessage() + "]", "エラー",
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -356,7 +356,7 @@ public class MainChartPanel extends JPanel implements ChartMouseListener, Action
 		ValueAxis xAxis = plot.getDomainAxis();
 		// マウスのいる位置の一番近くにCrosshairを表示
 		EntityCollection entities = chartPanel.getChartRenderingInfo().getEntityCollection();
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("未確認")
 		Iterator<ChartEntity> iterator = entities.iterator();
 		int minDist = Integer.MAX_VALUE;
 		int mouseX = event.getTrigger().getX();
