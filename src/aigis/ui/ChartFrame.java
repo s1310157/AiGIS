@@ -8,7 +8,7 @@ import aigis.Const;
 
 public class ChartFrame {
 
-	private JFrame frame = new JFrame("AiGIS -Chart-");
+	private JFrame frame = new JFrame("AiGIS -図表-");
 	private MainChartPanel chartPanel = new MainChartPanel();
 
 	public ChartFrame() {
