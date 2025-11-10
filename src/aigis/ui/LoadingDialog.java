@@ -36,11 +36,11 @@ public class LoadingDialog extends JDialog {
 		setAlwaysOnTop(true);
 		setResizable(false);
 		setSize(300, 200);
-		infoLabel = new JLabel("loading");
+		infoLabel = new JLabel("ロード中");
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		getContentPane().add(infoLabel, BorderLayout.SOUTH);
 		{
-			JLabel loadingLabel = new JLabel(" Loading...");
+			JLabel loadingLabel = new JLabel("ロード中...");
 			loadingLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			getContentPane().add(loadingLabel, BorderLayout.CENTER);
 			loadingLabel.setIcon(new ImageIcon(LoadingDialog.class.getResource("/aigis/res/ajax-loader.gif")));
