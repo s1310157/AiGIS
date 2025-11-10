@@ -47,7 +47,7 @@ public class SettingDialog extends JDialog {
 		super(owner);
 		setModal(true);
 		setResizable(false);
-		setTitle("Settings");
+		setTitle("設定");
 		setSize(450, 277);
 		setLocationRelativeTo(owner);
 		getContentPane().setLayout(new BorderLayout());
@@ -71,13 +71,13 @@ public class SettingDialog extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton("キャンセル");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						setVisible(false);
 					}
 				});
-				cancelButton.setActionCommand("Cancel");
+				cancelButton.setActionCommand("キャンセル");
 				buttonPane.add(cancelButton);
 			}
 		}
@@ -91,7 +91,7 @@ public class SettingDialog extends JDialog {
 			gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 			panel.setLayout(gbl_panel);
 			{
-				JLabel lblDataPath = new JLabel("DefaultDataPath");
+				JLabel lblDataPath = new JLabel("既定のデータパス");
 				GridBagConstraints gbc_lblDataPath = new GridBagConstraints();
 				gbc_lblDataPath.insets = new Insets(0, 0, 5, 5);
 				gbc_lblDataPath.gridx = 1;
@@ -128,7 +128,7 @@ public class SettingDialog extends JDialog {
 				panel.add(btnDataPath, gbc_btnDataPath);
 			}
 			{
-				JLabel lblPngPath = new JLabel("SavePngPath");
+				JLabel lblPngPath = new JLabel("PNG保存先パス");
 				GridBagConstraints gbc_lblPngPath = new GridBagConstraints();
 				gbc_lblPngPath.insets = new Insets(0, 0, 5, 5);
 				gbc_lblPngPath.gridx = 1;
@@ -165,7 +165,7 @@ public class SettingDialog extends JDialog {
 				panel.add(btnPngPath, gbc_btnPngPath);
 			}
 			{
-				JLabel lblGraphPath = new JLabel("SaveGraphDataPath");
+				JLabel lblGraphPath = new JLabel("グラフデータ保存先パス");
 				GridBagConstraints gbc_lblGraphPath = new GridBagConstraints();
 				gbc_lblGraphPath.insets = new Insets(0, 0, 5, 5);
 				gbc_lblGraphPath.gridx = 1;
@@ -202,7 +202,7 @@ public class SettingDialog extends JDialog {
 				panel.add(btnGraphPath, gbc_btnGraphPath);
 			}
 			{
-				JLabel lblLookUpPath = new JLabel("LookUpTablePath");
+				JLabel lblLookUpPath = new JLabel("ルックアップテーブルのパス");
 				GridBagConstraints gbc_lblLookUpPath = new GridBagConstraints();
 				gbc_lblLookUpPath.insets = new Insets(0, 0, 0, 5);
 				gbc_lblLookUpPath.gridx = 1;
