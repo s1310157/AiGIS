@@ -62,7 +62,7 @@ public class RescaleRangeDialog extends JDialog {
 				}
 			}
 		});
-		setTitle("Rescale Range");
+		setTitle("再スケーリング範囲");
 		setResizable(false);
 		setBounds(100, 100, 370, 200);
 		getContentPane().setLayout(new BorderLayout());
@@ -75,7 +75,7 @@ public class RescaleRangeDialog extends JDialog {
 		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
-			JLabel lblMinimum = new JLabel("Minimum");
+			JLabel lblMinimum = new JLabel("最小");
 			GridBagConstraints gbc_lblMinimum = new GridBagConstraints();
 			gbc_lblMinimum.fill = GridBagConstraints.HORIZONTAL;
 			gbc_lblMinimum.insets = new Insets(0, 0, 5, 5);
@@ -97,7 +97,7 @@ public class RescaleRangeDialog extends JDialog {
 			textMinimum.setColumns(10);
 		}
 		{
-			JLabel lblMaximum = new JLabel("Maximum");
+			JLabel lblMaximum = new JLabel("最大");
 			GridBagConstraints gbc_lblMaximum = new GridBagConstraints();
 			gbc_lblMaximum.anchor = GridBagConstraints.WEST;
 			gbc_lblMaximum.insets = new Insets(0, 0, 0, 5);
@@ -125,7 +125,7 @@ public class RescaleRangeDialog extends JDialog {
 			buttonPane.setLayout(fl_buttonPane);
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton btnApply = new JButton("Apply");
+				JButton btnApply = new JButton("適用");
 				btnApply.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						applay();
@@ -134,7 +134,7 @@ public class RescaleRangeDialog extends JDialog {
 				buttonPane.add(btnApply);
 			}
 			{
-				JButton btnReset = new JButton("Reset");
+				JButton btnReset = new JButton("リセット");
 				btnReset.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if (eventListener != null) {
@@ -157,13 +157,13 @@ public class RescaleRangeDialog extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton("キャンセル");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						close();
 					}
 				});
-				cancelButton.setActionCommand("Cancel");
+				cancelButton.setActionCommand("キャンセル");
 				buttonPane.add(cancelButton);
 			}
 		}
@@ -187,7 +187,7 @@ public class RescaleRangeDialog extends JDialog {
 				eventListener.applay(dMax, dMin);
 			}
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, "Invalid data. Please input numerical value!!", "Error",
+			JOptionPane.showMessageDialog(null, "無効なデータです。数値を入力してください！！", "エラー",
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
