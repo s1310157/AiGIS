@@ -193,7 +193,7 @@ public class MainFrame extends MainFrameDesign {
 		this.getBtnCameraMove().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Logger.Debug("Move Camera:" + cameraLat.getText() + " - " + cameraLng.getText());
+					Logger.Debug("カメラを移動:" + cameraLat.getText() + " - " + cameraLng.getText());
 					float lat = Float.parseFloat(cameraLat.getText());
 					float lng = Float.parseFloat(cameraLng.getText());
 					float roll = Float.parseFloat(cameraRoll.getText());
@@ -205,7 +205,7 @@ public class MainFrame extends MainFrameDesign {
 					}
 					glPanel.repaint();
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(MainFrame.this, "Invalid data. Lat.:[-90,90], Lon.:[0,360]", "Error",
+					JOptionPane.showMessageDialog(MainFrame.this, "無効なデータです 緯度:[-90,90], 軽度:[0,360]", "",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -214,14 +214,14 @@ public class MainFrame extends MainFrameDesign {
 		this.getBtnCameraSet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Logger.Debug("Set Camera: dist:" + cameraDistance.getText() + " fov:" + cameraFov.getText());
+					Logger.Debug("カメラをセット: 距離:" + cameraDistance.getText() + " fov:" + cameraFov.getText());
 					float dist = Float.parseFloat(cameraDistance.getText());
 					float fov = Float.parseFloat(cameraFov.getText());
 					window.setCameraDistance(dist);
 					window.setFov(fov);
 					glPanel.repaint();
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(MainFrame.this, "Invalid data.", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(MainFrame.this, "無効なデータです", "エラー", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -230,13 +230,13 @@ public class MainFrame extends MainFrameDesign {
 		this.getBtnLightMove().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Logger.Debug("Move Light:" + lightLat.getText() + " - " + lightLng.getText());
+					Logger.Debug("光源を移動:" + lightLat.getText() + " - " + lightLng.getText());
 					float lat = Float.parseFloat(lightLat.getText());
 					float lng = Float.parseFloat(lightLng.getText());
 					window.moveLight(lat, lng);
 					glPanel.repaint();
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(MainFrame.this, "Invalid data. Lat.:[-90,90], Lon.:[0,360]", "Error",
+					JOptionPane.showMessageDialog(MainFrame.this, "無効なデータです 緯度:[-90,90], 軽度:[0,360]", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -271,12 +271,12 @@ public class MainFrame extends MainFrameDesign {
 		this.getBtnInfoCopy().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TableModel info = getInfoTable().getModel();
-				String out = "PolygonID : " + info.getValueAt(0, 1);
+				String out = "ポリゴンID : " + info.getValueAt(0, 1);
 				String item = (String) info.getValueAt(1, 1);
-				out += "\nLatitude : " + (item.equals("-") ? item : item + "°");
+				out += "\n緯度 : " + (item.equals("-") ? item : item + "°");
 				item = (String) info.getValueAt(2, 1);
-				out += "\nLongitude : " + (item.equals("-") ? item : item + "°");
-				out += "\nDistance : " + info.getValueAt(3, 1);
+				out += "\n経度 : " + (item.equals("-") ? item : item + "°");
+				out += "\n距離 : " + info.getValueAt(3, 1);
 				out += "\nX : " + info.getValueAt(4, 1);
 				out += "\nY : " + info.getValueAt(5, 1);
 				out += "\nZ : " + info.getValueAt(6, 1);
@@ -419,8 +419,8 @@ public class MainFrame extends MainFrameDesign {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == imageOpen || e.getSource() == MainFrame.this.getBtnAddTex()) {
 					if (!window.textures.canAddTexture()) {
-						String msg = "You can not add more textures.";
-						JOptionPane.showMessageDialog(MainFrame.this, msg, "Warning", JOptionPane.WARNING_MESSAGE);
+						String msg = "これ以上テクスチャを追加することができません";
+						JOptionPane.showMessageDialog(MainFrame.this, msg, "警告", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 					OpenImageDialog dialog = new OpenImageDialog(MainFrame.this, scene.getImageMapPath());
@@ -435,11 +435,11 @@ public class MainFrame extends MainFrameDesign {
 						texModel.fireTableDataChanged();
 					} catch (Exception ex) {
 						Logger.Error(ex);
-						String msg = "Failed to open files. \n";
+						String msg = "ファイルを開けません\n";
 						if (ex.getMessage() != null) {
 							msg += "[" + ex.getMessage() + "]";
 						}
-						JOptionPane.showMessageDialog(MainFrame.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(MainFrame.this, msg, "エラー", JOptionPane.ERROR_MESSAGE);
 
 					}
 				}
@@ -494,11 +494,11 @@ public class MainFrame extends MainFrameDesign {
 						g3dModel.fireTableDataChanged();
 					} catch (Exception ex) {
 						Logger.Error(ex);
-						String msg = "Failed to open files. \n";
+						String msg = "ファイルを開けません\n";
 						if (ex.getMessage() != null) {
 							msg += "[" + ex.getMessage() + "]";
 						}
-						JOptionPane.showMessageDialog(MainFrame.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(MainFrame.this, msg, "エラー", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				glPanel.repaint();
@@ -510,10 +510,10 @@ public class MainFrame extends MainFrameDesign {
 		JTable infoTable = this.getInfoTable();
 		// @formatter:off
 		String[][] values = { 
-				{ "PolygonID", "-" }, 
-				{ "Latitude", "-" }, 
-				{ "Longitude", "-" }, 
-				{ "Distance", "-" },
+				{ "ポリゴンID", "-" }, 
+				{ "緯度", "-" }, 
+				{ "経度", "-" }, 
+				{ "距離", "-" },
 				{ "X", "-" }, 
 				{ "Y", "-" }, 
 				{ "Z", "-" } };
@@ -523,7 +523,7 @@ public class MainFrame extends MainFrameDesign {
 
 		mapModel = new MapTableModel();
 		mapTable.setModel(mapModel);
-		ButtonCellEditor mapCellEditor = new ButtonCellEditor("Plot", new CellEventListener() {
+		ButtonCellEditor mapCellEditor = new ButtonCellEditor("プロット", new CellEventListener() {
 
 			@Override
 			public void actionPerformed(JTable table, int row, int column, boolean check) {
@@ -552,7 +552,7 @@ public class MainFrame extends MainFrameDesign {
 
 		}, false);
 
-		String[] mapHeaders = { "Name", "Value", "Plot" };
+		String[] mapHeaders = { "名前", "値", "プロット" };
 		for (int i = 0; i < mapHeaders.length; i++) {
 			TableColumn column = mapTable.getColumnModel().getColumn(i);
 			column.setHeaderValue(mapHeaders[i]);
@@ -641,7 +641,7 @@ public class MainFrame extends MainFrameDesign {
 		}, false);
 
 		// table settings
-		String[] headers = { "Name", "1", "2", "3", "4", "Frus", "", "" };
+		String[] headers = { "名前", "1", "2", "3", "4", "Frus", "", "" };
 		for (int i = 0; i < headers.length; i++) {
 			TableColumn column = texInfoTable.getColumnModel().getColumn(i);
 			column.setHeaderValue(headers[i]);
@@ -674,7 +674,7 @@ public class MainFrame extends MainFrameDesign {
 			}
 		}, true);
 
-		ButtonCellEditor genReloadCellEditor = new ButtonCellEditor("Reload", new CellEventListener() {
+		ButtonCellEditor genReloadCellEditor = new ButtonCellEditor("再読み込み", new CellEventListener() {
 			@Override
 			public void actionPerformed(JTable table, int row, int column, boolean check) {
 				try {
@@ -687,11 +687,11 @@ public class MainFrame extends MainFrameDesign {
 					glPanel.repaint();
 				} catch (Exception ex) {
 					Logger.Error(ex);
-					String msg = "Failed to open files. \n";
+					String msg = "ファイルを開けません\n";
 					if (ex.getMessage() != null) {
 						msg += "[" + ex.getMessage() + "]";
 					}
-					JOptionPane.showMessageDialog(MainFrame.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(MainFrame.this, msg, "エラー", JOptionPane.ERROR_MESSAGE);
 				}
 
 			}
@@ -703,7 +703,7 @@ public class MainFrame extends MainFrameDesign {
 		general3DTable.setModel(g3dModel);
 		general3DTable.setRowHeight(24);
 
-		String[] general3DHeaders = { "Show", "FileName", "" };
+		String[] general3DHeaders = { "表示", "ファイル名", "" };
 		for (int i = 0; i < general3DHeaders.length; i++) {
 			TableColumn column = general3DTable.getColumnModel().getColumn(i);
 			column.setHeaderValue(general3DHeaders[i]);
@@ -809,12 +809,12 @@ public class MainFrame extends MainFrameDesign {
 			window.screenshot(workingDirectory);
 		} catch (Exception e) {
 			Logger.Error(e);
-			JOptionPane.showMessageDialog(MainFrame.this, "Failed to take a snapshot. \n[" + e.getMessage() + "]",
-					"Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(MainFrame.this, "スナップショットを撮影できません\n[" + e.getMessage() + "]",
+					"エラー", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
-		JOptionPane.showMessageDialog(this, "The snapshot was saved successfully.\n'" + path + "'", "Done",
+		JOptionPane.showMessageDialog(this, "スナップショットが保存されました\n'" + path + "'", "完了",
 				JOptionPane.INFORMATION_MESSAGE);
 
 	}
@@ -951,7 +951,7 @@ public class MainFrame extends MainFrameDesign {
 									setEnabled(true);
 									dialog.setVisible(false);
 									JOptionPane.showMessageDialog(MainFrame.this,
-											"Can't load the data. \n[" + e.getMessage() + "]", "Error",
+											"データをロードできません\n[" + e.getMessage() + "]", "エラー",
 											JOptionPane.ERROR_MESSAGE);
 								}
 							});
@@ -1012,7 +1012,7 @@ public class MainFrame extends MainFrameDesign {
 									setEnabled(true);
 									dialog.setVisible(false);
 									JOptionPane.showMessageDialog(MainFrame.this,
-											"Can't load the data. \n[" + e.getMessage() + "]", "Error",
+											"データをロードできません\n[" + e.getMessage() + "]", "エラー",
 											JOptionPane.ERROR_MESSAGE);
 								}
 							});
