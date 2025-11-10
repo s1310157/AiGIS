@@ -138,7 +138,7 @@ public class CameraInfoDialog extends JDialog {
 		super(owner);
 		this.cameraInfo = cameraInfo.clone();
 		setModal(true);
-		setTitle("Camera Info");
+		setTitle("カメラの情報");
 		setBounds(100, 100, 660, 335);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -150,7 +150,7 @@ public class CameraInfoDialog extends JDialog {
 		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
-			JLabel lblPosition = new JLabel("Position");
+			JLabel lblPosition = new JLabel("位置");
 			GridBagConstraints gbc_lblPosition = new GridBagConstraints();
 			gbc_lblPosition.anchor = GridBagConstraints.EAST;
 			gbc_lblPosition.insets = new Insets(0, 0, 5, 5);
@@ -189,7 +189,7 @@ public class CameraInfoDialog extends JDialog {
 			textPositionZ.setColumns(10);
 		}
 		{
-			JLabel lblDirection = new JLabel("Direction");
+			JLabel lblDirection = new JLabel("方向");
 			GridBagConstraints gbc_lblDirection = new GridBagConstraints();
 			gbc_lblDirection.anchor = GridBagConstraints.EAST;
 			gbc_lblDirection.insets = new Insets(0, 0, 5, 5);
@@ -228,7 +228,7 @@ public class CameraInfoDialog extends JDialog {
 			textDirectionZ.setColumns(10);
 		}
 		{
-			JLabel lblUp = new JLabel("Up");
+			JLabel lblUp = new JLabel("上昇");
 			GridBagConstraints gbc_lblUp = new GridBagConstraints();
 			gbc_lblUp.anchor = GridBagConstraints.EAST;
 			gbc_lblUp.insets = new Insets(0, 0, 5, 5);
@@ -267,7 +267,7 @@ public class CameraInfoDialog extends JDialog {
 			textUpZ.setColumns(10);
 		}
 		{
-			JLabel lblFrustum1 = new JLabel("Frustum1");
+			JLabel lblFrustum1 = new JLabel("視錐台1");
 			GridBagConstraints gbc_lblFrustum1 = new GridBagConstraints();
 			gbc_lblFrustum1.anchor = GridBagConstraints.EAST;
 			gbc_lblFrustum1.insets = new Insets(0, 0, 5, 5);
@@ -306,7 +306,7 @@ public class CameraInfoDialog extends JDialog {
 			textFrustum1Z.setColumns(10);
 		}
 		{
-			JLabel lblFrustum2 = new JLabel("Frustum2");
+			JLabel lblFrustum2 = new JLabel("視錐台2");
 			GridBagConstraints gbc_lblFrustum2 = new GridBagConstraints();
 			gbc_lblFrustum2.anchor = GridBagConstraints.EAST;
 			gbc_lblFrustum2.insets = new Insets(0, 0, 5, 5);
@@ -345,7 +345,7 @@ public class CameraInfoDialog extends JDialog {
 			textFrustum2Z.setColumns(10);
 		}
 		{
-			JLabel lblFrustum3 = new JLabel("Frustum3");
+			JLabel lblFrustum3 = new JLabel("視錐台3");
 			GridBagConstraints gbc_lblFrustum3 = new GridBagConstraints();
 			gbc_lblFrustum3.anchor = GridBagConstraints.EAST;
 			gbc_lblFrustum3.insets = new Insets(0, 0, 5, 5);
@@ -384,7 +384,7 @@ public class CameraInfoDialog extends JDialog {
 			textFrustum3Z.setColumns(10);
 		}
 		{
-			JLabel lblFrustum = new JLabel("Frustum4");
+			JLabel lblFrustum = new JLabel("視錐台4");
 			GridBagConstraints gbc_lblFrustum = new GridBagConstraints();
 			gbc_lblFrustum.anchor = GridBagConstraints.EAST;
 			gbc_lblFrustum.insets = new Insets(0, 0, 0, 5);
@@ -426,7 +426,7 @@ public class CameraInfoDialog extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				btnOpen = new JButton("Open...");
+				btnOpen = new JButton("開く...");
 				btnOpen.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						FileNameExtensionFilter filter = new FileNameExtensionFilter("Info file", "info", "txt");
@@ -446,7 +446,7 @@ public class CameraInfoDialog extends JDialog {
 				buttonPane.add(btnOpen);
 			}
 			{
-				btnSave = new JButton("Save...");
+				btnSave = new JButton("保存...");
 				btnSave.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						FileNameExtensionFilter filter = new FileNameExtensionFilter("Info file", "info", "txt");
@@ -457,7 +457,7 @@ public class CameraInfoDialog extends JDialog {
 								File f = chooser.getSelectedFile();
 								if (f.exists()) {
 									int ret = JOptionPane.showConfirmDialog(self,
-											"The file exist.\nDo you want to replace it?");
+											"ファイルが存在します。\n上書きしますか？");
 									if (ret != JOptionPane.OK_OPTION) {
 										return;
 									}
@@ -469,17 +469,17 @@ public class CameraInfoDialog extends JDialog {
 								PrintWriter pw = new PrintWriter(new BufferedWriter(file));
 								String now = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now());
 								CameraInfo info = CameraInfoDialog.this.cameraInfo;
-								pw.println("START_TIME          = " + now);
-								pw.println("STOP_TIME           = " + now);
-								pw.println("SPACECRAFT_POSITION = " + toupleStr(info.position));
-								pw.println("BORESIGHT_DIRECTION = " + toupleStr(info.direction));
-								pw.println("UP_DIRECTION        = " + toupleStr(info.up));
+								pw.println("開始時間          = " + now);
+								pw.println("停止時間           = " + now);
+								pw.println("宇宙船の位置 = " + toupleStr(info.position));
+								pw.println("照準方向 = " + toupleStr(info.direction));
+								pw.println("上方向        = " + toupleStr(info.up));
 								Vector3d vec[] = info.getFrustum();
-								pw.println("FRUSTUM1            = " + toupleStr(vec[0]));
-								pw.println("FRUSTUM2            = " + toupleStr(vec[1]));
-								pw.println("FRUSTUM3            = " + toupleStr(vec[2]));
-								pw.println("FRUSTUM4            = " + toupleStr(vec[3]));
-								pw.println("SUN_POSITION_LT     = " + toupleStr(info.position));
+								pw.println("視錐台1            = " + toupleStr(vec[0]));
+								pw.println("視錐台2            = " + toupleStr(vec[1]));
+								pw.println("視錐台3            = " + toupleStr(vec[2]));
+								pw.println("視錐台4            = " + toupleStr(vec[3]));
+								pw.println("太陽の位置_左図     = " + toupleStr(info.position));
 								pw.close();
 							} catch (Exception ex) {
 								ex.printStackTrace();
@@ -509,13 +509,13 @@ public class CameraInfoDialog extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton("キャンセル");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						setVisible(false);
 					}
 				});
-				cancelButton.setActionCommand("Cancel");
+				cancelButton.setActionCommand("キャンセル");
 				buttonPane.add(cancelButton);
 			}
 		}
