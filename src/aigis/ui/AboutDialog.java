@@ -58,7 +58,7 @@ public class AboutDialog extends JDialog {
 		}
 		{
 			JLabel lblTitle = new JLabel("AiGIS");
-			lblTitle.setFont(new Font("Lucida Grande", Font.BOLD, 18));
+			lblTitle.setFont(new Font("ルシーダ・グランデ", Font.BOLD, 18));
 			lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 			contentPanel.add(lblTitle);
 		}
@@ -67,7 +67,7 @@ public class AboutDialog extends JDialog {
 			contentPanel.add(verticalGlue);
 		}
 		{
-			JLabel lblVersion = new JLabel("Version " + Const.APP_VER);
+			JLabel lblVersion = new JLabel("バージョン " + Const.APP_VER);
 			lblVersion.setAlignmentX(Component.CENTER_ALIGNMENT);
 			contentPanel.add(lblVersion);
 		}
