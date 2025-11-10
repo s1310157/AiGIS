@@ -1,0 +1,2 @@
+export PATH="/c/Program Files/Java/jdk-22/bin:$PATH"
+./make.sh
