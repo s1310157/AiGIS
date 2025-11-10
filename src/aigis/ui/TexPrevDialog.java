@@ -49,7 +49,7 @@ public class TexPrevDialog extends JDialog {
 	 */
 	public TexPrevDialog(Frame owner) {
 		super(owner);
-		setTitle("Preview");
+		setTitle("プレビュー");
 		setSize(800, 500);
 		setLocationRelativeTo(owner);
 		getContentPane().setLayout(new BorderLayout());
@@ -120,7 +120,7 @@ public class TexPrevDialog extends JDialog {
 		lblImagePrev.setIcon(icon);
 
 		if (tex.infoFile == null) {
-			textArea.setText("None");
+			textArea.setText("なし");
 			return;
 		}
 
