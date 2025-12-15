@@ -76,8 +76,17 @@ public class MainFrame extends MainFrameDesign {
 	private SettingDialog settingDialog;
 	private TreeMap<String, ChartFrame> chartFrames = new TreeMap<>();
 	private final DecimalFormat doubleFormat = new DecimalFormat("#.########");
+	private final Map<String, String> spectrumDescriptions = new HashMap<>();
+
+	 private void initSpectrumDescriptions() {
+        spectrumDescriptions.put("AMICA_Brightness","AMICAカメラによる輝度データです。\n" + "小惑星イトカワ表面の反射特性を示します。");
+		spectrumDescriptions.put("Elevation","標高データです。\n" + "基準面からの高さを表し、地形解析に用いられます。");
+		spectrumDescriptions.put("Gravitational_Potential","重力ポテンシャルデータです。\n" + "質量分布や重力場の解析に使用されます。");
+		spectrumDescriptions.put("Surface_Slope","表面傾斜角データです。\n" + "地形の急峻さを評価する指標です。");
+    }
 
 	public MainFrame() {
+		initSpectrumDescriptions();
 		// title
 		setTitle(Const.APP_NAME);
 		// icon
@@ -569,12 +578,22 @@ public class MainFrame extends MainFrameDesign {
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (!e.getValueIsAdjusting()) {
-					int row = mapTable.getSelectedRow();
-					String key = (String) mapTable.getModel().getValueAt(row, 0);
-					window.getActiveRenderer().changeSpectrum(key);
-					viewRescale.setEnabled(row > 0);
-					glPanel.repaint();
+				if (e.getValueIsAdjusting()) {
+                    return;
+                }
+                int row = mapTable.getSelectedRow();
+				 if (row < 0) {
+					return;
+				}
+				String key = (String) mapTable.getModel().getValueAt(row, 0);
+				window.getActiveRenderer().changeSpectrum(key);
+				viewRescale.setEnabled(row > 0);
+				glPanel.repaint();
+				String desc = spectrumDescriptions.get(key);
+				if (desc != null) {
+					SpectrumInfoDialog dialog = new SpectrumInfoDialog(MainFrame.this, key + " の解説", desc);
+					dialog.setLocationRelativeTo(MainFrame.this);
+					dialog.setVisible(true);
 				}
 			}
 		});
@@ -1222,6 +1241,5 @@ public class MainFrame extends MainFrameDesign {
 		public boolean isCellEditable(int row, int col) {
 			return col != 1;
 		}
-
 	}
 }
