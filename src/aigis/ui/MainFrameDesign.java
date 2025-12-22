@@ -35,6 +35,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
@@ -112,6 +115,10 @@ public class MainFrameDesign extends JFrame {
 	private JLabel lblCameraRoll;
 	private JTextField textCameraRoll;
 	private JPanel panelToolsModel;
+	private JPanel spectrumInfoPanel;
+    private JTextArea spectrumInfoText;
+	private JCheckBoxMenuItem menuSpectrumInfo;
+	private JCheckBox chkShowSpectrumDescription;
 
 	/**
 	 * Launch the application.
@@ -179,6 +186,9 @@ public class MainFrameDesign extends JFrame {
 
 		chckbxmntmShowAxis = new JCheckBoxMenuItem("軸を表示");
 		mnViewMenu.add(chckbxmntmShowAxis);
+
+		menuSpectrumInfo = new JCheckBoxMenuItem("スペクトル解説を表示", true);
+		mnViewMenu.add(menuSpectrumInfo);
 
 		mntmRescaleRange = new JMenuItem("色範囲を再スケーリング...");
 		mntmRescaleRange.setEnabled(false);
@@ -589,6 +599,21 @@ public class MainFrameDesign extends JFrame {
 		setFocusTraversalPolicy(new FocusTraversalOnArray(
 				new Component[] { lblCamera, textCameraLat, textCameraLng, textCameraRoll, btnCameraMove,
 						textCameraDistance, textFov, btnCameraSet, textLightLat, textLightLng, btnLightMove }));
+
+		spectrumInfoPanel = new JPanel(new BorderLayout());
+		spectrumInfoPanel.setBorder(BorderFactory.createTitledBorder("スペクトル解説"));
+
+		chkShowSpectrumDescription = new JCheckBox("解説を表示", true);
+        spectrumInfoPanel.add(chkShowSpectrumDescription, BorderLayout.NORTH);
+
+		spectrumInfoText = new JTextArea();
+	    spectrumInfoText.setEditable(false);
+		spectrumInfoText.setLineWrap(true);
+	    spectrumInfoText.setWrapStyleWord(true);
+		JScrollPane spectrumInfoScroll = new JScrollPane(spectrumInfoText,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		spectrumInfoPanel.add(spectrumInfoScroll, BorderLayout.CENTER);
+	    spectrumInfoPanel.setPreferredSize(new Dimension(300, 200));
+		contentPane.add(spectrumInfoPanel, BorderLayout.EAST);
 	}
 
 	protected JButton getBtnCameraMove() {
@@ -661,6 +686,10 @@ public class MainFrameDesign extends JFrame {
 
 	protected JCheckBoxMenuItem getChckbxmntmShading() {
 		return chckbxmntmShading;
+	}
+
+	protected JCheckBoxMenuItem getMenuSpectrumInfo() {
+		return menuSpectrumInfo;
 	}
 
 	protected JMenuItem getMntmReset() {
@@ -770,4 +799,17 @@ public class MainFrameDesign extends JFrame {
 	protected JPanel getPanelToolsModel() {
 		return panelToolsModel;
 	}
+
+	protected JPanel getSpectrumInfoPanel() {
+		return spectrumInfoPanel;
+	}
+
+	protected JTextArea getSpectrumInfoText() {
+		return spectrumInfoText;
+	}
+	
+	protected JCheckBox getChkShowSpectrumDescription() {
+		return chkShowSpectrumDescription;
+	}
+
 }
