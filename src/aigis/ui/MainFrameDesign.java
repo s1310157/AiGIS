@@ -45,6 +45,7 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLJPanel;
 import static aigis.i18n.I18n.t;
+import java.util.Locale;
 
 /***
  * Design of the MainFrame. Don't edit by hand. Use the SwingDesigner.
@@ -278,7 +279,7 @@ public class MainFrameDesign extends JFrame {
 		chckbxmntmShowAdditional3d = new JCheckBoxMenuItem(t("j.showadditional3d"));
 		mnAdditional3d.add(chckbxmntmShowAdditional3d);
 
-		chkShowSpectrumDescription = new JCheckBox(t("j.showspectrumdescription"));
+		chkShowSpectrumDescription = new JCheckBox(t("j.spectrum"));
 
 		mntmReloadAll = new JMenuItem(t("j.reloadall"));
 		mnAdditional3d.add(mntmReloadAll);
