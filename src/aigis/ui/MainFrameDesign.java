@@ -44,6 +44,7 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLJPanel;
+import static aigis.i18n.I18n.t;
 
 /***
  * Design of the MainFrame. Don't edit by hand. Use the SwingDesigner.
@@ -119,6 +120,8 @@ public class MainFrameDesign extends JFrame {
     private JTextArea spectrumInfoText;
 	private JCheckBoxMenuItem menuSpectrumInfo;
 	private JCheckBox chkShowSpectrumDescription;
+	private JRadioButtonMenuItem langJa;
+    private JRadioButtonMenuItem langEn;
 
 	/**
 	 * Launch the application.
@@ -145,71 +148,71 @@ public class MainFrameDesign extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
-		JMenu mnFileMenu = new JMenu("ファイル");
+		JMenu mnFileMenu = new JMenu(t("j.file"));
 		menuBar.add(mnFileMenu);
 
-		mntmOpen = new JMenuItem("開く");
+		mntmOpen = new JMenuItem(t("j.open"));
 		mnFileMenu.add(mntmOpen);
 
-		mntmSaveSS = new JMenuItem("保存");
+		mntmSaveSS = new JMenuItem(t("j.save"));
 		mnFileMenu.add(mntmSaveSS);
 
 		separator = new JSeparator();
 		mnFileMenu.add(separator);
 
-		mntmSettings = new JMenuItem("設定");
+		mntmSettings = new JMenuItem(t("j.setting"));
 		mnFileMenu.add(mntmSettings);
 
-		mntmAbout = new JMenuItem("バージョン...");
+		mntmAbout = new JMenuItem(t("j.version"));
 		mnFileMenu.add(mntmAbout);
 
-		JMenu mnViewMenu = new JMenu("表示");
+		JMenu mnViewMenu = new JMenu(t("j.view"));
 		menuBar.add(mnViewMenu);
 
-		mnProjection = new JMenu("投影");
+		mnProjection = new JMenu(t("j.projection"));
 		mnViewMenu.add(mnProjection);
 
-		chckbxmntmPerspective = new JCheckBoxMenuItem("視点");
+		chckbxmntmPerspective = new JCheckBoxMenuItem(t("j.perspective"));
 		buttonGroupProjection.add(chckbxmntmPerspective);
 		chckbxmntmPerspective.setSelected(true);
 		mnProjection.add(chckbxmntmPerspective);
 
-		chckbxmntmOrthographic = new JCheckBoxMenuItem("正射影");
+		chckbxmntmOrthographic = new JCheckBoxMenuItem(t("j.orthographic"));
 		buttonGroupProjection.add(chckbxmntmOrthographic);
 		mnProjection.add(chckbxmntmOrthographic);
 
-		chckbxmntmLatLonGrid = new JCheckBoxMenuItem("緯経線を表示");
+		chckbxmntmLatLonGrid = new JCheckBoxMenuItem(t("j.latlongrid"));
 		mnViewMenu.add(chckbxmntmLatLonGrid);
 
-		chckbxmntmColorBar = new JCheckBoxMenuItem("カラーバーを表示");
+		chckbxmntmColorBar = new JCheckBoxMenuItem(t("j.colorbar"));
 		mnViewMenu.add(chckbxmntmColorBar);
 
-		chckbxmntmShowAxis = new JCheckBoxMenuItem("軸を表示");
+		chckbxmntmShowAxis = new JCheckBoxMenuItem(t("j.showaxis"));
 		mnViewMenu.add(chckbxmntmShowAxis);
 
-		menuSpectrumInfo = new JCheckBoxMenuItem("スペクトル解説を表示", true);
+		menuSpectrumInfo = new JCheckBoxMenuItem(t("j.spectruminfo"), true);
 		mnViewMenu.add(menuSpectrumInfo);
 
-		mntmRescaleRange = new JMenuItem("色範囲を再スケーリング...");
+		mntmRescaleRange = new JMenuItem(t("j.rescalerange"));
 		mntmRescaleRange.setEnabled(false);
 		mnViewMenu.add(mntmRescaleRange);
 
-		mnLookUp = new JMenu("表を検索");
+		mnLookUp = new JMenu(t("j.lookup"));
 		mnViewMenu.add(mnLookUp);
 
-		chckbxmntmShading = new JCheckBoxMenuItem("シェーディング");
+		chckbxmntmShading = new JCheckBoxMenuItem(t("j.shading"));
 		mnViewMenu.add(chckbxmntmShading);
 
-		mntmReset = new JMenuItem("表示をリセット");
+		mntmReset = new JMenuItem(t("j.reset"));
 		mnViewMenu.add(mntmReset);
 
-		chckbxmntmFixedLight = new JCheckBoxMenuItem("光源を固定");
+		chckbxmntmFixedLight = new JCheckBoxMenuItem(t("j.fixedlight"));
 		mnViewMenu.add(chckbxmntmFixedLight);
 
-		JMenu mnMultiMenu = new JMenu("複数表示");
+		JMenu mnMultiMenu = new JMenu(t("j.multiitem"));
 		menuBar.add(mnMultiMenu);
 
-		JMenu mnDivision = new JMenu("表示数");
+		JMenu mnDivision = new JMenu(t("j.division"));
 		mnMultiMenu.add(mnDivision);
 
 		radioDivision1 = new JRadioButtonMenuItem("1");
@@ -225,44 +228,59 @@ public class MainFrameDesign extends JFrame {
 		buttonGroupDivision.add(radioDivision4);
 		mnDivision.add(radioDivision4);
 
-		chckbxmntmSyncViews = new JCheckBoxMenuItem("同期");
+		chckbxmntmSyncViews = new JCheckBoxMenuItem(t("j.syncviews"));
 		chckbxmntmSyncViews.setSelected(true);
 		mnMultiMenu.add(chckbxmntmSyncViews);
 
-		mntmSyncAllViews = new JMenuItem("全てを同期");
+		mntmSyncAllViews = new JMenuItem(t("j.syncallviews"));
 		mnMultiMenu.add(mntmSyncAllViews);
 
-		JMenu mnImageMenu = new JMenu("画像");
+		JMenu mnImageMenu = new JMenu(t("j.image"));
 		menuBar.add(mnImageMenu);
 
-		mntmOpenImage = new JMenuItem("画像を開く...");
+		mntmOpenImage = new JMenuItem(t("j.openimage"));
 		mnImageMenu.add(mntmOpenImage);
 
-		JMenu mnMapdata = new JMenu("マップデータ");
+		JMenu mnMapdata = new JMenu(t("j.mapdata"));
 		menuBar.add(mnMapdata);
 
-		JMenu mnSort = new JMenu("並び替え");
+		JMenu mnSort = new JMenu(t("j.sort"));
 		mnMapdata.add(mnSort);
 
-		chckbxmntmByName = new JCheckBoxMenuItem("名前");
+		JMenu mnLanguage = new JMenu(t("j.language"));
+		mnViewMenu.add(mnLanguage);
+
+		langJa = new JRadioButtonMenuItem("日本語");
+        langEn = new JRadioButtonMenuItem("English");
+
+		ButtonGroup langGroup = new ButtonGroup();
+        langGroup.add(langJa); 
+        langGroup.add(langEn);
+
+        mnLanguage.add(langJa);
+        mnLanguage.add(langEn);
+
+		chckbxmntmByName = new JCheckBoxMenuItem(t("j.name"));
 		buttonGroupSort.add(chckbxmntmByName);
 		chckbxmntmByName.setSelected(true);
 		mnSort.add(chckbxmntmByName);
 
-		chckbxmntmByFilename = new JCheckBoxMenuItem("ファイル名");
+		chckbxmntmByFilename = new JCheckBoxMenuItem(t("j.filename"));
 		buttonGroupSort.add(chckbxmntmByFilename);
 		mnSort.add(chckbxmntmByFilename);
 
-		mntmReload = new JMenuItem("再読み込み");
+		mntmReload = new JMenuItem(t("j.reload"));
 		mnMapdata.add(mntmReload);
 
-		mnAdditional3d = new JMenu("3Dオブジェクト");
+		mnAdditional3d = new JMenu(t("j.3dobject"));
 		menuBar.add(mnAdditional3d);
 
-		chckbxmntmShowAdditional3d = new JCheckBoxMenuItem("追加で3Dオブジェクトを表示");
+		chckbxmntmShowAdditional3d = new JCheckBoxMenuItem(t("j.showadditional3d"));
 		mnAdditional3d.add(chckbxmntmShowAdditional3d);
 
-		mntmReloadAll = new JMenuItem("全てを再読み込み");
+		chkShowSpectrumDescription = new JCheckBox(t("j.showspectrumdescription"));
+
+		mntmReloadAll = new JMenuItem(t("j.reloadall"));
 		mnAdditional3d.add(mntmReloadAll);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -277,7 +295,7 @@ public class MainFrameDesign extends JFrame {
 		JPanel panelTools = new JPanel();
 		tabbedPane.add(panelTools);
 		tabbedPane.setEnabledAt(0, true);
-		tabbedPane.setTitleAt(0, "一般");
+		tabbedPane.setTitleAt(0, t("j.general"));
 		panelTools.setLayout(new BoxLayout(panelTools, BoxLayout.Y_AXIS));
 
 		JPanel panelToolsTop = new JPanel();
@@ -296,13 +314,13 @@ public class MainFrameDesign extends JFrame {
 		horizontalGlue_4 = Box.createHorizontalGlue();
 		toolBarCamera.add(horizontalGlue_4);
 
-		lblCamera = new JLabel("カメラ");
+		lblCamera = new JLabel(t("j.camera"));
 		toolBarCamera.add(lblCamera);
 
 		horizontalGlue_5 = Box.createHorizontalGlue();
 		toolBarCamera.add(horizontalGlue_5);
 
-		btnCameraInfo = new JButton("情報");
+		btnCameraInfo = new JButton(t("j.info"));
 		toolBarCamera.add(btnCameraInfo);
 
 		JPanel panelToolsCamera = new JPanel();
@@ -311,7 +329,7 @@ public class MainFrameDesign extends JFrame {
 		gbl_panelToolsCamera.columnWeights = new double[] { 0.0, 1.0, 0.0 };
 		panelToolsCamera.setLayout(gbl_panelToolsCamera);
 
-		JLabel lblCameraLat = new JLabel("緯度");
+		JLabel lblCameraLat = new JLabel(t("j.latitude"));
 		GridBagConstraints gbc_lblCameraLat = new GridBagConstraints();
 		gbc_lblCameraLat.fill = GridBagConstraints.BOTH;
 		gbc_lblCameraLat.insets = new Insets(0, 5, 5, 5);
@@ -329,7 +347,7 @@ public class MainFrameDesign extends JFrame {
 		gbc_textCameraLat.gridy = 0;
 		panelToolsCamera.add(textCameraLat, gbc_textCameraLat);
 
-		btnCameraMove = new JButton("移動");
+		btnCameraMove = new JButton(t("j.move"));
 		GridBagConstraints gbc_btnCameraMove = new GridBagConstraints();
 		gbc_btnCameraMove.insets = new Insets(0, 0, 5, 0);
 		gbc_btnCameraMove.gridheight = 3;
@@ -338,7 +356,7 @@ public class MainFrameDesign extends JFrame {
 		gbc_btnCameraMove.gridy = 0;
 		panelToolsCamera.add(btnCameraMove, gbc_btnCameraMove);
 
-		JLabel lblCameraLng = new JLabel("経度");
+		JLabel lblCameraLng = new JLabel(t("j.longitude"));
 		GridBagConstraints gbc_lblCameraLng = new GridBagConstraints();
 		gbc_lblCameraLng.fill = GridBagConstraints.BOTH;
 		gbc_lblCameraLng.insets = new Insets(0, 5, 5, 5);
@@ -354,7 +372,7 @@ public class MainFrameDesign extends JFrame {
 		gbc_textCameraLng.gridy = 1;
 		panelToolsCamera.add(textCameraLng, gbc_textCameraLng);
 
-		lblCameraRoll = new JLabel("回転");
+		lblCameraRoll = new JLabel(t("j.rotate"));
 		GridBagConstraints gbc_lblCameraRoll = new GridBagConstraints();
 		gbc_lblCameraRoll.fill = GridBagConstraints.BOTH;
 		gbc_lblCameraRoll.insets = new Insets(0, 5, 5, 5);
@@ -379,7 +397,7 @@ public class MainFrameDesign extends JFrame {
 		gbc_separator_1.gridy = 3;
 		panelToolsCamera.add(separator_1, gbc_separator_1);
 
-		lblCameraDistance = new JLabel("距離");
+		lblCameraDistance = new JLabel(t("j.distance"));
 		GridBagConstraints gbc_lblCameraDistance = new GridBagConstraints();
 		gbc_lblCameraDistance.fill = GridBagConstraints.BOTH;
 		gbc_lblCameraDistance.anchor = GridBagConstraints.EAST;
@@ -397,7 +415,7 @@ public class MainFrameDesign extends JFrame {
 		panelToolsCamera.add(textCameraDistance, gbc_textCameraDistance);
 		textCameraDistance.setColumns(10);
 
-		btnCameraSet = new JButton("設定");
+		btnCameraSet = new JButton(t("j.setting"));
 		GridBagConstraints gbc_btnCameraSet = new GridBagConstraints();
 		gbc_btnCameraSet.fill = GridBagConstraints.BOTH;
 		gbc_btnCameraSet.gridheight = 2;
@@ -426,7 +444,7 @@ public class MainFrameDesign extends JFrame {
 		JSeparator separator_2 = new JSeparator();
 		panelToolsTop.add(separator_2);
 
-		JLabel lblLight = new JLabel("光源");
+		JLabel lblLight = new JLabel(t("j.light"));
 		panelToolsTop.add(lblLight);
 		lblLight.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -439,7 +457,7 @@ public class MainFrameDesign extends JFrame {
 		gbl_panelToolsLight.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
 		panelToolsLight.setLayout(gbl_panelToolsLight);
 
-		JLabel lblLightLat = new JLabel("緯度");
+		JLabel lblLightLat = new JLabel(t("j.latitude"));
 		GridBagConstraints gbc_lblLightLat = new GridBagConstraints();
 		gbc_lblLightLat.fill = GridBagConstraints.BOTH;
 		gbc_lblLightLat.insets = new Insets(0, 5, 0, 5);
@@ -456,7 +474,7 @@ public class MainFrameDesign extends JFrame {
 		gbc_textLightLat.gridy = 0;
 		panelToolsLight.add(textLightLat, gbc_textLightLat);
 
-		btnLightMove = new JButton("移動");
+		btnLightMove = new JButton(t("j.move"));
 		GridBagConstraints gbc_btnLightMove = new GridBagConstraints();
 		gbc_btnLightMove.fill = GridBagConstraints.BOTH;
 		gbc_btnLightMove.gridheight = 2;
@@ -464,7 +482,7 @@ public class MainFrameDesign extends JFrame {
 		gbc_btnLightMove.gridy = 0;
 		panelToolsLight.add(btnLightMove, gbc_btnLightMove);
 
-		JLabel lblLightLng = new JLabel("経度");
+		JLabel lblLightLng = new JLabel(t("j.longitude"));
 		GridBagConstraints gbc_lblLightLng = new GridBagConstraints();
 		gbc_lblLightLng.fill = GridBagConstraints.BOTH;
 		gbc_lblLightLng.insets = new Insets(0, 5, 0, 5);
@@ -483,7 +501,7 @@ public class MainFrameDesign extends JFrame {
 		JSeparator separator_3 = new JSeparator();
 		panelToolsTop.add(separator_3);
 
-		JLabel lblModel = new JLabel("モデル");
+		JLabel lblModel = new JLabel(t("j.model"));
 		panelToolsTop.add(lblModel);
 		lblModel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
@@ -507,13 +525,13 @@ public class MainFrameDesign extends JFrame {
 		Component horizontalGlue = Box.createHorizontalGlue();
 		toolBar.add(horizontalGlue);
 
-		JLabel lblInfo = new JLabel("情報");
+		JLabel lblInfo = new JLabel(t("j.info"));
 		toolBar.add(lblInfo);
 
 		Component horizontalGlue_1 = Box.createHorizontalGlue();
 		toolBar.add(horizontalGlue_1);
 
-		btnInfoCopy = new JButton("コピー");
+		btnInfoCopy = new JButton(t("j.copy"));
 		toolBar.add(btnInfoCopy);
 
 		infoTable = new JTable();
@@ -532,7 +550,7 @@ public class MainFrameDesign extends JFrame {
 		Component horizontalGlue_2 = Box.createHorizontalGlue();
 		toolBar_1.add(horizontalGlue_2);
 
-		JLabel lblMapData = new JLabel("マップデータ");
+		JLabel lblMapData = new JLabel(t("j.mapdata"));
 		toolBar_1.add(lblMapData);
 
 		Component horizontalGlue_3 = Box.createHorizontalGlue();
@@ -553,10 +571,10 @@ public class MainFrameDesign extends JFrame {
 		scrollPane.setViewportView(mapTable);
 
 		JPanel panelTexture = new JPanel();
-		tabbedPane.addTab("画像", null, panelTexture, null);
+		tabbedPane.addTab(t("j.image"), null, panelTexture, null);
 		panelTexture.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblTexture = new JLabel("画像一覧");
+		JLabel lblTexture = new JLabel(t("j.imagelist"));
 		lblTexture.setHorizontalAlignment(SwingConstants.CENTER);
 		panelTexture.add(lblTexture, BorderLayout.NORTH);
 
@@ -569,15 +587,15 @@ public class MainFrameDesign extends JFrame {
 		texScrollPane.setPreferredSize(new Dimension(280, Short.MAX_VALUE));
 		texScrollPane.setViewportView(texInfoTable);
 
-		btnAddTex = new JButton("追加");
+		btnAddTex = new JButton(t("j.add"));
 		panelTexture.add(btnAddTex, BorderLayout.SOUTH);
 		tabbedPane.setEnabledAt(1, true);
 
 		panel3D = new JPanel();
-		tabbedPane.addTab("3Dオブジェクト", null, panel3D, null);
+		tabbedPane.addTab(t("j.3dobject"), null, panel3D, null);
 		panel3D.setLayout(new BorderLayout(0, 0));
 
-		lblNewLabel = new JLabel("3Dオブジェクト一覧");
+		lblNewLabel = new JLabel(t("j.3dobjectlist"));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		panel3D.add(lblNewLabel, BorderLayout.NORTH);
 
@@ -601,10 +619,7 @@ public class MainFrameDesign extends JFrame {
 						textCameraDistance, textFov, btnCameraSet, textLightLat, textLightLng, btnLightMove }));
 
 		spectrumInfoPanel = new JPanel(new BorderLayout());
-		spectrumInfoPanel.setBorder(BorderFactory.createTitledBorder("スペクトル解説"));
-
-		chkShowSpectrumDescription = new JCheckBox("解説を表示", true);
-        spectrumInfoPanel.add(chkShowSpectrumDescription, BorderLayout.NORTH);
+		spectrumInfoPanel.setBorder(BorderFactory.createTitledBorder(t("j.spectrum")));
 
 		spectrumInfoText = new JTextArea();
 	    spectrumInfoText.setEditable(false);
@@ -810,6 +825,14 @@ public class MainFrameDesign extends JFrame {
 	
 	protected JCheckBox getChkShowSpectrumDescription() {
 		return chkShowSpectrumDescription;
+	}
+
+	protected JRadioButtonMenuItem getLangJa() { 
+		return langJa; 
+	}
+
+    protected JRadioButtonMenuItem getLangEn() { 
+		return langEn; 
 	}
 
 }

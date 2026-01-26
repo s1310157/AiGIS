@@ -64,6 +64,11 @@ import aigis.model.SettingModel.ShapePathData;
 import aigis.model.SpectrumMap;
 import aigis.model.SpectrumMaps;
 import aigis.ui.ButtonCellEditor.CellEventListener;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import aigis.i18n.I18n;
+import static aigis.i18n.I18n.t;
 
 /***
  * MainFrame Controller.
@@ -80,25 +85,85 @@ public class MainFrame extends MainFrameDesign {
 	private TreeMap<String, ChartFrame> chartFrames = new TreeMap<>();
 	private final DecimalFormat doubleFormat = new DecimalFormat("#.########");
 	private JTextArea spectrumDescriptionArea;
-    private JCheckBox chkShowSpectrumDescription;
-	private boolean showSpectrumInfo = true;
     private Map<String, String> spectrumDescriptions = new HashMap<>();
 
 	private void initSpectrumDescriptions() {
-        spectrumDescriptions.put("AMICA_Brightness","AMICAカメラによる輝度データです。\n" + "小惑星イトカワ表面の反射特性を示します。");
-		spectrumDescriptions.put("Elevation","標高データです。\n" + "基準面からの高さを表し、地形解析に用いられます。");
-		spectrumDescriptions.put("Gravitational_Potential","重力ポテンシャルデータです。\n" + "質量分布や重力場の解析に使用されます。");
-		spectrumDescriptions.put("Surface_Slope","表面傾斜角データです。\n" + "地形の急峻さを評価する指標です。");
+        spectrumDescriptions.clear();
+		String basePath = "res/spectrum/";
+		String lang = I18n.getLocale().getLanguage();
+		String[] keys = {
+        "AMICA_Brightness",
+        "Elevation",
+        "Gravitational_Potential",
+        "Surface_Slope",
+		"LIDER_Shot_count",
+		"NIRS_Albeno",
+		"Acceleration",
+		"Geopotential_Height",
+		"Slope"
+    };
+
+	for (String key : keys) {
+        String text = loadSpectrumDescription(basePath + lang + "/" + key + ".txt");
+        if (text != null) {
+            spectrumDescriptions.put(key, text);
+        }
     }
+	
+    }
+
+    private void reloadSpectrumDescriptions() {
+        initSpectrumDescriptions();
+
+        JTable mapTable = getMapTable();
+        int row = mapTable.getSelectedRow();
+        if (row < 0) {
+            return;
+        }     
+
+        String key = (String) mapTable.getValueAt(row, 0);
+        String desc = spectrumDescriptions.get(key);
+
+        if (getSpectrumInfoPanel().isVisible()) {
+            spectrumDescriptionArea.setText(
+                "■ " + key + "\n\n" +
+                (desc != null ? desc : t("j.noexplanation"))
+            );
+            spectrumDescriptionArea.setCaretPosition(0);
+        }
+    }
+
+	private String loadSpectrumDescription(String resourcePath) {
+    try (InputStream is =
+            App.class.getClassLoader().getResourceAsStream(resourcePath)) {
+
+        if (is == null) {
+            Logger.Debug("Not found: " + resourcePath);
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        byte[] buffer = new byte[1024];
+        int len;
+
+        while ((len = is.read(buffer)) != -1) {
+            sb.append(new String(buffer, 0, len, StandardCharsets.UTF_8));
+        }
+
+        return sb.toString();
+
+    } catch (Exception e) {
+        Logger.Error(e);
+        return null;
+    }
+}
 
 	public MainFrame() {
 		initSpectrumDescriptions();
 
 		JPanel spectrumInfoPanel = getSpectrumInfoPanel();
         this.spectrumDescriptionArea = getSpectrumInfoText();
-        this.chkShowSpectrumDescription = getChkShowSpectrumDescription();
 
-		spectrumInfoPanel.setVisible(true);
 		// title
 		setTitle(Const.APP_NAME);
 		// icon
@@ -127,9 +192,12 @@ public class MainFrame extends MainFrameDesign {
 
 		// view menu
 		JCheckBoxMenuItem menuSpectrumInfo = this.getMenuSpectrumInfo();
+		spectrumInfoPanel.setVisible(menuSpectrumInfo.isSelected());
 		menuSpectrumInfo.addActionListener(e -> {
-			showSpectrumInfo = menuSpectrumInfo.isSelected();
-			spectrumInfoPanel.setVisible(showSpectrumInfo);
+			boolean show = menuSpectrumInfo.isSelected();
+            spectrumInfoPanel.setVisible(show);
+			spectrumInfoPanel.getParent().revalidate();
+			spectrumInfoPanel.getParent().repaint();
 		});
 
 		// view
@@ -221,7 +289,7 @@ public class MainFrame extends MainFrameDesign {
 		this.getBtnCameraMove().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Logger.Debug("カメラを移動:" + cameraLat.getText() + " - " + cameraLng.getText());
+					Logger.Debug(t("j.movecamera") + ":" + cameraLat.getText() + " - " + cameraLng.getText());
 					float lat = Float.parseFloat(cameraLat.getText());
 					float lng = Float.parseFloat(cameraLng.getText());
 					float roll = Float.parseFloat(cameraRoll.getText());
@@ -233,7 +301,7 @@ public class MainFrame extends MainFrameDesign {
 					}
 					glPanel.repaint();
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(MainFrame.this, "無効なデータです 緯度:[-90,90], 軽度:[0,360]", "",
+					JOptionPane.showMessageDialog(MainFrame.this, t("j.invaliddata"), "",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -242,14 +310,14 @@ public class MainFrame extends MainFrameDesign {
 		this.getBtnCameraSet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Logger.Debug("カメラをセット: 距離:" + cameraDistance.getText() + " fov:" + cameraFov.getText());
+					Logger.Debug(t("j.setcamera") + " " + t("j.distance") + cameraDistance.getText() + " fov:" + cameraFov.getText());
 					float dist = Float.parseFloat(cameraDistance.getText());
 					float fov = Float.parseFloat(cameraFov.getText());
 					window.setCameraDistance(dist);
 					window.setFov(fov);
 					glPanel.repaint();
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(MainFrame.this, "無効なデータです", "エラー", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(MainFrame.this, t("j.invalid"), t("j.error"), JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -258,13 +326,13 @@ public class MainFrame extends MainFrameDesign {
 		this.getBtnLightMove().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Logger.Debug("光源を移動:" + lightLat.getText() + " - " + lightLng.getText());
+					Logger.Debug(t("j.movelight") + ":" + lightLat.getText() + " - " + lightLng.getText());
 					float lat = Float.parseFloat(lightLat.getText());
 					float lng = Float.parseFloat(lightLng.getText());
 					window.moveLight(lat, lng);
 					glPanel.repaint();
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(MainFrame.this, "無効なデータです 緯度:[-90,90], 軽度:[0,360]", "Error",
+					JOptionPane.showMessageDialog(MainFrame.this, t("j.invaliddata"), t("j.error"),
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -299,12 +367,12 @@ public class MainFrame extends MainFrameDesign {
 		this.getBtnInfoCopy().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TableModel info = getInfoTable().getModel();
-				String out = "ポリゴンID : " + info.getValueAt(0, 1);
+				String out = t("j.polygonid") + " : " + info.getValueAt(0, 1);
 				String item = (String) info.getValueAt(1, 1);
-				out += "\n緯度 : " + (item.equals("-") ? item : item + "°");
+				out += "\n" + t("j.latitude") + " : " + (item.equals("-") ? item : item + "°");
 				item = (String) info.getValueAt(2, 1);
-				out += "\n経度 : " + (item.equals("-") ? item : item + "°");
-				out += "\n距離 : " + info.getValueAt(3, 1);
+				out += "\n" + t("j.longitude") + " : " + (item.equals("-") ? item : item + "°");
+				out += "\n" +  t("j.distance") + " : " + info.getValueAt(3, 1);
 				out += "\nX : " + info.getValueAt(4, 1);
 				out += "\nY : " + info.getValueAt(5, 1);
 				out += "\nZ : " + info.getValueAt(6, 1);
@@ -342,11 +410,21 @@ public class MainFrame extends MainFrameDesign {
 					if (settingDialog == null) {
 						settingDialog = new SettingDialog(MainFrame.this);
 					}
+
+					Locale before = I18n.getLocale();
+					
 					String lookupPath = String.valueOf(App.getProp(Const.LOOKUP_PATH_KEY));
 					settingDialog.setVisible(true);
-					if (!lookupPath.equals(App.getProp(Const.LOOKUP_PATH_KEY))) {
-						loadLookUpTable();
-					}
+
+					Locale after = I18n.getLocale();
+
+					if (!before.equals(after)) {
+                        reloadSpectrumDescriptions();
+                    }
+
+                    if (!lookupPath.equals(App.getProp(Const.LOOKUP_PATH_KEY))) {
+                        loadLookUpTable();
+                    }
 				}
 			}
 		};
@@ -447,8 +525,8 @@ public class MainFrame extends MainFrameDesign {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == imageOpen || e.getSource() == MainFrame.this.getBtnAddTex()) {
 					if (!window.textures.canAddTexture()) {
-						String msg = "これ以上テクスチャを追加することができません";
-						JOptionPane.showMessageDialog(MainFrame.this, msg, "警告", JOptionPane.WARNING_MESSAGE);
+						String msg = t("j.noadd");
+						JOptionPane.showMessageDialog(MainFrame.this, msg, t("j.warning"), JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 					OpenImageDialog dialog = new OpenImageDialog(MainFrame.this, scene.getImageMapPath());
@@ -463,11 +541,11 @@ public class MainFrame extends MainFrameDesign {
 						texModel.fireTableDataChanged();
 					} catch (Exception ex) {
 						Logger.Error(ex);
-						String msg = "ファイルを開けません\n";
+						String msg = t("j.noopen") + "\n";
 						if (ex.getMessage() != null) {
 							msg += "[" + ex.getMessage() + "]";
 						}
-						JOptionPane.showMessageDialog(MainFrame.this, msg, "エラー", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(MainFrame.this, msg, t("j.error"), JOptionPane.ERROR_MESSAGE);
 
 					}
 				}
@@ -522,11 +600,11 @@ public class MainFrame extends MainFrameDesign {
 						g3dModel.fireTableDataChanged();
 					} catch (Exception ex) {
 						Logger.Error(ex);
-						String msg = "ファイルを開けません\n";
+						String msg = t("j.noopen") + "\n";
 						if (ex.getMessage() != null) {
 							msg += "[" + ex.getMessage() + "]";
 						}
-						JOptionPane.showMessageDialog(MainFrame.this, msg, "エラー", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(MainFrame.this, msg, t("j.error"), JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				glPanel.repaint();
@@ -538,10 +616,10 @@ public class MainFrame extends MainFrameDesign {
 		JTable infoTable = this.getInfoTable();
 		// @formatter:off
 		String[][] values = { 
-				{ "ポリゴンID", "-" }, 
-				{ "緯度", "-" }, 
-				{ "経度", "-" }, 
-				{ "距離", "-" },
+				{ t("j.polygonid"), "-" }, 
+				{ t("j.latitude"), "-" }, 
+				{ t("j.longitude"), "-" }, 
+				{ t("j.distance"), "-" },
 				{ "X", "-" }, 
 				{ "Y", "-" }, 
 				{ "Z", "-" } };
@@ -551,7 +629,7 @@ public class MainFrame extends MainFrameDesign {
 
 		mapModel = new MapTableModel();
 		mapTable.setModel(mapModel);
-		ButtonCellEditor mapCellEditor = new ButtonCellEditor("プロット", new CellEventListener() {
+		ButtonCellEditor mapCellEditor = new ButtonCellEditor(t("j.plot"), new CellEventListener() {
 
 			@Override
 			public void actionPerformed(JTable table, int row, int column, boolean check) {
@@ -580,7 +658,7 @@ public class MainFrame extends MainFrameDesign {
 
 		}, false);
 
-		String[] mapHeaders = { "名前", "値", "プロット" };
+		String[] mapHeaders = { t("j.name"), t("j.value"), t("j.plot") };
 		for (int i = 0; i < mapHeaders.length; i++) {
 			TableColumn column = mapTable.getColumnModel().getColumn(i);
 			column.setHeaderValue(mapHeaders[i]);
@@ -611,17 +689,16 @@ public class MainFrame extends MainFrameDesign {
                 viewRescale.setEnabled(row > 0);
                 glPanel.repaint();
 
-                if (chkShowSpectrumDescription.isSelected()) {
-					String desc = spectrumDescriptions.get(key);
+				String desc = spectrumDescriptions.get(key);
+
+                if (spectrumInfoPanel.isVisible()) {
 					if (desc != null) {
 						spectrumDescriptionArea.setText("■ " + key + "\n\n" + desc);
-					} else {
-						spectrumDescriptionArea.setText("■ " + key + "\n\nこのデータの解説はありません。");
-					}
-					spectrumDescriptionArea.setCaretPosition(0);
-				} else {
-					spectrumDescriptionArea.setText("");
+                } else {
+					spectrumDescriptionArea.setText("■ " + key + "\n\n" + t("j.noexplanation"));
 				}
+				spectrumDescriptionArea.setCaretPosition(0);
+			}
             }
 
 		});
@@ -688,7 +765,7 @@ public class MainFrame extends MainFrameDesign {
 		}, false);
 
 		// table settings
-		String[] headers = { "名前", "1", "2", "3", "4", "Frus", "", "" };
+		String[] headers = { t("j.name"), "1", "2", "3", "4", "Frus", "", "" };
 		for (int i = 0; i < headers.length; i++) {
 			TableColumn column = texInfoTable.getColumnModel().getColumn(i);
 			column.setHeaderValue(headers[i]);
@@ -721,7 +798,7 @@ public class MainFrame extends MainFrameDesign {
 			}
 		}, true);
 
-		ButtonCellEditor genReloadCellEditor = new ButtonCellEditor("再読み込み", new CellEventListener() {
+		ButtonCellEditor genReloadCellEditor = new ButtonCellEditor(t("j.reload"), new CellEventListener() {
 			@Override
 			public void actionPerformed(JTable table, int row, int column, boolean check) {
 				try {
@@ -734,11 +811,11 @@ public class MainFrame extends MainFrameDesign {
 					glPanel.repaint();
 				} catch (Exception ex) {
 					Logger.Error(ex);
-					String msg = "ファイルを開けません\n";
+					String msg = t("j.noopen") + "\n";
 					if (ex.getMessage() != null) {
 						msg += "[" + ex.getMessage() + "]";
 					}
-					JOptionPane.showMessageDialog(MainFrame.this, msg, "エラー", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(MainFrame.this, msg, t("j.error"), JOptionPane.ERROR_MESSAGE);
 				}
 
 			}
@@ -750,7 +827,7 @@ public class MainFrame extends MainFrameDesign {
 		general3DTable.setModel(g3dModel);
 		general3DTable.setRowHeight(24);
 
-		String[] general3DHeaders = { "表示", "ファイル名", "" };
+		String[] general3DHeaders = { t("j.view"), t("j.filename"), "" };
 		for (int i = 0; i < general3DHeaders.length; i++) {
 			TableColumn column = general3DTable.getColumnModel().getColumn(i);
 			column.setHeaderValue(general3DHeaders[i]);
@@ -807,7 +884,7 @@ public class MainFrame extends MainFrameDesign {
 			File file = new File(defaultDataPath);
 			String files[] = file.list();
 
-			if (Arrays.asList(files).contains(Const.SETTING_TXT)) {
+			if (files != null && Arrays.asList(files).contains(Const.SETTING_TXT)) {
 				if (isStartUp) {
 					loadFile(file);
 					return true;
@@ -842,7 +919,7 @@ public class MainFrame extends MainFrameDesign {
 			}
 		}
 		// If there is no directory, it opens from the home directory
-		if (path == null || path == "") {
+		if (path == null || path.isEmpty()) {
 			path = System.getProperty("user.home");
 		}
 		// Save with a time name
@@ -856,12 +933,12 @@ public class MainFrame extends MainFrameDesign {
 			window.screenshot(workingDirectory);
 		} catch (Exception e) {
 			Logger.Error(e);
-			JOptionPane.showMessageDialog(MainFrame.this, "スナップショットを撮影できません\n[" + e.getMessage() + "]",
-					"エラー", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(MainFrame.this, t("j.nosnapshot") + "\n[" + e.getMessage() + "]",
+					t("j.error"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
-		JOptionPane.showMessageDialog(this, "スナップショットが保存されました\n'" + path + "'", "完了",
+		JOptionPane.showMessageDialog(this, t("j.savesnapshot") + "\n'" + path + "'", t("j.completed"),
 				JOptionPane.INFORMATION_MESSAGE);
 
 	}
@@ -955,6 +1032,7 @@ public class MainFrame extends MainFrameDesign {
 			buttonGroupLookUp.add(item);
 		}
 		buttonGroupLookUp.getElements().nextElement().setSelected(true);
+		
 	}
 
 	/**
@@ -998,7 +1076,7 @@ public class MainFrame extends MainFrameDesign {
 									setEnabled(true);
 									dialog.setVisible(false);
 									JOptionPane.showMessageDialog(MainFrame.this,
-											"データをロードできません\n[" + e.getMessage() + "]", "エラー",
+											t("j.noload") + "\n[" + e.getMessage() + "]", t("j.error"),
 											JOptionPane.ERROR_MESSAGE);
 								}
 							});
@@ -1059,7 +1137,7 @@ public class MainFrame extends MainFrameDesign {
 									setEnabled(true);
 									dialog.setVisible(false);
 									JOptionPane.showMessageDialog(MainFrame.this,
-											"データをロードできません\n[" + e.getMessage() + "]", "エラー",
+											t("j.noload") + "\n[" + e.getMessage() + "]", t("j.error"),
 											JOptionPane.ERROR_MESSAGE);
 								}
 							});
