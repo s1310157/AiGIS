@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/usr/bin/env bash
 
 OUTDIR=out
 
@@ -45,6 +45,8 @@ func_jar()
   find ./src -name "*.java" -print | xargs javac -XDignore.symbol.file -classpath "$CLASSPATH" -d $TMPDIR $JAVACOPT
 
   cp -R src/aigis/res $TMPDIR/aigis/res
+  mkdir -p $TMPDIR/aigis/i18n
+  cp src/aigis/i18n/*.properties $TMPDIR/aigis/i18n/
   cp -R template/meta/* $TMPDIR
   cp -R libs $JARDIR/
   cd $JARDIR
