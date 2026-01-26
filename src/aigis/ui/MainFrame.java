@@ -69,6 +69,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import aigis.i18n.I18n;
 import static aigis.i18n.I18n.t;
+import javax.swing.SwingUtilities;
 
 /***
  * MainFrame Controller.
@@ -158,6 +159,15 @@ public class MainFrame extends MainFrameDesign {
     }
 }
 
+    private void rebuildUI() {
+    SwingUtilities.invokeLater(() -> {
+        dispose();
+        MainFrame frame = new MainFrame();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    });
+}
+
 	public MainFrame() {
 		initSpectrumDescriptions();
 
@@ -183,6 +193,7 @@ public class MainFrame extends MainFrameDesign {
 		JTextField lightLat = this.getTextLightLat();
 		JTextField lightLng = this.getTextLightLng();
 		JTable mapTable = this.getMapTable();
+
 
 		// Menu Components
 		JMenuItem fileOpen = this.getMntmOpen();
@@ -234,6 +245,16 @@ public class MainFrame extends MainFrameDesign {
 		// gl
 		GLJPanel glPanel = this.getPanelGL();
 		window = new GLSplitWindow(glPanel, scene);
+
+		getLangJa().addActionListener(e -> {
+            I18n.setLocale(Locale.JAPANESE);
+            rebuildUI();
+        });
+
+        getLangEn().addActionListener(e -> {
+            I18n.setLocale(Locale.ENGLISH);
+            rebuildUI();
+        });
 
 		///// setting events ///
 
@@ -692,13 +713,12 @@ public class MainFrame extends MainFrameDesign {
 				String desc = spectrumDescriptions.get(key);
 
                 if (spectrumInfoPanel.isVisible()) {
-					if (desc != null) {
-						spectrumDescriptionArea.setText("■ " + key + "\n\n" + desc);
-                } else {
-					spectrumDescriptionArea.setText("■ " + key + "\n\n" + t("j.noexplanation"));
-				}
-				spectrumDescriptionArea.setCaretPosition(0);
-			}
+
+                    String none = I18n.t("spectrum.none");
+
+                    spectrumDescriptionArea.setText("■ " + key + "\n\n" +(desc != null ? desc : none));
+                    spectrumDescriptionArea.setCaretPosition(0);
+                }
             }
 
 		});

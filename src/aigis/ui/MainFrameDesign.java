@@ -250,7 +250,7 @@ public class MainFrameDesign extends JFrame {
 		JMenu mnLanguage = new JMenu(t("j.language"));
 		mnViewMenu.add(mnLanguage);
 
-		langJa = new JRadioButtonMenuItem("日本語");
+		langJa = new JRadioButtonMenuItem("日本語", true);
         langEn = new JRadioButtonMenuItem("English");
 
 		ButtonGroup langGroup = new ButtonGroup();
