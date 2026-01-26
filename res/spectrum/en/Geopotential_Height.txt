@@ -1,0 +1,2 @@
+Geopotential_Height
+The gravitational potential divided by a constant value to convert it into height. This represents the “mechanical height” that accounts for variations in gravity and is used in planetary science and atmospheric science.
