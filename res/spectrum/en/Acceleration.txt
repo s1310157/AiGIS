@@ -1,2 +1,0 @@
-Acceleration
-The force per unit mass acting on an object at that point. Typically refers to gravitational acceleration, representing the strength of the gravitational field (m/s²).

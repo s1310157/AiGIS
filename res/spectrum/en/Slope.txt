@@ -1,2 +1,0 @@
-Slope
-Terrain slope. Often used almost synonymously with Surface_Slope, but the calculation method and data resolution may differ.

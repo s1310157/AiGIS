@@ -1,2 +1,0 @@
-LIDAR_Shot_count
-Number of observation shots (number of laser pulses) for LIDAR (laser altimeter). A higher value indicates more elevation data has been acquired for that location.
