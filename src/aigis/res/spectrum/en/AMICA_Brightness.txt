@@ -1,0 +1,2 @@
+AMICA_Brightness
+Surface brightness observed by the Asteroid Multiband Imaging Camera (AMICA) aboard the asteroid probe “Hayabusa.” This reflects the surface reflectivity, composition, and weathering state.

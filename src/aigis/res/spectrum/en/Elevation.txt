@@ -1,0 +1,2 @@
+Elevation
+Elevation relative to a reference surface (such as a reference ellipsoid or mean radius surface). A fundamental indicator representing the height of terrain.

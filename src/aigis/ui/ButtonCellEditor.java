@@ -15,6 +15,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import aigis.i18n.I18n;
+import static aigis.i18n.I18n.t;
 
 /**
  * cell editor and renderer with a button or checkbox.
@@ -26,9 +28,9 @@ public class ButtonCellEditor extends AbstractCellEditor implements TableCellRen
 		public void actionPerformed(JTable table, int row, int column, boolean check);
 	}
 
-	public static final String NORMAL = "[ボタン]";
-	public static final String DISABLED = "[ボタンD]";
-	public static final String CHECKED = "[ボタンC]";
+	public static final String NORMAL = t("j.button");
+	public static final String DISABLED = t("j.dbutton");
+	public static final String CHECKED = t("j.cbutton");
 	private final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 	private JButton renderButton = null;
 	private JCheckBox renderCheck = null;

@@ -90,7 +90,7 @@ public class MainFrame extends MainFrameDesign {
 
 	private void initSpectrumDescriptions() {
         spectrumDescriptions.clear();
-		String basePath = "res/spectrum/";
+		String basePath = "aigis/res/spectrum/";
 		String lang = I18n.getLocale().getLanguage();
 		String[] keys = {
         "AMICA_Brightness",
@@ -159,7 +159,11 @@ public class MainFrame extends MainFrameDesign {
     }
 }
 
-    private void rebuildUI() {
+    private void refreshTexts() {
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
+	private void rebuildUI() {
     SwingUtilities.invokeLater(() -> {
         dispose();
         MainFrame frame = new MainFrame();
@@ -211,6 +215,16 @@ public class MainFrame extends MainFrameDesign {
 			spectrumInfoPanel.getParent().repaint();
 		});
 
+		getLangJa().addActionListener(e -> {
+            I18n.setLocale(Locale.JAPANESE);
+            rebuildUI();
+        });
+
+        getLangEn().addActionListener(e -> {
+            I18n.setLocale(Locale.ENGLISH);
+            rebuildUI();
+        });
+
 		// view
 		JCheckBoxMenuItem viewColorbar = this.getChckbxmntmColorBar();
 		JCheckBoxMenuItem viewLatLon = this.getChckbxmntmLatLonGrid();
@@ -245,16 +259,6 @@ public class MainFrame extends MainFrameDesign {
 		// gl
 		GLJPanel glPanel = this.getPanelGL();
 		window = new GLSplitWindow(glPanel, scene);
-
-		getLangJa().addActionListener(e -> {
-            I18n.setLocale(Locale.JAPANESE);
-            rebuildUI();
-        });
-
-        getLangEn().addActionListener(e -> {
-            I18n.setLocale(Locale.ENGLISH);
-            rebuildUI();
-        });
 
 		///// setting events ///
 
@@ -441,6 +445,7 @@ public class MainFrame extends MainFrameDesign {
 
 					if (!before.equals(after)) {
                         reloadSpectrumDescriptions();
+						rebuildUI();
                     }
 
                     if (!lookupPath.equals(App.getProp(Const.LOOKUP_PATH_KEY))) {
@@ -714,7 +719,7 @@ public class MainFrame extends MainFrameDesign {
 
                 if (spectrumInfoPanel.isVisible()) {
 
-                    String none = I18n.t("spectrum.none");
+                    String none = I18n.t("j.noexplanation");
 
                     spectrumDescriptionArea.setText("■ " + key + "\n\n" +(desc != null ? desc : none));
                     spectrumDescriptionArea.setCaretPosition(0);
@@ -1303,7 +1308,7 @@ public class MainFrame extends MainFrameDesign {
 		public Object getValueAt(int row, int col) {
 			SpectrumMap spec = spectrums.get(row).getValue();
 			if (col == 0) {
-				return spec.getName();
+				return spectrums.get(row).getKey();
 			}
 			if (col == 1) {
 				Renderer rendere = window.getActiveRenderer();

@@ -24,6 +24,8 @@ import javax.swing.SwingConstants;
 
 import aigis.Logger;
 import aigis.gl.Textures.Setting;
+import aigis.i18n.I18n;
+import static aigis.i18n.I18n.t;
 
 @SuppressWarnings("serial")
 public class TexPrevDialog extends JDialog {
@@ -49,7 +51,7 @@ public class TexPrevDialog extends JDialog {
 	 */
 	public TexPrevDialog(Frame owner) {
 		super(owner);
-		setTitle("プレビュー");
+		setTitle(t("j.preview"));
 		setSize(800, 500);
 		setLocationRelativeTo(owner);
 		getContentPane().setLayout(new BorderLayout());
@@ -120,7 +122,7 @@ public class TexPrevDialog extends JDialog {
 		lblImagePrev.setIcon(icon);
 
 		if (tex.infoFile == null) {
-			textArea.setText("なし");
+			textArea.setText(t("j.none"));
 			return;
 		}
 

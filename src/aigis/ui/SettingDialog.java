@@ -20,6 +20,9 @@ import javax.swing.JTextField;
 import aigis.App;
 import aigis.Const;
 
+import aigis.i18n.I18n;
+import static aigis.i18n.I18n.t;
+
 @SuppressWarnings("serial")
 public class SettingDialog extends JDialog {
 	private JTextField textDataPath;
@@ -47,7 +50,7 @@ public class SettingDialog extends JDialog {
 		super(owner);
 		setModal(true);
 		setResizable(false);
-		setTitle("設定");
+		setTitle(t("j.setting"));
 		setSize(450, 277);
 		setLocationRelativeTo(owner);
 		getContentPane().setLayout(new BorderLayout());
@@ -71,13 +74,13 @@ public class SettingDialog extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("キャンセル");
+				JButton cancelButton = new JButton(t("j.cancel"));
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						setVisible(false);
 					}
 				});
-				cancelButton.setActionCommand("キャンセル");
+				cancelButton.setActionCommand(t("j.cancel"));
 				buttonPane.add(cancelButton);
 			}
 		}
@@ -91,7 +94,7 @@ public class SettingDialog extends JDialog {
 			gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 			panel.setLayout(gbl_panel);
 			{
-				JLabel lblDataPath = new JLabel("既定のデータパス");
+				JLabel lblDataPath = new JLabel(t("j.datapath"));
 				GridBagConstraints gbc_lblDataPath = new GridBagConstraints();
 				gbc_lblDataPath.insets = new Insets(0, 0, 5, 5);
 				gbc_lblDataPath.gridx = 1;
@@ -128,7 +131,7 @@ public class SettingDialog extends JDialog {
 				panel.add(btnDataPath, gbc_btnDataPath);
 			}
 			{
-				JLabel lblPngPath = new JLabel("PNG保存先パス");
+				JLabel lblPngPath = new JLabel(t("j.destinationpath"));
 				GridBagConstraints gbc_lblPngPath = new GridBagConstraints();
 				gbc_lblPngPath.insets = new Insets(0, 0, 5, 5);
 				gbc_lblPngPath.gridx = 1;
@@ -165,7 +168,7 @@ public class SettingDialog extends JDialog {
 				panel.add(btnPngPath, gbc_btnPngPath);
 			}
 			{
-				JLabel lblGraphPath = new JLabel("グラフデータ保存先パス");
+				JLabel lblGraphPath = new JLabel(t("j.graphdatapath"));
 				GridBagConstraints gbc_lblGraphPath = new GridBagConstraints();
 				gbc_lblGraphPath.insets = new Insets(0, 0, 5, 5);
 				gbc_lblGraphPath.gridx = 1;
@@ -202,7 +205,7 @@ public class SettingDialog extends JDialog {
 				panel.add(btnGraphPath, gbc_btnGraphPath);
 			}
 			{
-				JLabel lblLookUpPath = new JLabel("ルックアップテーブルのパス");
+				JLabel lblLookUpPath = new JLabel(t("j.lookupdatapath"));
 				GridBagConstraints gbc_lblLookUpPath = new GridBagConstraints();
 				gbc_lblLookUpPath.insets = new Insets(0, 0, 0, 5);
 				gbc_lblLookUpPath.gridx = 1;

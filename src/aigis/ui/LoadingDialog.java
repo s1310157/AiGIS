@@ -8,6 +8,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import aigis.i18n.I18n;
+import static aigis.i18n.I18n.t;
+
 
 public class LoadingDialog extends JDialog {
 
@@ -36,11 +39,11 @@ public class LoadingDialog extends JDialog {
 		setAlwaysOnTop(true);
 		setResizable(false);
 		setSize(300, 200);
-		infoLabel = new JLabel("ロード中");
+		infoLabel = new JLabel(t("j.loading"));
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		getContentPane().add(infoLabel, BorderLayout.SOUTH);
 		{
-			JLabel loadingLabel = new JLabel("ロード中...");
+			JLabel loadingLabel = new JLabel(t("j.loading") + "...");
 			loadingLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			getContentPane().add(loadingLabel, BorderLayout.CENTER);
 			loadingLabel.setIcon(new ImageIcon(LoadingDialog.class.getResource("/aigis/res/ajax-loader.gif")));

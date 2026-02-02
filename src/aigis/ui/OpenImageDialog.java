@@ -21,6 +21,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import aigis.i18n.I18n;
+import static aigis.i18n.I18n.t;
 
 import aigis.App;
 
@@ -62,7 +64,7 @@ public class OpenImageDialog extends JDialog {
 		super(owner);
 		setResizable(false);
 		setModal(true);
-		setTitle("画像を開く");
+		setTitle(t("j.openimage"));
 		setBounds(100, 100, 370, 220);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -74,7 +76,7 @@ public class OpenImageDialog extends JDialog {
 		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
-			JLabel lblImage = new JLabel("画像");
+			JLabel lblImage = new JLabel(t("j.image"));
 			GridBagConstraints gbc_lblImage = new GridBagConstraints();
 			gbc_lblImage.fill = GridBagConstraints.HORIZONTAL;
 			gbc_lblImage.insets = new Insets(0, 0, 5, 5);
@@ -97,7 +99,7 @@ public class OpenImageDialog extends JDialog {
 			JButton btnOpenImage = new JButton("...");
 			btnOpenImage.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					FileNameExtensionFilter filter = new FileNameExtensionFilter("画像", "jpg", "png", "fit", "fits");
+					FileNameExtensionFilter filter = new FileNameExtensionFilter(t("j.image"), "jpg", "png", "fit", "fits");
 					JFileChooser chooser = App.showOpenDialog(OpenImageDialog.this, imageMapPath,
 							JFileChooser.FILES_ONLY, filter, true);
 					if (chooser != null) {
@@ -115,7 +117,7 @@ public class OpenImageDialog extends JDialog {
 			contentPanel.add(btnOpenImage, gbc_btnOpenImage);
 		}
 		{
-			JLabel lblInfo = new JLabel("情報/合計");
+			JLabel lblInfo = new JLabel(t("j.infototal"));
 			GridBagConstraints gbc_lblInfo = new GridBagConstraints();
 			gbc_lblInfo.fill = GridBagConstraints.HORIZONTAL;
 			gbc_lblInfo.anchor = GridBagConstraints.EAST;
@@ -139,7 +141,7 @@ public class OpenImageDialog extends JDialog {
 			btnOpenInfo = new JButton("...");
 			btnOpenInfo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					FileNameExtensionFilter filter = new FileNameExtensionFilter("情報/合計 ファイル", "info", "txt", "sum");
+					FileNameExtensionFilter filter = new FileNameExtensionFilter(t("j.infototalfile"), "info", "txt", "sum");
 					JFileChooser chooser = App.showOpenDialog(OpenImageDialog.this, imageMapPath,
 							JFileChooser.FILES_ONLY, filter, true);
 					if (chooser != null) {
@@ -166,7 +168,7 @@ public class OpenImageDialog extends JDialog {
 			gbc_panel.gridy = 3;
 			contentPanel.add(panel, gbc_panel);
 			{
-				rdbtnImage = new JRadioButton("画像");
+				rdbtnImage = new JRadioButton(t("j.image"));
 				rdbtnImage.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						btnOpenInfo.setEnabled(true);
@@ -178,7 +180,7 @@ public class OpenImageDialog extends JDialog {
 				panel.add(rdbtnImage);
 			}
 			{
-				rdbtnMap = new JRadioButton("マップ");
+				rdbtnMap = new JRadioButton(t("j.map"));
 				rdbtnMap.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						btnOpenInfo.setEnabled(false);
@@ -214,13 +216,13 @@ public class OpenImageDialog extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("キャンセル");
+				JButton cancelButton = new JButton(t("j.cancel"));
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						setVisible(false);
 					}
 				});
-				cancelButton.setActionCommand("キャンセル");
+				cancelButton.setActionCommand(t("j.cancel"));
 				buttonPane.add(cancelButton);
 			}
 		}

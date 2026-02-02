@@ -44,6 +44,7 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLJPanel;
+import aigis.i18n.I18n;
 import static aigis.i18n.I18n.t;
 import java.util.Locale;
 
@@ -251,8 +252,11 @@ public class MainFrameDesign extends JFrame {
 		JMenu mnLanguage = new JMenu(t("j.language"));
 		mnViewMenu.add(mnLanguage);
 
-		langJa = new JRadioButtonMenuItem("日本語", true);
+		langJa = new JRadioButtonMenuItem("日本語");
         langEn = new JRadioButtonMenuItem("English");
+		Locale current = I18n.getLocale();
+        langJa.setSelected(current.equals(Locale.JAPANESE));
+        langEn.setSelected(current.equals(Locale.ENGLISH));
 
 		ButtonGroup langGroup = new ButtonGroup();
         langGroup.add(langJa); 

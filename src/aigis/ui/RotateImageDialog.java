@@ -17,6 +17,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
+import aigis.i18n.I18n;
+import static aigis.i18n.I18n.t;
+import javax.swing.SwingUtilities;
 
 @SuppressWarnings("serial")
 public class RotateImageDialog extends JDialog {
@@ -47,7 +50,7 @@ public class RotateImageDialog extends JDialog {
 	public RotateImageDialog() {
 		setModal(true);
 		setResizable(false);
-		setTitle("回転");
+		setTitle(t("j.rotate"));
 		setBounds(100, 100, 300, 250);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -59,7 +62,7 @@ public class RotateImageDialog extends JDialog {
 		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 		{
-			JLabel lblRotate = new JLabel("右に回転");
+			JLabel lblRotate = new JLabel(t("j.right"));
 			GridBagConstraints gbc_lblRotate = new GridBagConstraints();
 			gbc_lblRotate.anchor = GridBagConstraints.WEST;
 			gbc_lblRotate.insets = new Insets(0, 0, 5, 5);
@@ -68,7 +71,7 @@ public class RotateImageDialog extends JDialog {
 			contentPanel.add(lblRotate, gbc_lblRotate);
 		}
 		{
-			JLabel lblFlip = new JLabel("反転");
+			JLabel lblFlip = new JLabel(t("j.reverse"));
 			GridBagConstraints gbc_lblFlip = new GridBagConstraints();
 			gbc_lblFlip.anchor = GridBagConstraints.WEST;
 			gbc_lblFlip.insets = new Insets(0, 0, 5, 5);
@@ -88,7 +91,7 @@ public class RotateImageDialog extends JDialog {
 			contentPanel.add(rdbtn0deg, gbc_rdbtn0deg);
 		}
 		{
-			JRadioButton rdbtnNone = new JRadioButton("なし");
+			JRadioButton rdbtnNone = new JRadioButton(t("j.none"));
 			rdbtnNone.setSelected(true);
 			buttonGroupFlip.add(rdbtnNone);
 			GridBagConstraints gbc_rdbtnNone = new GridBagConstraints();
@@ -109,7 +112,7 @@ public class RotateImageDialog extends JDialog {
 			contentPanel.add(rdbtn90deg, gbc_rdbtn90deg);
 		}
 		{
-			JRadioButton rdbtnVertical = new JRadioButton("垂直");
+			JRadioButton rdbtnVertical = new JRadioButton(t("j.vertical"));
 			buttonGroupFlip.add(rdbtnVertical);
 			GridBagConstraints gbc_rdbtnVertical = new GridBagConstraints();
 			gbc_rdbtnVertical.anchor = GridBagConstraints.WEST;
@@ -129,7 +132,7 @@ public class RotateImageDialog extends JDialog {
 			contentPanel.add(rdbtn180deg, gbc_rdbtn180deg);
 		}
 		{
-			JRadioButton rdbtnHorizontal = new JRadioButton("水平");
+			JRadioButton rdbtnHorizontal = new JRadioButton(t("j.horizontal"));
 			buttonGroupFlip.add(rdbtnHorizontal);
 			GridBagConstraints gbc_rdbtnHorizontal = new GridBagConstraints();
 			gbc_rdbtnHorizontal.anchor = GridBagConstraints.WEST;
@@ -166,10 +169,10 @@ public class RotateImageDialog extends JDialog {
 						for (Enumeration<AbstractButton> buttons = buttonGroupFlip.getElements(); buttons.hasMoreElements();) {
 				            AbstractButton button = buttons.nextElement();
 				            if (button.isSelected()) {
-				            	if (button.getText().endsWith("垂直")) {
+				            	if (button.getText().endsWith(t("j.vertical"))) {
 				            		flipType = 1;
 				            	}
-				            	if (button.getText().endsWith("水平")) {
+				            	if (button.getText().endsWith(t("j.horizontal"))) {
 				            		flipType = 2;
 				            	}
 				            	break;

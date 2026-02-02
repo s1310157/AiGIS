@@ -49,6 +49,8 @@ import aigis.model.CameraInfo;
 import aigis.model.LatLon;
 import aigis.model.ModelSelection.Resolution;
 import aigis.model.Models;
+import aigis.i18n.I18n;
+import static aigis.i18n.I18n.t;
 
 /***
  * 4 parts window.
@@ -301,15 +303,15 @@ public class GLSplitWindow {
 
 			@Override
 			public void init(GLAutoDrawable drawable) {
-				Logger.Debug("*GLの初期化");
+				Logger.Debug(t("j.glinitialization"));
 				initgl(drawable);
 			}
 
 			@Override
 			public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-				Logger.Debug("*GLの再形成: x=" + x + ", y=" + y + ", w=" + width + ", h=" + height);
+				Logger.Debug(t("j.glreorganization") + ": x=" + x + ", y=" + y + ", w=" + width + ", h=" + height);
 				glPanel.getCurrentSurfaceScale(viewScales);
-				Logger.Debug("*ビュースケール: x=" + viewScales[0] + ", y=" + viewScales[1]);
+				Logger.Debug(t("j.viewscale") + ": x=" + viewScales[0] + ", y=" + viewScales[1]);
 				divide(division);
 			}
 
@@ -330,7 +332,7 @@ public class GLSplitWindow {
 					} catch (RuntimeException e) {
 						Logger.Error(e);
 						String msg = e.getMessage();
-						JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), "エラー",
+						JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), t("j.error"),
 								JOptionPane.WARNING_MESSAGE);
 					}
 
@@ -344,7 +346,7 @@ public class GLSplitWindow {
 				} catch (Exception e) {
 					Logger.Error(e);
 					String msg = e.getMessage();
-					JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), "エラー",
+					JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), t("j.error"),
 							JOptionPane.ERROR_MESSAGE);
 					System.exit(1);
 					return;
@@ -353,7 +355,7 @@ public class GLSplitWindow {
 
 			@Override
 			public void dispose(GLAutoDrawable drawable) {
-				Logger.Debug("*GLの破棄");
+				Logger.Debug(t("j.gldiscard"));
 			}
 
 		});
@@ -524,7 +526,7 @@ public class GLSplitWindow {
 	 * @param drawable
 	 */
 	private void initgl(GLAutoDrawable drawable) {
-		Logger.Debug("JOGLを初期化中...");
+		Logger.Debug(t("j.jogl") + "...");
 		gl = drawable.getGL().getGL2();
 		Logger.Debug("GL:" + gl.glGetString(GL.GL_VERSION));
 		boolean enabledVBO = gl.isExtensionAvailable("GL_ARB_vertex_buffer_object");
@@ -534,16 +536,16 @@ public class GLSplitWindow {
 			pkg = Package.getPackage("javax.media.opengl");
 		}
 		if (pkg != null) {
-			Logger.Debug("JOGL バージョン: " + pkg.getImplementationVersion());
+			Logger.Debug("JOGL " + t("j.version") + ": " + pkg.getImplementationVersion());
 		}
 		FloatBuffer glGetBuf = com.jogamp.common.nio.Buffers.newDirectFloatBuffer(2);
 		gl.glGetFloatv(GL2.GL_LINE_WIDTH_RANGE, glGetBuf);
-		Logger.Debug("ライン幅: " + glGetBuf.get(0) + "~" + glGetBuf.get(1));
+		Logger.Debug(t("j.linewidth") + ": " + glGetBuf.get(0) + "~" + glGetBuf.get(1));
 		textures = new Textures(gl);
 
 		// VBOが使えない場合は終了
 		if (enabledVBO == false) {
-			JOptionPane.showMessageDialog(null, "VBOはサポートされていません\n", "エラー", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, t("j.notsupported") + "\n", t("j.error"), JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 			return;
 		}
@@ -702,11 +704,11 @@ public class GLSplitWindow {
 		int sw = (int) viewScales[0];
 		int sh = (int) viewScales[1];
 		double dotsPerMilli = 72f / 10f / 2.54f;
-		IIOMetadataNode horiz = new IIOMetadataNode("水平ピクセルサイズ");
-		horiz.setAttribute("値", Double.toString(dotsPerMilli * sh));
-		IIOMetadataNode vert = new IIOMetadataNode("垂直ピクセルサイズ");
-		vert.setAttribute("値", Double.toString(dotsPerMilli * sw));
-		IIOMetadataNode dim = new IIOMetadataNode("次元");
+		IIOMetadataNode horiz = new IIOMetadataNode(t("j.hpixel"));
+		horiz.setAttribute(t("j.value"), Double.toString(dotsPerMilli * sh));
+		IIOMetadataNode vert = new IIOMetadataNode(t("j.vpixel"));
+		vert.setAttribute(t("j.value"), Double.toString(dotsPerMilli * sw));
+		IIOMetadataNode dim = new IIOMetadataNode(t("j.dimension"));
 		dim.appendChild(horiz);
 		dim.appendChild(vert);
 		IIOMetadataNode root = new IIOMetadataNode("javax_imageio_1.0");

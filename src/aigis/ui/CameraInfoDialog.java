@@ -29,6 +29,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.vecmath.Tuple3d;
 import javax.vecmath.Vector3d;
+import aigis.i18n.I18n;
+import static aigis.i18n.I18n.t;
 
 import aigis.App;
 import aigis.model.CameraInfo;
@@ -138,7 +140,7 @@ public class CameraInfoDialog extends JDialog {
 		super(owner);
 		this.cameraInfo = cameraInfo.clone();
 		setModal(true);
-		setTitle("カメラの情報");
+		setTitle(t("j.camerainfo"));
 		setBounds(100, 100, 660, 335);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -150,7 +152,7 @@ public class CameraInfoDialog extends JDialog {
 		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
-			JLabel lblPosition = new JLabel("位置");
+			JLabel lblPosition = new JLabel(t("j.position"));
 			GridBagConstraints gbc_lblPosition = new GridBagConstraints();
 			gbc_lblPosition.anchor = GridBagConstraints.EAST;
 			gbc_lblPosition.insets = new Insets(0, 0, 5, 5);
@@ -189,7 +191,7 @@ public class CameraInfoDialog extends JDialog {
 			textPositionZ.setColumns(10);
 		}
 		{
-			JLabel lblDirection = new JLabel("方向");
+			JLabel lblDirection = new JLabel(t("j.direction"));
 			GridBagConstraints gbc_lblDirection = new GridBagConstraints();
 			gbc_lblDirection.anchor = GridBagConstraints.EAST;
 			gbc_lblDirection.insets = new Insets(0, 0, 5, 5);
@@ -228,7 +230,7 @@ public class CameraInfoDialog extends JDialog {
 			textDirectionZ.setColumns(10);
 		}
 		{
-			JLabel lblUp = new JLabel("上昇");
+			JLabel lblUp = new JLabel(t("j.rise"));
 			GridBagConstraints gbc_lblUp = new GridBagConstraints();
 			gbc_lblUp.anchor = GridBagConstraints.EAST;
 			gbc_lblUp.insets = new Insets(0, 0, 5, 5);
@@ -267,7 +269,7 @@ public class CameraInfoDialog extends JDialog {
 			textUpZ.setColumns(10);
 		}
 		{
-			JLabel lblFrustum1 = new JLabel("視錐台1");
+			JLabel lblFrustum1 = new JLabel(t("j.pupillarycone1"));
 			GridBagConstraints gbc_lblFrustum1 = new GridBagConstraints();
 			gbc_lblFrustum1.anchor = GridBagConstraints.EAST;
 			gbc_lblFrustum1.insets = new Insets(0, 0, 5, 5);
@@ -306,7 +308,7 @@ public class CameraInfoDialog extends JDialog {
 			textFrustum1Z.setColumns(10);
 		}
 		{
-			JLabel lblFrustum2 = new JLabel("視錐台2");
+			JLabel lblFrustum2 = new JLabel(t("j.pupillarycone2"));
 			GridBagConstraints gbc_lblFrustum2 = new GridBagConstraints();
 			gbc_lblFrustum2.anchor = GridBagConstraints.EAST;
 			gbc_lblFrustum2.insets = new Insets(0, 0, 5, 5);
@@ -345,7 +347,7 @@ public class CameraInfoDialog extends JDialog {
 			textFrustum2Z.setColumns(10);
 		}
 		{
-			JLabel lblFrustum3 = new JLabel("視錐台3");
+			JLabel lblFrustum3 = new JLabel(t("j.pupillarycone3"));
 			GridBagConstraints gbc_lblFrustum3 = new GridBagConstraints();
 			gbc_lblFrustum3.anchor = GridBagConstraints.EAST;
 			gbc_lblFrustum3.insets = new Insets(0, 0, 5, 5);
@@ -384,7 +386,7 @@ public class CameraInfoDialog extends JDialog {
 			textFrustum3Z.setColumns(10);
 		}
 		{
-			JLabel lblFrustum = new JLabel("視錐台4");
+			JLabel lblFrustum = new JLabel(t("j.pupillarycone4"));
 			GridBagConstraints gbc_lblFrustum = new GridBagConstraints();
 			gbc_lblFrustum.anchor = GridBagConstraints.EAST;
 			gbc_lblFrustum.insets = new Insets(0, 0, 0, 5);
@@ -426,7 +428,7 @@ public class CameraInfoDialog extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				btnOpen = new JButton("開く...");
+				btnOpen = new JButton(t("j.open") + "...");
 				btnOpen.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						FileNameExtensionFilter filter = new FileNameExtensionFilter("Info file", "info", "txt");
@@ -446,7 +448,7 @@ public class CameraInfoDialog extends JDialog {
 				buttonPane.add(btnOpen);
 			}
 			{
-				btnSave = new JButton("保存...");
+				btnSave = new JButton(t("j.save") + "...");
 				btnSave.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						FileNameExtensionFilter filter = new FileNameExtensionFilter("Info file", "info", "txt");
@@ -457,7 +459,7 @@ public class CameraInfoDialog extends JDialog {
 								File f = chooser.getSelectedFile();
 								if (f.exists()) {
 									int ret = JOptionPane.showConfirmDialog(self,
-											"ファイルが存在します。\n上書きしますか？");
+											t("j.fileexists") + "\n" + t("j.overwrite"));
 									if (ret != JOptionPane.OK_OPTION) {
 										return;
 									}
@@ -469,17 +471,17 @@ public class CameraInfoDialog extends JDialog {
 								PrintWriter pw = new PrintWriter(new BufferedWriter(file));
 								String now = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now());
 								CameraInfo info = CameraInfoDialog.this.cameraInfo;
-								pw.println("開始時間          = " + now);
-								pw.println("停止時間           = " + now);
-								pw.println("宇宙船の位置 = " + toupleStr(info.position));
-								pw.println("照準方向 = " + toupleStr(info.direction));
-								pw.println("上方向        = " + toupleStr(info.up));
+								pw.println(t("j.starttime") + "          = " + now);
+								pw.println(t("j.stoptime") + "           = " + now);
+								pw.println(t("j.spaceship") + " = " + toupleStr(info.position));
+								pw.println(t("j.aiming") + " = " + toupleStr(info.direction));
+								pw.println(t("j.upward") + "        = " + toupleStr(info.up));
 								Vector3d vec[] = info.getFrustum();
-								pw.println("視錐台1            = " + toupleStr(vec[0]));
-								pw.println("視錐台2            = " + toupleStr(vec[1]));
-								pw.println("視錐台3            = " + toupleStr(vec[2]));
-								pw.println("視錐台4            = " + toupleStr(vec[3]));
-								pw.println("太陽の位置_左図     = " + toupleStr(info.position));
+								pw.println(t("j.pupillarycone1") + "            = " + toupleStr(vec[0]));
+								pw.println(t("j.pupillarycone2") + "            = " + toupleStr(vec[1]));
+								pw.println(t("j.pupillarycone3") + "            = " + toupleStr(vec[2]));
+								pw.println(t("j.pupillarycone4") + "            = " + toupleStr(vec[3]));
+								pw.println(t("j.sunposition") + "     = " + toupleStr(info.position));
 								pw.close();
 							} catch (Exception ex) {
 								ex.printStackTrace();
@@ -509,13 +511,13 @@ public class CameraInfoDialog extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("キャンセル");
+				JButton cancelButton = new JButton(t("j.cancel"));
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						setVisible(false);
 					}
 				});
-				cancelButton.setActionCommand("キャンセル");
+				cancelButton.setActionCommand(t("j.cancel"));
 				buttonPane.add(cancelButton);
 			}
 		}
