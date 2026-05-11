@@ -249,22 +249,24 @@ public class MainFrameDesign extends JFrame {
 		JMenu mnSort = new JMenu(t("j.sort"));
 		mnMapdata.add(mnSort);
 
-		JMenu mnLanguage = new JMenu(t("j.language"));
-		mnViewMenu.add(mnLanguage);
+　　　　	JMenu mnLanguage = new JMenu(t("j.language"));
+        　　mnViewMenu.add(mnLanguage);
 
-		langJa = new JRadioButtonMenuItem("日本語");
-        langEn = new JRadioButtonMenuItem("English");
-		Locale current = I18n.getLocale();
-        langJa.setSelected(current.equals(Locale.JAPANESE));
-        langEn.setSelected(current.equals(Locale.ENGLISH));
+            langJa = new JRadioButtonMenuItem("日本語");
+            langEn = new JRadioButtonMenuItem("English");
 
-		ButtonGroup langGroup = new ButtonGroup();
-        langGroup.add(langJa); 
-        langGroup.add(langEn);
+            Locale current = I18n.getLocale();
 
-        mnLanguage.add(langJa);
-        mnLanguage.add(langEn);
+            langJa.setSelected(current.getLanguage().equals("ja"));
+            langEn.setSelected(current.getLanguage().equals("en"));
 
+            ButtonGroup langGroup = new ButtonGroup();
+            langGroup.add(langJa);
+			langGroup.add(langEn);
+			
+			mnLanguage.add(langJa);
+			mnLanguage.add(langEn);
+		
 		chckbxmntmByName = new JCheckBoxMenuItem(t("j.name"));
 		buttonGroupSort.add(chckbxmntmByName);
 		chckbxmntmByName.setSelected(true);
