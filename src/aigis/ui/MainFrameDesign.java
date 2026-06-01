@@ -47,6 +47,7 @@ import com.jogamp.opengl.awt.GLJPanel;
 import aigis.i18n.I18n;
 import static aigis.i18n.I18n.t;
 import java.util.Locale;
+import javax.swing.JEditorPane;
 
 /***
  * Design of the MainFrame. Don't edit by hand. Use the SwingDesigner.
@@ -119,7 +120,7 @@ public class MainFrameDesign extends JFrame {
 	private JTextField textCameraRoll;
 	private JPanel panelToolsModel;
 	private JPanel spectrumInfoPanel;
-    private JTextArea spectrumInfoText;
+    private JEditorPane spectrumInfoText;
 	private JCheckBoxMenuItem menuSpectrumInfo;
 	private JCheckBox chkShowSpectrumDescription;
 	private JRadioButtonMenuItem langJa;
@@ -627,10 +628,9 @@ public class MainFrameDesign extends JFrame {
 		spectrumInfoPanel = new JPanel(new BorderLayout());
 		spectrumInfoPanel.setBorder(BorderFactory.createTitledBorder(t("j.spectrum")));
 
-		spectrumInfoText = new JTextArea();
-	    spectrumInfoText.setEditable(false);
-		spectrumInfoText.setLineWrap(true);
-	    spectrumInfoText.setWrapStyleWord(true);
+		spectrumInfoText = new JEditorPane();
+        spectrumInfoText.setEditable(false);
+        spectrumInfoText.setContentType("text/html");
 		JScrollPane spectrumInfoScroll = new JScrollPane(spectrumInfoText,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		spectrumInfoPanel.add(spectrumInfoScroll, BorderLayout.CENTER);
 	    spectrumInfoPanel.setPreferredSize(new Dimension(300, 200));
@@ -832,9 +832,9 @@ public class MainFrameDesign extends JFrame {
 		return spectrumInfoPanel;
 	}
 
-	protected JTextArea getSpectrumInfoText() {
-		return spectrumInfoText;
-	}
+	public JEditorPane getSpectrumInfoText() {
+        return spectrumInfoText;
+    }
 	
 	protected JCheckBox getChkShowSpectrumDescription() {
 		return chkShowSpectrumDescription;
