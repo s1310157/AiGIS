@@ -166,7 +166,8 @@ public class MainFrame extends MainFrameDesign {
 	private void rebuildUI() {
     SwingUtilities.invokeLater(() -> {
         dispose();
-        MainFrame frame = new MainFrame();
+		MainFrame frame = new MainFrame();
+		frame.setSize(1400, 1000);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     });
