@@ -70,6 +70,7 @@ import java.util.Locale;
 import aigis.i18n.I18n;
 import static aigis.i18n.I18n.t;
 import javax.swing.SwingUtilities;
+import javax.swing.JEditorPane;
 
 /***
  * MainFrame Controller.
@@ -85,79 +86,7 @@ public class MainFrame extends MainFrameDesign {
 	private SettingDialog settingDialog;
 	private TreeMap<String, ChartFrame> chartFrames = new TreeMap<>();
 	private final DecimalFormat doubleFormat = new DecimalFormat("#.########");
-	private JTextArea spectrumDescriptionArea;
-    private Map<String, String> spectrumDescriptions = new HashMap<>();
-
-	private void initSpectrumDescriptions() {
-        spectrumDescriptions.clear();
-		String basePath = "aigis/res/spectrum/";
-		String lang = I18n.getLocale().getLanguage();
-		String[] keys = {
-        "AMICA_Brightness",
-        "Elevation",
-        "Gravitational_Potential",
-        "Surface_Slope",
-		"LIDER_Shot_count",
-		"NIRS_Albeno",
-		"Acceleration",
-		"Geopotential_Height",
-		"Slope"
-    };
-
-	for (String key : keys) {
-        String text = loadSpectrumDescription(basePath + lang + "/" + key + ".txt");
-        if (text != null) {
-            spectrumDescriptions.put(key, text);
-        }
-    }
-	
-    }
-
-    private void reloadSpectrumDescriptions() {
-        initSpectrumDescriptions();
-
-        JTable mapTable = getMapTable();
-        int row = mapTable.getSelectedRow();
-        if (row < 0) {
-            return;
-        }     
-
-        String key = (String) mapTable.getValueAt(row, 0);
-        String desc = spectrumDescriptions.get(key);
-
-        if (getSpectrumInfoPanel().isVisible()) {
-            spectrumDescriptionArea.setText(
-                "■ " + key + "\n\n" +
-                (desc != null ? desc : t("j.noexplanation"))
-            );
-            spectrumDescriptionArea.setCaretPosition(0);
-        }
-    }
-
-	private String loadSpectrumDescription(String resourcePath) {
-    try (InputStream is =
-            App.class.getClassLoader().getResourceAsStream(resourcePath)) {
-
-        if (is == null) {
-            Logger.Debug("Not found: " + resourcePath);
-            return null;
-        }
-
-        StringBuilder sb = new StringBuilder();
-        byte[] buffer = new byte[1024];
-        int len;
-
-        while ((len = is.read(buffer)) != -1) {
-            sb.append(new String(buffer, 0, len, StandardCharsets.UTF_8));
-        }
-
-        return sb.toString();
-
-    } catch (Exception e) {
-        Logger.Error(e);
-        return null;
-    }
-}
+	private JEditorPane spectrumDescriptionArea;
 
     private void refreshTexts() {
         SwingUtilities.updateComponentTreeUI(this);
@@ -166,7 +95,7 @@ public class MainFrame extends MainFrameDesign {
 	private void rebuildUI() {
     SwingUtilities.invokeLater(() -> {
         dispose();
-		MainFrame frame = new MainFrame();
+        MainFrame frame = new MainFrame();
 		frame.setSize(1400, 1000);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -174,7 +103,6 @@ public class MainFrame extends MainFrameDesign {
 }
 
 	public MainFrame() {
-		initSpectrumDescriptions();
 
 		JPanel spectrumInfoPanel = getSpectrumInfoPanel();
         this.spectrumDescriptionArea = getSpectrumInfoText();
@@ -445,7 +373,6 @@ public class MainFrame extends MainFrameDesign {
 					Locale after = I18n.getLocale();
 
 					if (!before.equals(after)) {
-                        reloadSpectrumDescriptions();
 						rebuildUI();
                     }
 
@@ -716,17 +643,21 @@ public class MainFrame extends MainFrameDesign {
                 viewRescale.setEnabled(row > 0);
                 glPanel.repaint();
 
-				String desc = spectrumDescriptions.get(key);
-
-                if (spectrumInfoPanel.isVisible()) {
-
-                    String none = I18n.t("j.noexplanation");
-
-                    spectrumDescriptionArea.setText("■ " + key + "\n\n" +(desc != null ? desc : none));
-                    spectrumDescriptionArea.setCaretPosition(0);
-                }
+				if (spectrumInfoPanel.isVisible()) {
+                    try {
+						String lang = I18n.getLocale().getLanguage();
+						URL url = App.class.getResource("/aigis/res/spectrum/" + lang + "/" + key + ".html");
+						if (url != null) {
+							spectrumDescriptionArea.setPage(url);
+						} else {
+							spectrumDescriptionArea.setText("<html><body>" + I18n.t("j.noexplanation") + "</body></html>");
+						}
+					} catch (Exception ex) {
+						Logger.Error(ex);
+						spectrumDescriptionArea.setText("<html><body>" + I18n.t("j.noexplanation") + "</body></html>");
+                    }
+                }                 
             }
-
 		});
 
 		// Texture table
