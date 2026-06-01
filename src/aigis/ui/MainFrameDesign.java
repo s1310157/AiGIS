@@ -249,8 +249,8 @@ public class MainFrameDesign extends JFrame {
 		JMenu mnSort = new JMenu(t("j.sort"));
 		mnMapdata.add(mnSort);
 
-　　　　	JMenu mnLanguage = new JMenu(t("j.language"));
-        　　mnViewMenu.add(mnLanguage);
+		JMenu mnLanguage = new JMenu(t("j.language"));
+            mnViewMenu.add(mnLanguage);
 
             langJa = new JRadioButtonMenuItem("日本語");
             langEn = new JRadioButtonMenuItem("English");
@@ -266,7 +266,7 @@ public class MainFrameDesign extends JFrame {
 			
 			mnLanguage.add(langJa);
 			mnLanguage.add(langEn);
-		
+
 		chckbxmntmByName = new JCheckBoxMenuItem(t("j.name"));
 		buttonGroupSort.add(chckbxmntmByName);
 		chckbxmntmByName.setSelected(true);
@@ -293,7 +293,6 @@ public class MainFrameDesign extends JFrame {
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		contentPane.add(splitPane, BorderLayout.CENTER);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setForeground(Color.black);
@@ -635,8 +634,15 @@ public class MainFrameDesign extends JFrame {
 		JScrollPane spectrumInfoScroll = new JScrollPane(spectrumInfoText,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		spectrumInfoPanel.add(spectrumInfoScroll, BorderLayout.CENTER);
 	    spectrumInfoPanel.setPreferredSize(new Dimension(300, 200));
-		contentPane.add(spectrumInfoPanel, BorderLayout.EAST);
-	}
+		spectrumInfoPanel.setMinimumSize(new Dimension(150, 100));
+
+		JSplitPane outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splitPane, spectrumInfoPanel);
+        outerSplitPane.setResizeWeight(1.0);
+		outerSplitPane.setDividerLocation(0.5);
+        outerSplitPane.setOneTouchExpandable(true);
+
+        contentPane.add(outerSplitPane, BorderLayout.CENTER);
+    }
 
 	protected JButton getBtnCameraMove() {
 		return btnCameraMove;
