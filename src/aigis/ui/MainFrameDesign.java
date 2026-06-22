@@ -48,6 +48,8 @@ import aigis.i18n.I18n;
 import static aigis.i18n.I18n.t;
 import java.util.Locale;
 import javax.swing.JEditorPane;
+import java.util.List;
+import java.util.ArrayList;
 
 /***
  * Design of the MainFrame. Don't edit by hand. Use the SwingDesigner.
@@ -123,8 +125,7 @@ public class MainFrameDesign extends JFrame {
     private JEditorPane spectrumInfoText;
 	private JCheckBoxMenuItem menuSpectrumInfo;
 	private JCheckBox chkShowSpectrumDescription;
-	private JRadioButtonMenuItem langJa;
-    private JRadioButtonMenuItem langEn;
+	private List<JRadioButtonMenuItem> langMenuItems = new ArrayList<>();
 
 	/**
 	 * Launch the application.
@@ -253,21 +254,26 @@ public class MainFrameDesign extends JFrame {
 		JMenu mnLanguage = new JMenu(t("j.language"));
             mnViewMenu.add(mnLanguage);
 
-            langJa = new JRadioButtonMenuItem("日本語");
-            langEn = new JRadioButtonMenuItem("English");
-
+            ButtonGroup langGroup = new ButtonGroup();
             Locale current = I18n.getLocale();
 
-            langJa.setSelected(current.getLanguage().equals("ja"));
-            langEn.setSelected(current.getLanguage().equals("en"));
+			Locale[] supportedLocales = { Locale.JAPANESE, Locale.ENGLISH };
+			String[] langKeys = { "j.lang.ja", "j.lang.en" };
 
-            ButtonGroup langGroup = new ButtonGroup();
-            langGroup.add(langJa);
-			langGroup.add(langEn);
+            for (int i = 0; i < supportedLocales.length; i++) {
+                Locale locale = supportedLocales[i];
+				JRadioButtonMenuItem langItem = new JRadioButtonMenuItem(t(langKeys[i]));
+				langItem.setSelected(current.getLanguage().equals(locale.getLanguage()));
+
+				langItem.addActionListener(e -> {
+                    I18n.setLocale(locale);
+                    rebuildUI();
+				});
+            langGroup.add(langItem);
+            mnLanguage.add(langItem);
+            langMenuItems.add(langItem);
+        }
 			
-			mnLanguage.add(langJa);
-			mnLanguage.add(langEn);
-
 		chckbxmntmByName = new JCheckBoxMenuItem(t("j.name"));
 		buttonGroupSort.add(chckbxmntmByName);
 		chckbxmntmByName.setSelected(true);
@@ -840,12 +846,12 @@ public class MainFrameDesign extends JFrame {
 		return chkShowSpectrumDescription;
 	}
 
-	protected JRadioButtonMenuItem getLangJa() { 
-		return langJa; 
-	}
+	protected List<JRadioButtonMenuItem> getLangItems() {
+        return langMenuItems;
+    }
 
-    protected JRadioButtonMenuItem getLangEn() { 
-		return langEn; 
+	protected void rebuildUI(){
+
 	}
 
 }
