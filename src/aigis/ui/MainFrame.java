@@ -87,9 +87,14 @@ public class MainFrame extends MainFrameDesign {
 	private TreeMap<String, ChartFrame> chartFrames = new TreeMap<>();
 	private final DecimalFormat doubleFormat = new DecimalFormat("#.########");
 	private JEditorPane spectrumDescriptionArea;
+	private String parentFileName;
 
     private void refreshTexts() {
         SwingUtilities.updateComponentTreeUI(this);
+    }
+
+	private String getParentFileName() {
+        return parentFileName;
     }
 
 	public void rebuildUI() {
@@ -100,6 +105,7 @@ public class MainFrame extends MainFrameDesign {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     });
+
 }
 
 	public MainFrame() {
@@ -624,29 +630,53 @@ public class MainFrame extends MainFrameDesign {
                 }
 
                 int row = mapTable.getSelectedRow();
-                    if (row < 0) {
-                        return;
-                }
-
-                String key = (String) mapTable.getModel().getValueAt(row, 0);
-                window.getActiveRenderer().changeSpectrum(key);
-                viewRescale.setEnabled(row > 0);
-                glPanel.repaint();
+				String key = null;
+            
+				if(row >= 0) {
+                    key = (String) mapTable.getModel().getValueAt(row, 0);
+                    window.getActiveRenderer().changeSpectrum(key);
+                    viewRescale.setEnabled(row > 0);
+                    glPanel.repaint();
+				}
 
 				if (spectrumInfoPanel.isVisible()) {
                     try {
-						String lang = I18n.getLocale().getLanguage();
-						URL url = App.class.getResource("/aigis/res/spectrum/" + lang + "/" + key + ".html");
-						if (url != null) {
-							spectrumDescriptionArea.setPage(url);
-						} else {
-							spectrumDescriptionArea.setText("<html><body>" + I18n.t("j.noexplanation") + "</body></html>");
-						}
-					} catch (Exception ex) {
-						Logger.Error(ex);
-						spectrumDescriptionArea.setText("<html><body>" + I18n.t("j.noexplanation") + "</body></html>");
+                        String lang = I18n.getLocale().getLanguage();
+                        String targetKey = key;
+
+                        if (targetKey == null || targetKey.isEmpty() || "#None".equals(targetKey)) {
+                            String parentFileName = getParentFileName();
+
+                            if (parentFileName != null && !parentFileName.isEmpty()) {
+                                String baseName = parentFileName.replaceFirst("\\.[^.]+$", "");
+                                String normalizedBaseName = baseName.toLowerCase(Locale.ROOT);
+
+                                if (normalizedBaseName.startsWith("itokawa")) {
+                                    targetKey = "Itokawa";
+                                } else if (normalizedBaseName.startsWith("ryugu")) {
+                                    targetKey = "Ryugu";
+                                } else {
+                                    targetKey = parentFileName.replace(".", "_");
+                                }
+                            }
+                        }
+
+                        URL url = null;
+                            if (targetKey != null && !targetKey.isEmpty()) {
+                            url = App.class.getResource("/aigis/res/spectrum/" + lang + "/" + targetKey + ".html");
+                        }
+
+                        if (url != null) {
+                            spectrumDescriptionArea.setPage(url);
+                        } else {
+                            spectrumDescriptionArea.setText("<html><body>" + I18n.t("j.noexplanation") + "</body></html>");
+                        }
+
+                    } catch (Exception ex) {
+                        Logger.Error(ex);
+                        spectrumDescriptionArea.setText("<html><body>" + I18n.t("j.noexplanation") + "</body></html>");
                     }
-                }                 
+                }
             }
 		});
 
@@ -988,6 +1018,7 @@ public class MainFrame extends MainFrameDesign {
 	 * @param file
 	 */
 	private void loadFile(File file) {
+		this.parentFileName = file.getName();
 		Logger.Debug(file.getAbsolutePath());
 		LoadingDialog dialog = new LoadingDialog(this);
 		setEnabled(false);
