@@ -92,7 +92,7 @@ public class MainFrame extends MainFrameDesign {
         SwingUtilities.updateComponentTreeUI(this);
     }
 
-	private void rebuildUI() {
+	public void rebuildUI() {
     SwingUtilities.invokeLater(() -> {
         dispose();
         MainFrame frame = new MainFrame();
@@ -143,16 +143,6 @@ public class MainFrame extends MainFrameDesign {
 			spectrumInfoPanel.getParent().revalidate();
 			spectrumInfoPanel.getParent().repaint();
 		});
-
-		getLangJa().addActionListener(e -> {
-            I18n.setLocale(Locale.JAPANESE);
-            rebuildUI();
-        });
-
-        getLangEn().addActionListener(e -> {
-            I18n.setLocale(Locale.ENGLISH);
-            rebuildUI();
-        });
 
 		// view
 		JCheckBoxMenuItem viewColorbar = this.getChckbxmntmColorBar();
