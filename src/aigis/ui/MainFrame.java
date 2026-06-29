@@ -71,6 +71,8 @@ import aigis.i18n.I18n;
 import static aigis.i18n.I18n.t;
 import javax.swing.SwingUtilities;
 import javax.swing.JEditorPane;
+import java.io.Reader;
+import java.io.InputStreamReader;
 
 /***
  * MainFrame Controller.
@@ -667,9 +669,12 @@ public class MainFrame extends MainFrameDesign {
                         }
 
                         if (url != null) {
-                            spectrumDescriptionArea.setPage(url);
+                           try (Reader reader = new InputStreamReader(url.openStream(),StandardCharsets.UTF_8)) {
+                                spectrumDescriptionArea.setContentType("text/html; charset=UTF-8");
+                                spectrumDescriptionArea.read(reader, null);
+                            }
                         } else {
-                            spectrumDescriptionArea.setText("<html><body>" + I18n.t("j.noexplanation") + "</body></html>");
+                                spectrumDescriptionArea.setText("<html><body>" + I18n.t("j.noexplanation") + "</body></html>");
                         }
 
                     } catch (Exception ex) {
