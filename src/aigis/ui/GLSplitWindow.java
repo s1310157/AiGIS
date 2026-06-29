@@ -82,14 +82,35 @@ public class GLSplitWindow {
 	private boolean withoutFrame = false;
 	private Character fixedAxis = null;
 
-	private Scene scene;
+	private Scene[] scenes = new Scene[4];
+
+	/***
+	 * Assign a specific Scene to a viewport index (0–3).
+	 * If not set, the primary scene (index 0) is used.
+	 */
+	public void setScene(int viewportIndex, Scene scene) {
+		if (viewportIndex >= 0 && viewportIndex < scenes.length) {
+			scenes[viewportIndex] = scene;
+			if (renderers[viewportIndex] != null) {
+				renderers[viewportIndex] = new Renderer(scene);
+				renderers[viewportIndex].resetSetting(true);
+			}
+		}
+	}
+
+	private Scene getSceneForViewport(int index) {
+		if (scenes[index] != null) {
+			return scenes[index];
+		}
+		return scenes[0];
+	}
 
 	/***
 	 * constructor
 	 */
 	public GLSplitWindow(GLJPanel glPanel, Scene scene) {
 		this.glPanel = glPanel;
-		this.scene = scene;
+		this.scenes[0] = scene;
 
 		// mouse events
 		glPanel.addMouseWheelListener(new MouseWheelListener() {
@@ -324,16 +345,21 @@ public class GLSplitWindow {
 				gl.glBindTexture(GL.GL_TEXTURE_2D, 0);
 
 				try {
-					scene.compile(gl);
-					Models models = scene.getRegisteredModels();
-
-					try {
-						textures.initTexture(gl, models);
-					} catch (RuntimeException e) {
-						Logger.Error(e);
-						String msg = e.getMessage();
-						JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), t("j.error"),
-								JOptionPane.WARNING_MESSAGE);
+					// Compile and init textures for each unique scene across active viewports
+					java.util.LinkedHashSet<Scene> activeScenes = new java.util.LinkedHashSet<>();
+					for (int i = 0; i < division; i++) {
+						activeScenes.add(getSceneForViewport(i));
+					}
+					for (Scene s : activeScenes) {
+						s.compile(gl);
+						try {
+							textures.initTexture(gl, s.getRegisteredModels());
+						} catch (RuntimeException e) {
+							Logger.Error(e);
+							String msg = e.getMessage();
+							JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), t("j.error"),
+									JOptionPane.WARNING_MESSAGE);
+						}
 					}
 
 					gl.glMatrixMode(GL_MODELVIEW);
@@ -391,7 +417,7 @@ public class GLSplitWindow {
 		}
 		for (int i = 0; i < division; i++) {
 			if (renderers[i] == null) {
-				renderers[i] = new Renderer(scene);
+				renderers[i] = new Renderer(getSceneForViewport(i));
 				renderers[i].resetSetting(true);
 			}
 			if (eventListener != null && screen == i) {
@@ -491,13 +517,15 @@ public class GLSplitWindow {
 	}
 
 	/**
-	 * Reset all renderers.
+	 * Reset all renderers. Each renderer uses its own scene's model size when available.
 	 */
 	public void resetRenderer(boolean resetCamera, double size) {
 		for (int i = 0; i < division; i++) {
 			renderers[i].resetSetting(resetCamera);
 			if (resetCamera) {
-				renderers[i].getCameraInfo().setDefaultSize(size);
+				Scene s = getSceneForViewport(i);
+				double viewportSize = s.getModelSize() > 0 ? s.getModelSize() : size;
+				renderers[i].getCameraInfo().setDefaultSize(viewportSize);
 			}
 		}
 		if (eventListener != null) {
