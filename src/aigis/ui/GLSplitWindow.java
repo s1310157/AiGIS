@@ -41,6 +41,8 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.awt.GLJPanel;
 
+import static aigis.i18n.I18n.t;
+
 import aigis.Logger;
 import aigis.Scene;
 import aigis.SceneManager;
@@ -333,7 +335,7 @@ public class GLSplitWindow {
 					} catch (RuntimeException e) {
 						Logger.Error(e);
 						String msg = e.getMessage();
-						JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), "Error",
+						JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), t("j.error"),
 								JOptionPane.WARNING_MESSAGE);
 					}
 
@@ -347,7 +349,7 @@ public class GLSplitWindow {
 				} catch (Exception e) {
 					Logger.Error(e);
 					String msg = e.getMessage();
-					JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), "Error",
+					JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), t("j.error"),
 							JOptionPane.ERROR_MESSAGE);
 					System.exit(1);
 					return;
@@ -492,7 +494,7 @@ public class GLSplitWindow {
 	}
 
 	/**
-	 * Reset all renderers.
+	 * Reset all renderers. Each renderer uses its own scene's model size when available.
 	 */
 	public void resetRenderer(boolean resetCamera, double size) {
 		for (int i = 0; i < division; i++) {
@@ -567,7 +569,7 @@ public class GLSplitWindow {
 
 		// VBOが使えない場合は終了
 		if (enabledVBO == false) {
-			JOptionPane.showMessageDialog(null, "VBO not supported. \n", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, t("j.notsupported") + "\n", t("j.error"), JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 			return;
 		}

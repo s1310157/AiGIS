@@ -98,6 +98,7 @@ public class Renderer {
 	private Font font = new Font("Monospaced", java.awt.Font.BOLD, 32);
 	private TextRenderer tr = new TextRenderer(font, true, true);
 	private GLU glu = new GLU();
+	private ScaleBar scaleBar = new ScaleBar();
 
 	public Renderer(Scene scene) {
 		this.scene = scene;
@@ -626,6 +627,9 @@ public class Renderer {
 			gl.glLoadIdentity();
 			scene.colorbar.draw(gl, viewport[2], viewport[3], scene, this);
 		}
+
+		// draw scale bar (always visible)
+		scaleBar.draw(gl, viewport[2], viewport[3], camera);
 
 		// error check
 		int err = gl.glGetError();

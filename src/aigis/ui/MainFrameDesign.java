@@ -35,12 +35,21 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLJPanel;
+import aigis.i18n.I18n;
+import static aigis.i18n.I18n.t;
+import java.util.Locale;
+import javax.swing.JEditorPane;
+import java.util.List;
+import java.util.ArrayList;
 
 /***
  * Design of the MainFrame. Don't edit by hand. Use the SwingDesigner.
@@ -113,6 +122,11 @@ public class MainFrameDesign extends JFrame {
 	private JLabel lblCameraRoll;
 	private JTextField textCameraRoll;
 	private JPanel panelToolsModel;
+	private JPanel spectrumInfoPanel;
+    private JEditorPane spectrumInfoText;
+	private JCheckBoxMenuItem menuSpectrumInfo;
+	private JCheckBox chkShowSpectrumDescription;
+	private List<JRadioButtonMenuItem> langMenuItems = new ArrayList<>();
 
 	/**
 	 * Launch the application.
@@ -139,71 +153,74 @@ public class MainFrameDesign extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
-		JMenu mnFileMenu = new JMenu("File");
+		JMenu mnFileMenu = new JMenu(t("j.file"));
 		menuBar.add(mnFileMenu);
 
-		mntmOpen = new JMenuItem("Open...");
+		mntmOpen = new JMenuItem(t("j.open"));
 		mnFileMenu.add(mntmOpen);
 
 		mntmOpenNewScene = new JMenuItem("Open in New Scene...");
 		mnFileMenu.add(mntmOpenNewScene);
 
-		mntmSaveSS = new JMenuItem("Save Snapshot");
+		mntmSaveSS = new JMenuItem(t("j.save"));
 		mnFileMenu.add(mntmSaveSS);
 
 		separator = new JSeparator();
 		mnFileMenu.add(separator);
 
-		mntmSettings = new JMenuItem("Settings...");
+		mntmSettings = new JMenuItem(t("j.setting"));
 		mnFileMenu.add(mntmSettings);
 
-		mntmAbout = new JMenuItem("About...");
+		mntmAbout = new JMenuItem(t("j.version"));
 		mnFileMenu.add(mntmAbout);
 
-		JMenu mnViewMenu = new JMenu("View");
+		JMenu mnViewMenu = new JMenu(t("j.view"));
 		menuBar.add(mnViewMenu);
 
-		mnProjection = new JMenu("Projection");
+		mnProjection = new JMenu(t("j.projection"));
 		mnViewMenu.add(mnProjection);
 
-		chckbxmntmPerspective = new JCheckBoxMenuItem("Perspective");
+		chckbxmntmPerspective = new JCheckBoxMenuItem(t("j.perspective"));
 		buttonGroupProjection.add(chckbxmntmPerspective);
 		chckbxmntmPerspective.setSelected(true);
 		mnProjection.add(chckbxmntmPerspective);
 
-		chckbxmntmOrthographic = new JCheckBoxMenuItem("Orthographic");
+		chckbxmntmOrthographic = new JCheckBoxMenuItem(t("j.orthographic"));
 		buttonGroupProjection.add(chckbxmntmOrthographic);
 		mnProjection.add(chckbxmntmOrthographic);
 
-		chckbxmntmLatLonGrid = new JCheckBoxMenuItem("Show Lat-Lon Grid");
+		chckbxmntmLatLonGrid = new JCheckBoxMenuItem(t("j.latlongrid"));
 		mnViewMenu.add(chckbxmntmLatLonGrid);
 
-		chckbxmntmColorBar = new JCheckBoxMenuItem("Show Color Bar");
+		chckbxmntmColorBar = new JCheckBoxMenuItem(t("j.colorbar"));
 		mnViewMenu.add(chckbxmntmColorBar);
 
-		chckbxmntmShowAxis = new JCheckBoxMenuItem("Show Axis");
+		chckbxmntmShowAxis = new JCheckBoxMenuItem(t("j.showaxis"));
 		mnViewMenu.add(chckbxmntmShowAxis);
 
-		mntmRescaleRange = new JMenuItem("Rescale Color Range...");
+		menuSpectrumInfo = new JCheckBoxMenuItem(t("j.spectruminfo"), true);
+		mnViewMenu.add(menuSpectrumInfo);
+
+		mntmRescaleRange = new JMenuItem(t("j.rescalerange"));
 		mntmRescaleRange.setEnabled(false);
 		mnViewMenu.add(mntmRescaleRange);
 
-		mnLookUp = new JMenu("Look-up Table");
+		mnLookUp = new JMenu(t("j.lookup"));
 		mnViewMenu.add(mnLookUp);
 
-		chckbxmntmShading = new JCheckBoxMenuItem("Shading");
+		chckbxmntmShading = new JCheckBoxMenuItem(t("j.shading"));
 		mnViewMenu.add(chckbxmntmShading);
 
-		mntmReset = new JMenuItem("Reset View");
+		mntmReset = new JMenuItem(t("j.reset"));
 		mnViewMenu.add(mntmReset);
 
-		chckbxmntmFixedLight = new JCheckBoxMenuItem("Fixed Light");
+		chckbxmntmFixedLight = new JCheckBoxMenuItem(t("j.fixedlight"));
 		mnViewMenu.add(chckbxmntmFixedLight);
 
-		JMenu mnMultiMenu = new JMenu("Multi-View");
+		JMenu mnMultiMenu = new JMenu(t("j.multiitem"));
 		menuBar.add(mnMultiMenu);
 
-		JMenu mnDivision = new JMenu("Division");
+		JMenu mnDivision = new JMenu(t("j.division"));
 		mnMultiMenu.add(mnDivision);
 
 		radioDivision1 = new JRadioButtonMenuItem("1");
@@ -219,50 +236,74 @@ public class MainFrameDesign extends JFrame {
 		buttonGroupDivision.add(radioDivision4);
 		mnDivision.add(radioDivision4);
 
-		chckbxmntmSyncViews = new JCheckBoxMenuItem("Sync Views");
+		chckbxmntmSyncViews = new JCheckBoxMenuItem(t("j.syncviews"));
 		chckbxmntmSyncViews.setSelected(true);
 		mnMultiMenu.add(chckbxmntmSyncViews);
 
-		mntmSyncAllViews = new JMenuItem("Sync All Views");
+		mntmSyncAllViews = new JMenuItem(t("j.syncallviews"));
 		mnMultiMenu.add(mntmSyncAllViews);
 
-		JMenu mnImageMenu = new JMenu("Image");
+		JMenu mnImageMenu = new JMenu(t("j.image"));
 		menuBar.add(mnImageMenu);
 
-		mntmOpenImage = new JMenuItem("Open Image/Map Image...");
+		mntmOpenImage = new JMenuItem(t("j.openimage"));
 		mnImageMenu.add(mntmOpenImage);
 
-		JMenu mnMapdata = new JMenu("MapData");
+		JMenu mnMapdata = new JMenu(t("j.mapdata"));
 		menuBar.add(mnMapdata);
 
-		JMenu mnSort = new JMenu("Sort");
+		JMenu mnSort = new JMenu(t("j.sort"));
 		mnMapdata.add(mnSort);
 
-		chckbxmntmByName = new JCheckBoxMenuItem("By Name");
+		JMenu mnLanguage = new JMenu(t("j.language"));
+            mnViewMenu.add(mnLanguage);
+
+            ButtonGroup langGroup = new ButtonGroup();
+            Locale current = I18n.getLocale();
+
+			Locale[] supportedLocales = { Locale.JAPANESE, Locale.ENGLISH };
+			String[] langKeys = { "j.lang.ja", "j.lang.en" };
+
+            for (int i = 0; i < supportedLocales.length; i++) {
+                Locale locale = supportedLocales[i];
+				JRadioButtonMenuItem langItem = new JRadioButtonMenuItem(t(langKeys[i]));
+				langItem.setSelected(current.getLanguage().equals(locale.getLanguage()));
+
+				langItem.addActionListener(e -> {
+                    I18n.setLocale(locale);
+                    rebuildUI();
+				});
+            langGroup.add(langItem);
+            mnLanguage.add(langItem);
+            langMenuItems.add(langItem);
+        }
+			
+		chckbxmntmByName = new JCheckBoxMenuItem(t("j.name"));
 		buttonGroupSort.add(chckbxmntmByName);
 		chckbxmntmByName.setSelected(true);
 		mnSort.add(chckbxmntmByName);
 
-		chckbxmntmByFilename = new JCheckBoxMenuItem("By FileName");
+		chckbxmntmByFilename = new JCheckBoxMenuItem(t("j.filename"));
 		buttonGroupSort.add(chckbxmntmByFilename);
 		mnSort.add(chckbxmntmByFilename);
 
-		mntmReload = new JMenuItem("Reload");
+		mntmReload = new JMenuItem(t("j.reload"));
 		mnMapdata.add(mntmReload);
 
-		mnAdditional3d = new JMenu("3D Object");
+		mnAdditional3d = new JMenu(t("j.3dobject"));
 		menuBar.add(mnAdditional3d);
 
-		chckbxmntmShowAdditional3d = new JCheckBoxMenuItem("Show Additional 3D Object");
+		chckbxmntmShowAdditional3d = new JCheckBoxMenuItem(t("j.showadditional3d"));
 		mnAdditional3d.add(chckbxmntmShowAdditional3d);
 
-		mntmReloadAll = new JMenuItem("ReloadAll");
+		chkShowSpectrumDescription = new JCheckBox(t("j.spectrum"));
+
+		mntmReloadAll = new JMenuItem(t("j.reloadall"));
 		mnAdditional3d.add(mntmReloadAll);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		contentPane.add(splitPane, BorderLayout.CENTER);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setForeground(Color.black);
@@ -271,7 +312,7 @@ public class MainFrameDesign extends JFrame {
 		JPanel panelTools = new JPanel();
 		tabbedPane.add(panelTools);
 		tabbedPane.setEnabledAt(0, true);
-		tabbedPane.setTitleAt(0, "General");
+		tabbedPane.setTitleAt(0, t("j.general"));
 		panelTools.setLayout(new BoxLayout(panelTools, BoxLayout.Y_AXIS));
 
 		JPanel panelToolsTop = new JPanel();
@@ -290,13 +331,13 @@ public class MainFrameDesign extends JFrame {
 		horizontalGlue_4 = Box.createHorizontalGlue();
 		toolBarCamera.add(horizontalGlue_4);
 
-		lblCamera = new JLabel("Camera");
+		lblCamera = new JLabel(t("j.camera"));
 		toolBarCamera.add(lblCamera);
 
 		horizontalGlue_5 = Box.createHorizontalGlue();
 		toolBarCamera.add(horizontalGlue_5);
 
-		btnCameraInfo = new JButton("Info");
+		btnCameraInfo = new JButton(t("j.info"));
 		toolBarCamera.add(btnCameraInfo);
 
 		JPanel panelToolsCamera = new JPanel();
@@ -305,7 +346,7 @@ public class MainFrameDesign extends JFrame {
 		gbl_panelToolsCamera.columnWeights = new double[] { 0.0, 1.0, 0.0 };
 		panelToolsCamera.setLayout(gbl_panelToolsCamera);
 
-		JLabel lblCameraLat = new JLabel("Latitude");
+		JLabel lblCameraLat = new JLabel(t("j.latitude"));
 		GridBagConstraints gbc_lblCameraLat = new GridBagConstraints();
 		gbc_lblCameraLat.fill = GridBagConstraints.BOTH;
 		gbc_lblCameraLat.insets = new Insets(0, 5, 5, 5);
@@ -323,7 +364,7 @@ public class MainFrameDesign extends JFrame {
 		gbc_textCameraLat.gridy = 0;
 		panelToolsCamera.add(textCameraLat, gbc_textCameraLat);
 
-		btnCameraMove = new JButton("Move");
+		btnCameraMove = new JButton(t("j.move"));
 		GridBagConstraints gbc_btnCameraMove = new GridBagConstraints();
 		gbc_btnCameraMove.insets = new Insets(0, 0, 5, 0);
 		gbc_btnCameraMove.gridheight = 3;
@@ -332,7 +373,7 @@ public class MainFrameDesign extends JFrame {
 		gbc_btnCameraMove.gridy = 0;
 		panelToolsCamera.add(btnCameraMove, gbc_btnCameraMove);
 
-		JLabel lblCameraLng = new JLabel("Longitude");
+		JLabel lblCameraLng = new JLabel(t("j.longitude"));
 		GridBagConstraints gbc_lblCameraLng = new GridBagConstraints();
 		gbc_lblCameraLng.fill = GridBagConstraints.BOTH;
 		gbc_lblCameraLng.insets = new Insets(0, 5, 5, 5);
@@ -348,7 +389,7 @@ public class MainFrameDesign extends JFrame {
 		gbc_textCameraLng.gridy = 1;
 		panelToolsCamera.add(textCameraLng, gbc_textCameraLng);
 
-		lblCameraRoll = new JLabel("Roll");
+		lblCameraRoll = new JLabel(t("j.rotate"));
 		GridBagConstraints gbc_lblCameraRoll = new GridBagConstraints();
 		gbc_lblCameraRoll.fill = GridBagConstraints.BOTH;
 		gbc_lblCameraRoll.insets = new Insets(0, 5, 5, 5);
@@ -373,7 +414,7 @@ public class MainFrameDesign extends JFrame {
 		gbc_separator_1.gridy = 3;
 		panelToolsCamera.add(separator_1, gbc_separator_1);
 
-		lblCameraDistance = new JLabel("Distance");
+		lblCameraDistance = new JLabel(t("j.distance"));
 		GridBagConstraints gbc_lblCameraDistance = new GridBagConstraints();
 		gbc_lblCameraDistance.fill = GridBagConstraints.BOTH;
 		gbc_lblCameraDistance.anchor = GridBagConstraints.EAST;
@@ -391,7 +432,7 @@ public class MainFrameDesign extends JFrame {
 		panelToolsCamera.add(textCameraDistance, gbc_textCameraDistance);
 		textCameraDistance.setColumns(10);
 
-		btnCameraSet = new JButton("Set");
+		btnCameraSet = new JButton(t("j.setting"));
 		GridBagConstraints gbc_btnCameraSet = new GridBagConstraints();
 		gbc_btnCameraSet.fill = GridBagConstraints.BOTH;
 		gbc_btnCameraSet.gridheight = 2;
@@ -420,7 +461,7 @@ public class MainFrameDesign extends JFrame {
 		JSeparator separator_2 = new JSeparator();
 		panelToolsTop.add(separator_2);
 
-		JLabel lblLight = new JLabel("Light");
+		JLabel lblLight = new JLabel(t("j.light"));
 		panelToolsTop.add(lblLight);
 		lblLight.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -433,7 +474,7 @@ public class MainFrameDesign extends JFrame {
 		gbl_panelToolsLight.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
 		panelToolsLight.setLayout(gbl_panelToolsLight);
 
-		JLabel lblLightLat = new JLabel("Latitude");
+		JLabel lblLightLat = new JLabel(t("j.latitude"));
 		GridBagConstraints gbc_lblLightLat = new GridBagConstraints();
 		gbc_lblLightLat.fill = GridBagConstraints.BOTH;
 		gbc_lblLightLat.insets = new Insets(0, 5, 0, 5);
@@ -450,7 +491,7 @@ public class MainFrameDesign extends JFrame {
 		gbc_textLightLat.gridy = 0;
 		panelToolsLight.add(textLightLat, gbc_textLightLat);
 
-		btnLightMove = new JButton("Move");
+		btnLightMove = new JButton(t("j.move"));
 		GridBagConstraints gbc_btnLightMove = new GridBagConstraints();
 		gbc_btnLightMove.fill = GridBagConstraints.BOTH;
 		gbc_btnLightMove.gridheight = 2;
@@ -458,7 +499,7 @@ public class MainFrameDesign extends JFrame {
 		gbc_btnLightMove.gridy = 0;
 		panelToolsLight.add(btnLightMove, gbc_btnLightMove);
 
-		JLabel lblLightLng = new JLabel("Longitude");
+		JLabel lblLightLng = new JLabel(t("j.longitude"));
 		GridBagConstraints gbc_lblLightLng = new GridBagConstraints();
 		gbc_lblLightLng.fill = GridBagConstraints.BOTH;
 		gbc_lblLightLng.insets = new Insets(0, 5, 0, 5);
@@ -477,7 +518,7 @@ public class MainFrameDesign extends JFrame {
 		JSeparator separator_3 = new JSeparator();
 		panelToolsTop.add(separator_3);
 
-		JLabel lblModel = new JLabel("Model");
+		JLabel lblModel = new JLabel(t("j.model"));
 		panelToolsTop.add(lblModel);
 		lblModel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
@@ -501,13 +542,13 @@ public class MainFrameDesign extends JFrame {
 		Component horizontalGlue = Box.createHorizontalGlue();
 		toolBar.add(horizontalGlue);
 
-		JLabel lblInfo = new JLabel("Info");
+		JLabel lblInfo = new JLabel(t("j.info"));
 		toolBar.add(lblInfo);
 
 		Component horizontalGlue_1 = Box.createHorizontalGlue();
 		toolBar.add(horizontalGlue_1);
 
-		btnInfoCopy = new JButton("Copy");
+		btnInfoCopy = new JButton(t("j.copy"));
 		toolBar.add(btnInfoCopy);
 
 		infoTable = new JTable();
@@ -526,7 +567,7 @@ public class MainFrameDesign extends JFrame {
 		Component horizontalGlue_2 = Box.createHorizontalGlue();
 		toolBar_1.add(horizontalGlue_2);
 
-		JLabel lblMapData = new JLabel("MapData");
+		JLabel lblMapData = new JLabel(t("j.mapdata"));
 		toolBar_1.add(lblMapData);
 
 		Component horizontalGlue_3 = Box.createHorizontalGlue();
@@ -547,10 +588,10 @@ public class MainFrameDesign extends JFrame {
 		scrollPane.setViewportView(mapTable);
 
 		JPanel panelTexture = new JPanel();
-		tabbedPane.addTab("Images", null, panelTexture, null);
+		tabbedPane.addTab(t("j.image"), null, panelTexture, null);
 		panelTexture.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblTexture = new JLabel("ImageList");
+		JLabel lblTexture = new JLabel(t("j.imagelist"));
 		lblTexture.setHorizontalAlignment(SwingConstants.CENTER);
 		panelTexture.add(lblTexture, BorderLayout.NORTH);
 
@@ -563,15 +604,15 @@ public class MainFrameDesign extends JFrame {
 		texScrollPane.setPreferredSize(new Dimension(280, Short.MAX_VALUE));
 		texScrollPane.setViewportView(texInfoTable);
 
-		btnAddTex = new JButton("ADD");
+		btnAddTex = new JButton(t("j.add"));
 		panelTexture.add(btnAddTex, BorderLayout.SOUTH);
 		tabbedPane.setEnabledAt(1, true);
 
 		panel3D = new JPanel();
-		tabbedPane.addTab("3D Object", null, panel3D, null);
+		tabbedPane.addTab(t("j.3dobject"), null, panel3D, null);
 		panel3D.setLayout(new BorderLayout(0, 0));
 
-		lblNewLabel = new JLabel("3D Object List");
+		lblNewLabel = new JLabel(t("j.3dobjectlist"));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		panel3D.add(lblNewLabel, BorderLayout.NORTH);
 
@@ -593,7 +634,25 @@ public class MainFrameDesign extends JFrame {
 		setFocusTraversalPolicy(new FocusTraversalOnArray(
 				new Component[] { lblCamera, textCameraLat, textCameraLng, textCameraRoll, btnCameraMove,
 						textCameraDistance, textFov, btnCameraSet, textLightLat, textLightLng, btnLightMove }));
-	}
+
+		spectrumInfoPanel = new JPanel(new BorderLayout());
+		spectrumInfoPanel.setBorder(BorderFactory.createTitledBorder(t("j.spectrum")));
+
+		spectrumInfoText = new JEditorPane();
+        spectrumInfoText.setEditable(false);
+        spectrumInfoText.setContentType("text/html");
+		JScrollPane spectrumInfoScroll = new JScrollPane(spectrumInfoText,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		spectrumInfoPanel.add(spectrumInfoScroll, BorderLayout.CENTER);
+	    spectrumInfoPanel.setPreferredSize(new Dimension(300, 200));
+		spectrumInfoPanel.setMinimumSize(new Dimension(150, 100));
+
+		JSplitPane outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splitPane, spectrumInfoPanel);
+        outerSplitPane.setResizeWeight(1.0);
+		outerSplitPane.setDividerLocation(0.5);
+        outerSplitPane.setOneTouchExpandable(true);
+
+        contentPane.add(outerSplitPane, BorderLayout.CENTER);
+    }
 
 	protected JButton getBtnCameraMove() {
 		return btnCameraMove;
@@ -669,6 +728,10 @@ public class MainFrameDesign extends JFrame {
 
 	protected JCheckBoxMenuItem getChckbxmntmShading() {
 		return chckbxmntmShading;
+	}
+
+	protected JCheckBoxMenuItem getMenuSpectrumInfo() {
+		return menuSpectrumInfo;
 	}
 
 	protected JMenuItem getMntmReset() {
@@ -778,4 +841,25 @@ public class MainFrameDesign extends JFrame {
 	protected JPanel getPanelToolsModel() {
 		return panelToolsModel;
 	}
+
+	protected JPanel getSpectrumInfoPanel() {
+		return spectrumInfoPanel;
+	}
+
+	public JEditorPane getSpectrumInfoText() {
+        return spectrumInfoText;
+    }
+	
+	protected JCheckBox getChkShowSpectrumDescription() {
+		return chkShowSpectrumDescription;
+	}
+
+	protected List<JRadioButtonMenuItem> getLangItems() {
+        return langMenuItems;
+    }
+
+	protected void rebuildUI(){
+
+	}
+
 }
