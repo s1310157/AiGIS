@@ -103,6 +103,24 @@ public class Renderer {
 		this.scene = scene;
 	}
 
+	/***
+	 * Change the scene to display.
+	 *
+	 * @param scene
+	 */
+	public void setScene(Scene scene) {
+		this.scene = scene;
+	}
+
+	/***
+	 * Get the scene displayed by this renderer.
+	 *
+	 * @return
+	 */
+	public Scene getScene() {
+		return scene;
+	}
+
 	/**
 	 * Reset settings
 	 */

@@ -1,2 +1,0 @@
-Gravitational_Potential
-Potential energy due to gravity at a given position (per unit mass). A scalar quantity reflecting the strength of the gravitational field and the mass distribution.

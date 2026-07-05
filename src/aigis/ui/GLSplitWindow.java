@@ -43,14 +43,13 @@ import com.jogamp.opengl.awt.GLJPanel;
 
 import aigis.Logger;
 import aigis.Scene;
+import aigis.SceneManager;
 import aigis.gl.Renderer;
 import aigis.gl.Textures;
 import aigis.model.CameraInfo;
 import aigis.model.LatLon;
 import aigis.model.ModelSelection.Resolution;
 import aigis.model.Models;
-import aigis.i18n.I18n;
-import static aigis.i18n.I18n.t;
 
 /***
  * 4 parts window.
@@ -82,14 +81,14 @@ public class GLSplitWindow {
 	private boolean withoutFrame = false;
 	private Character fixedAxis = null;
 
-	private Scene scene;
+	private SceneManager sceneManager;
 
 	/***
 	 * constructor
 	 */
-	public GLSplitWindow(GLJPanel glPanel, Scene scene) {
+	public GLSplitWindow(GLJPanel glPanel, SceneManager sceneManager) {
 		this.glPanel = glPanel;
-		this.scene = scene;
+		this.sceneManager = sceneManager;
 
 		// mouse events
 		glPanel.addMouseWheelListener(new MouseWheelListener() {
@@ -263,12 +262,14 @@ public class GLSplitWindow {
 				prevMousePos.x = e.getX();
 				prevMousePos.y = e.getY();
 				int index = getScreenIndex(e.getPoint());
-				if (scene.isChangeModel()) {
-					if (isSync) {
-						for (int i = 0; i < division; i++) {
+				if (isSync) {
+					for (int i = 0; i < division; i++) {
+						if (renderers[i].getScene().isChangeModel()) {
 							renderers[i].changeResolution(Resolution.Low);
 						}
-					} else {
+					}
+				} else {
+					if (renderers[index].getScene().isChangeModel()) {
 						renderers[index].changeResolution(Resolution.Low);
 					}
 				}
@@ -277,7 +278,7 @@ public class GLSplitWindow {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				for (int i = 0; i < division; i++) {
-					if (scene.isChangeModel()) {
+					if (renderers[i].getScene().isChangeModel()) {
 						renderers[i].changeResolution(null);
 					}
 				}
@@ -303,15 +304,15 @@ public class GLSplitWindow {
 
 			@Override
 			public void init(GLAutoDrawable drawable) {
-				Logger.Debug(t("j.glinitialization"));
+				Logger.Debug("*gl init");
 				initgl(drawable);
 			}
 
 			@Override
 			public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-				Logger.Debug(t("j.glreorganization") + ": x=" + x + ", y=" + y + ", w=" + width + ", h=" + height);
+				Logger.Debug("*gl reshape: x=" + x + ", y=" + y + ", w=" + width + ", h=" + height);
 				glPanel.getCurrentSurfaceScale(viewScales);
-				Logger.Debug(t("j.viewscale") + ": x=" + viewScales[0] + ", y=" + viewScales[1]);
+				Logger.Debug("*viewScales: x=" + viewScales[0] + ", y=" + viewScales[1]);
 				divide(division);
 			}
 
@@ -324,15 +325,15 @@ public class GLSplitWindow {
 				gl.glBindTexture(GL.GL_TEXTURE_2D, 0);
 
 				try {
-					scene.compile(gl);
-					Models models = scene.getRegisteredModels();
+					sceneManager.compile(gl);
+					Models models = sceneManager.getActiveScene().getRegisteredModels();
 
 					try {
 						textures.initTexture(gl, models);
 					} catch (RuntimeException e) {
 						Logger.Error(e);
 						String msg = e.getMessage();
-						JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), t("j.error"),
+						JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), "Error",
 								JOptionPane.WARNING_MESSAGE);
 					}
 
@@ -346,7 +347,7 @@ public class GLSplitWindow {
 				} catch (Exception e) {
 					Logger.Error(e);
 					String msg = e.getMessage();
-					JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), t("j.error"),
+					JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), "Error",
 							JOptionPane.ERROR_MESSAGE);
 					System.exit(1);
 					return;
@@ -355,7 +356,7 @@ public class GLSplitWindow {
 
 			@Override
 			public void dispose(GLAutoDrawable drawable) {
-				Logger.Debug(t("j.gldiscard"));
+				Logger.Debug("*gl dispose");
 			}
 
 		});
@@ -391,7 +392,7 @@ public class GLSplitWindow {
 		}
 		for (int i = 0; i < division; i++) {
 			if (renderers[i] == null) {
-				renderers[i] = new Renderer(scene);
+				renderers[i] = new Renderer(sceneManager.getActiveScene());
 				renderers[i].resetSetting(true);
 			}
 			if (eventListener != null && screen == i) {
@@ -497,13 +498,34 @@ public class GLSplitWindow {
 		for (int i = 0; i < division; i++) {
 			renderers[i].resetSetting(resetCamera);
 			if (resetCamera) {
-				renderers[i].getCameraInfo().setDefaultSize(size);
+				// each view may display a different scene
+				double sceneSize = renderers[i].getScene().getModelSize();
+				renderers[i].getCameraInfo().setDefaultSize(sceneSize > 0 ? sceneSize : size);
 			}
 		}
 		if (eventListener != null) {
 			eventListener.screenChanged(currentScreen);
 			eventListener.lightMoved(renderers[0].getLightLatLon());
 			eventListener.cameraMoved(renderers[0].getCameraInfo());
+		}
+		glPanel.repaint();
+	}
+
+	/***
+	 * Set the scene to the active view.
+	 *
+	 * @param scene
+	 * @param size model size of the scene
+	 */
+	public void setSceneToActiveView(Scene scene, double size) {
+		Renderer renderer = renderers[currentScreen];
+		renderer.setScene(scene);
+		renderer.resetSetting(true);
+		renderer.getCameraInfo().setDefaultSize(size);
+		if (eventListener != null) {
+			eventListener.screenChanged(currentScreen);
+			eventListener.lightMoved(renderer.getLightLatLon());
+			eventListener.cameraMoved(renderer.getCameraInfo());
 		}
 		glPanel.repaint();
 	}
@@ -526,7 +548,7 @@ public class GLSplitWindow {
 	 * @param drawable
 	 */
 	private void initgl(GLAutoDrawable drawable) {
-		Logger.Debug(t("j.jogl") + "...");
+		Logger.Debug("Initializing JOGL...");
 		gl = drawable.getGL().getGL2();
 		Logger.Debug("GL:" + gl.glGetString(GL.GL_VERSION));
 		boolean enabledVBO = gl.isExtensionAvailable("GL_ARB_vertex_buffer_object");
@@ -536,16 +558,16 @@ public class GLSplitWindow {
 			pkg = Package.getPackage("javax.media.opengl");
 		}
 		if (pkg != null) {
-			Logger.Debug("JOGL " + t("j.version") + ": " + pkg.getImplementationVersion());
+			Logger.Debug("JOGL version: " + pkg.getImplementationVersion());
 		}
 		FloatBuffer glGetBuf = com.jogamp.common.nio.Buffers.newDirectFloatBuffer(2);
 		gl.glGetFloatv(GL2.GL_LINE_WIDTH_RANGE, glGetBuf);
-		Logger.Debug(t("j.linewidth") + ": " + glGetBuf.get(0) + "~" + glGetBuf.get(1));
+		Logger.Debug("LINE_WIDTH: " + glGetBuf.get(0) + "~" + glGetBuf.get(1));
 		textures = new Textures(gl);
 
 		// VBOが使えない場合は終了
 		if (enabledVBO == false) {
-			JOptionPane.showMessageDialog(null, t("j.notsupported") + "\n", t("j.error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "VBO not supported. \n", "Error", JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 			return;
 		}
@@ -704,11 +726,11 @@ public class GLSplitWindow {
 		int sw = (int) viewScales[0];
 		int sh = (int) viewScales[1];
 		double dotsPerMilli = 72f / 10f / 2.54f;
-		IIOMetadataNode horiz = new IIOMetadataNode(t("j.hpixel"));
-		horiz.setAttribute(t("j.value"), Double.toString(dotsPerMilli * sh));
-		IIOMetadataNode vert = new IIOMetadataNode(t("j.vpixel"));
-		vert.setAttribute(t("j.value"), Double.toString(dotsPerMilli * sw));
-		IIOMetadataNode dim = new IIOMetadataNode(t("j.dimension"));
+		IIOMetadataNode horiz = new IIOMetadataNode("HorizontalPixelSize");
+		horiz.setAttribute("value", Double.toString(dotsPerMilli * sh));
+		IIOMetadataNode vert = new IIOMetadataNode("VerticalPixelSize");
+		vert.setAttribute("value", Double.toString(dotsPerMilli * sw));
+		IIOMetadataNode dim = new IIOMetadataNode("Dimension");
 		dim.appendChild(horiz);
 		dim.appendChild(vert);
 		IIOMetadataNode root = new IIOMetadataNode("javax_imageio_1.0");

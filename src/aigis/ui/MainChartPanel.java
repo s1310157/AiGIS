@@ -52,8 +52,6 @@ import aigis.App;
 import aigis.Const;
 import aigis.Logger;
 import aigis.model.ChartData;
-import aigis.i18n.I18n;
-import static aigis.i18n.I18n.t;
 
 public class MainChartPanel extends JPanel implements ChartMouseListener, ActionListener {
 
@@ -70,7 +68,7 @@ public class MainChartPanel extends JPanel implements ChartMouseListener, Action
 	private List<String[]> xColumnsList = new ArrayList<>();
 	private List<String[]> yRowsList = new ArrayList<>();
 
-	private JButton jbuttonChart = new JButton(t("j.savechart"));
+	private JButton jbuttonChart = new JButton("save chart");
 
 	/** 情報Window表示用のデータ */
 	class InfoValue {
@@ -335,12 +333,12 @@ public class MainChartPanel extends JPanel implements ChartMouseListener, Action
 
 			filewriter.close();
 
-			JOptionPane.showMessageDialog(this, t("j.savedchart") + "\n'" + path + "'", t("j.completed"),
+			JOptionPane.showMessageDialog(this, "The chart data was saved successfully.\n'" + path + "'", "Done",
 					JOptionPane.INFORMATION_MESSAGE);
 
 		} catch (Exception e) {
 			Logger.Error(e);
-			JOptionPane.showMessageDialog(this, t("j.cannotsavedchart") + "\n[" + e.getMessage() + "]", t("j.error"),
+			JOptionPane.showMessageDialog(this, "Failed to save the chart data. \n[" + e.getMessage() + "]", "Error",
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -358,7 +356,7 @@ public class MainChartPanel extends JPanel implements ChartMouseListener, Action
 		ValueAxis xAxis = plot.getDomainAxis();
 		// マウスのいる位置の一番近くにCrosshairを表示
 		EntityCollection entities = chartPanel.getChartRenderingInfo().getEntityCollection();
-		@SuppressWarnings("deprecation")
+		@SuppressWarnings("unchecked")
 		Iterator<ChartEntity> iterator = entities.iterator();
 		int minDist = Integer.MAX_VALUE;
 		int mouseX = event.getTrigger().getX();

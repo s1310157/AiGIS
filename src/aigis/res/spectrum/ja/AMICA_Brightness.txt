@@ -1,2 +1,0 @@
-輝度値
-小惑星探査機「はやぶさ」に搭載された AMICA（Asteroid Multiband Imaging Camera）で観測された地表の明るさ。表面の反射率や組成、風化状態を反映する。

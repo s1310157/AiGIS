@@ -42,9 +42,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
-import javax.swing.JTextArea;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 
 import com.jogamp.opengl.awt.GLJPanel;
 
@@ -52,6 +49,7 @@ import aigis.App;
 import aigis.Const;
 import aigis.Logger;
 import aigis.Scene;
+import aigis.SceneManager;
 import aigis.gl.Renderer;
 import aigis.gl.Textures.Setting;
 import aigis.model.CameraInfo;
@@ -64,12 +62,6 @@ import aigis.model.SettingModel.ShapePathData;
 import aigis.model.SpectrumMap;
 import aigis.model.SpectrumMaps;
 import aigis.ui.ButtonCellEditor.CellEventListener;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
-import aigis.i18n.I18n;
-import static aigis.i18n.I18n.t;
-import javax.swing.SwingUtilities;
 
 /***
  * MainFrame Controller.
@@ -77,7 +69,8 @@ import javax.swing.SwingUtilities;
 @SuppressWarnings("serial")
 public class MainFrame extends MainFrameDesign {
 
-	private Scene scene = new Scene();
+	private SceneManager sceneManager = new SceneManager();
+	private Scene scene = sceneManager.getActiveScene();
 	private GLSplitWindow window;
 	private MapTableModel mapModel;
 	private TexTableModel texModel;
@@ -85,99 +78,8 @@ public class MainFrame extends MainFrameDesign {
 	private SettingDialog settingDialog;
 	private TreeMap<String, ChartFrame> chartFrames = new TreeMap<>();
 	private final DecimalFormat doubleFormat = new DecimalFormat("#.########");
-	private JTextArea spectrumDescriptionArea;
-    private Map<String, String> spectrumDescriptions = new HashMap<>();
-
-	private void initSpectrumDescriptions() {
-        spectrumDescriptions.clear();
-		String basePath = "aigis/res/spectrum/";
-		String lang = I18n.getLocale().getLanguage();
-		String[] keys = {
-        "AMICA_Brightness",
-        "Elevation",
-        "Gravitational_Potential",
-        "Surface_Slope",
-		"LIDER_Shot_count",
-		"NIRS_Albeno",
-		"Acceleration",
-		"Geopotential_Height",
-		"Slope"
-    };
-
-	for (String key : keys) {
-        String text = loadSpectrumDescription(basePath + lang + "/" + key + ".txt");
-        if (text != null) {
-            spectrumDescriptions.put(key, text);
-        }
-    }
-	
-    }
-
-    private void reloadSpectrumDescriptions() {
-        initSpectrumDescriptions();
-
-        JTable mapTable = getMapTable();
-        int row = mapTable.getSelectedRow();
-        if (row < 0) {
-            return;
-        }     
-
-        String key = (String) mapTable.getValueAt(row, 0);
-        String desc = spectrumDescriptions.get(key);
-
-        if (getSpectrumInfoPanel().isVisible()) {
-            spectrumDescriptionArea.setText(
-                "■ " + key + "\n\n" +
-                (desc != null ? desc : t("j.noexplanation"))
-            );
-            spectrumDescriptionArea.setCaretPosition(0);
-        }
-    }
-
-	private String loadSpectrumDescription(String resourcePath) {
-    try (InputStream is =
-            App.class.getClassLoader().getResourceAsStream(resourcePath)) {
-
-        if (is == null) {
-            Logger.Debug("Not found: " + resourcePath);
-            return null;
-        }
-
-        StringBuilder sb = new StringBuilder();
-        byte[] buffer = new byte[1024];
-        int len;
-
-        while ((len = is.read(buffer)) != -1) {
-            sb.append(new String(buffer, 0, len, StandardCharsets.UTF_8));
-        }
-
-        return sb.toString();
-
-    } catch (Exception e) {
-        Logger.Error(e);
-        return null;
-    }
-}
-
-    private void refreshTexts() {
-        SwingUtilities.updateComponentTreeUI(this);
-    }
-
-	private void rebuildUI() {
-    SwingUtilities.invokeLater(() -> {
-        dispose();
-        MainFrame frame = new MainFrame();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    });
-}
 
 	public MainFrame() {
-		initSpectrumDescriptions();
-
-		JPanel spectrumInfoPanel = getSpectrumInfoPanel();
-        this.spectrumDescriptionArea = getSpectrumInfoText();
-
 		// title
 		setTitle(Const.APP_NAME);
 		// icon
@@ -198,32 +100,12 @@ public class MainFrame extends MainFrameDesign {
 		JTextField lightLng = this.getTextLightLng();
 		JTable mapTable = this.getMapTable();
 
-
 		// Menu Components
 		JMenuItem fileOpen = this.getMntmOpen();
+		JMenuItem fileOpenNewScene = this.getMntmOpenNewScene();
 		JMenuItem fileSaveSS = this.getMntmSaveSS();
 		JMenuItem fileAbout = this.getMntmAbout();
 		JMenuItem fileSettings = this.getMntmSettings();
-
-		// view menu
-		JCheckBoxMenuItem menuSpectrumInfo = this.getMenuSpectrumInfo();
-		spectrumInfoPanel.setVisible(menuSpectrumInfo.isSelected());
-		menuSpectrumInfo.addActionListener(e -> {
-			boolean show = menuSpectrumInfo.isSelected();
-            spectrumInfoPanel.setVisible(show);
-			spectrumInfoPanel.getParent().revalidate();
-			spectrumInfoPanel.getParent().repaint();
-		});
-
-		getLangJa().addActionListener(e -> {
-            I18n.setLocale(Locale.JAPANESE);
-            rebuildUI();
-        });
-
-        getLangEn().addActionListener(e -> {
-            I18n.setLocale(Locale.ENGLISH);
-            rebuildUI();
-        });
 
 		// view
 		JCheckBoxMenuItem viewColorbar = this.getChckbxmntmColorBar();
@@ -258,7 +140,7 @@ public class MainFrame extends MainFrameDesign {
 
 		// gl
 		GLJPanel glPanel = this.getPanelGL();
-		window = new GLSplitWindow(glPanel, scene);
+		window = new GLSplitWindow(glPanel, sceneManager);
 
 		///// setting events ///
 
@@ -288,6 +170,15 @@ public class MainFrame extends MainFrameDesign {
 			@Override
 			public void screenChanged(int index) {
 				Renderer rendere = window.getActiveRenderer();
+				// switch UI to the scene displayed in the active view
+				if (rendere.getScene() != scene) {
+					scene = rendere.getScene();
+					sceneManager.setActiveScene(scene);
+					clearModelList();
+					buildModelList();
+					String title = scene.getTitle();
+					setTitle("AiGIS" + (title == null ? "" : " -" + title + "-"));
+				}
 				int polygonID = rendere.getPolygonID();
 				LatLon info = rendere.selectPolygon(polygonID, false);
 				String rowKey = rendere.getCurrentSpectrumKey();
@@ -314,7 +205,7 @@ public class MainFrame extends MainFrameDesign {
 		this.getBtnCameraMove().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Logger.Debug(t("j.movecamera") + ":" + cameraLat.getText() + " - " + cameraLng.getText());
+					Logger.Debug("Move Camera:" + cameraLat.getText() + " - " + cameraLng.getText());
 					float lat = Float.parseFloat(cameraLat.getText());
 					float lng = Float.parseFloat(cameraLng.getText());
 					float roll = Float.parseFloat(cameraRoll.getText());
@@ -326,7 +217,7 @@ public class MainFrame extends MainFrameDesign {
 					}
 					glPanel.repaint();
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(MainFrame.this, t("j.invaliddata"), "",
+					JOptionPane.showMessageDialog(MainFrame.this, "Invalid data. Lat.:[-90,90], Lon.:[0,360]", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -335,14 +226,14 @@ public class MainFrame extends MainFrameDesign {
 		this.getBtnCameraSet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Logger.Debug(t("j.setcamera") + " " + t("j.distance") + cameraDistance.getText() + " fov:" + cameraFov.getText());
+					Logger.Debug("Set Camera: dist:" + cameraDistance.getText() + " fov:" + cameraFov.getText());
 					float dist = Float.parseFloat(cameraDistance.getText());
 					float fov = Float.parseFloat(cameraFov.getText());
 					window.setCameraDistance(dist);
 					window.setFov(fov);
 					glPanel.repaint();
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(MainFrame.this, t("j.invalid"), t("j.error"), JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(MainFrame.this, "Invalid data.", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -351,13 +242,13 @@ public class MainFrame extends MainFrameDesign {
 		this.getBtnLightMove().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Logger.Debug(t("j.movelight") + ":" + lightLat.getText() + " - " + lightLng.getText());
+					Logger.Debug("Move Light:" + lightLat.getText() + " - " + lightLng.getText());
 					float lat = Float.parseFloat(lightLat.getText());
 					float lng = Float.parseFloat(lightLng.getText());
 					window.moveLight(lat, lng);
 					glPanel.repaint();
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(MainFrame.this, t("j.invaliddata"), t("j.error"),
+					JOptionPane.showMessageDialog(MainFrame.this, "Invalid data. Lat.:[-90,90], Lon.:[0,360]", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -392,12 +283,12 @@ public class MainFrame extends MainFrameDesign {
 		this.getBtnInfoCopy().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TableModel info = getInfoTable().getModel();
-				String out = t("j.polygonid") + " : " + info.getValueAt(0, 1);
+				String out = "PolygonID : " + info.getValueAt(0, 1);
 				String item = (String) info.getValueAt(1, 1);
-				out += "\n" + t("j.latitude") + " : " + (item.equals("-") ? item : item + "°");
+				out += "\nLatitude : " + (item.equals("-") ? item : item + "°");
 				item = (String) info.getValueAt(2, 1);
-				out += "\n" + t("j.longitude") + " : " + (item.equals("-") ? item : item + "°");
-				out += "\n" +  t("j.distance") + " : " + info.getValueAt(3, 1);
+				out += "\nLongitude : " + (item.equals("-") ? item : item + "°");
+				out += "\nDistance : " + info.getValueAt(3, 1);
 				out += "\nX : " + info.getValueAt(4, 1);
 				out += "\nY : " + info.getValueAt(5, 1);
 				out += "\nZ : " + info.getValueAt(6, 1);
@@ -422,7 +313,10 @@ public class MainFrame extends MainFrameDesign {
 		ActionListener fileAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == fileOpen) {
-					openFile(false);
+					openFile(false, false);
+				}
+				if (e.getSource() == fileOpenNewScene) {
+					openFile(false, true);
 				}
 				if (e.getSource() == fileSaveSS) {
 					saveSS();
@@ -435,26 +329,16 @@ public class MainFrame extends MainFrameDesign {
 					if (settingDialog == null) {
 						settingDialog = new SettingDialog(MainFrame.this);
 					}
-
-					Locale before = I18n.getLocale();
-					
 					String lookupPath = String.valueOf(App.getProp(Const.LOOKUP_PATH_KEY));
 					settingDialog.setVisible(true);
-
-					Locale after = I18n.getLocale();
-
-					if (!before.equals(after)) {
-                        reloadSpectrumDescriptions();
-						rebuildUI();
-                    }
-
-                    if (!lookupPath.equals(App.getProp(Const.LOOKUP_PATH_KEY))) {
-                        loadLookUpTable();
-                    }
+					if (!lookupPath.equals(App.getProp(Const.LOOKUP_PATH_KEY))) {
+						loadLookUpTable();
+					}
 				}
 			}
 		};
 		fileOpen.addActionListener(fileAction);
+		fileOpenNewScene.addActionListener(fileAction);
 		fileSaveSS.addActionListener(fileAction);
 		fileAbout.addActionListener(fileAction);
 		fileSettings.addActionListener(fileAction);
@@ -551,8 +435,8 @@ public class MainFrame extends MainFrameDesign {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == imageOpen || e.getSource() == MainFrame.this.getBtnAddTex()) {
 					if (!window.textures.canAddTexture()) {
-						String msg = t("j.noadd");
-						JOptionPane.showMessageDialog(MainFrame.this, msg, t("j.warning"), JOptionPane.WARNING_MESSAGE);
+						String msg = "You can not add more textures.";
+						JOptionPane.showMessageDialog(MainFrame.this, msg, "Warning", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 					OpenImageDialog dialog = new OpenImageDialog(MainFrame.this, scene.getImageMapPath());
@@ -567,11 +451,11 @@ public class MainFrame extends MainFrameDesign {
 						texModel.fireTableDataChanged();
 					} catch (Exception ex) {
 						Logger.Error(ex);
-						String msg = t("j.noopen") + "\n";
+						String msg = "Failed to open files. \n";
 						if (ex.getMessage() != null) {
 							msg += "[" + ex.getMessage() + "]";
 						}
-						JOptionPane.showMessageDialog(MainFrame.this, msg, t("j.error"), JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(MainFrame.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
 
 					}
 				}
@@ -626,11 +510,11 @@ public class MainFrame extends MainFrameDesign {
 						g3dModel.fireTableDataChanged();
 					} catch (Exception ex) {
 						Logger.Error(ex);
-						String msg = t("j.noopen") + "\n";
+						String msg = "Failed to open files. \n";
 						if (ex.getMessage() != null) {
 							msg += "[" + ex.getMessage() + "]";
 						}
-						JOptionPane.showMessageDialog(MainFrame.this, msg, t("j.error"), JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(MainFrame.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				glPanel.repaint();
@@ -642,10 +526,10 @@ public class MainFrame extends MainFrameDesign {
 		JTable infoTable = this.getInfoTable();
 		// @formatter:off
 		String[][] values = { 
-				{ t("j.polygonid"), "-" }, 
-				{ t("j.latitude"), "-" }, 
-				{ t("j.longitude"), "-" }, 
-				{ t("j.distance"), "-" },
+				{ "PolygonID", "-" }, 
+				{ "Latitude", "-" }, 
+				{ "Longitude", "-" }, 
+				{ "Distance", "-" },
 				{ "X", "-" }, 
 				{ "Y", "-" }, 
 				{ "Z", "-" } };
@@ -655,7 +539,7 @@ public class MainFrame extends MainFrameDesign {
 
 		mapModel = new MapTableModel();
 		mapTable.setModel(mapModel);
-		ButtonCellEditor mapCellEditor = new ButtonCellEditor(t("j.plot"), new CellEventListener() {
+		ButtonCellEditor mapCellEditor = new ButtonCellEditor("Plot", new CellEventListener() {
 
 			@Override
 			public void actionPerformed(JTable table, int row, int column, boolean check) {
@@ -666,7 +550,8 @@ public class MainFrame extends MainFrameDesign {
 				}
 				String title = (String) table.getModel().getValueAt(row, 0);
 				ModelSelection selection = rendere.getCuttentSelection();
-				String key = selection.index + "-" + title + "-" + selection.resolution;
+				String key = sceneManager.indexOf(scene) + ":" + selection.index + "-" + title + "-"
+						+ selection.resolution;
 				ChartData data = scene.getChartData(title, selection);
 				ChartFrame frame;
 				if (chartFrames.containsKey(key)) {
@@ -684,7 +569,7 @@ public class MainFrame extends MainFrameDesign {
 
 		}, false);
 
-		String[] mapHeaders = { t("j.name"), t("j.value"), t("j.plot") };
+		String[] mapHeaders = { "Name", "Value", "Plot" };
 		for (int i = 0; i < mapHeaders.length; i++) {
 			TableColumn column = mapTable.getColumnModel().getColumn(i);
 			column.setHeaderValue(mapHeaders[i]);
@@ -700,32 +585,15 @@ public class MainFrame extends MainFrameDesign {
 		cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (e.getValueIsAdjusting()) {
-                    return;
-                }
-
-                int row = mapTable.getSelectedRow();
-                    if (row < 0) {
-                        return;
-                }
-
-                String key = (String) mapTable.getModel().getValueAt(row, 0);
-                window.getActiveRenderer().changeSpectrum(key);
-                viewRescale.setEnabled(row > 0);
-                glPanel.repaint();
-
-				String desc = spectrumDescriptions.get(key);
-
-                if (spectrumInfoPanel.isVisible()) {
-
-                    String none = I18n.t("j.noexplanation");
-
-                    spectrumDescriptionArea.setText("■ " + key + "\n\n" +(desc != null ? desc : none));
-                    spectrumDescriptionArea.setCaretPosition(0);
-                }
-            }
-
+			public void valueChanged(ListSelectionEvent e) {
+				if (!e.getValueIsAdjusting()) {
+					int row = mapTable.getSelectedRow();
+					String key = (String) mapTable.getModel().getValueAt(row, 0);
+					window.getActiveRenderer().changeSpectrum(key);
+					viewRescale.setEnabled(row > 0);
+					glPanel.repaint();
+				}
+			}
 		});
 
 		// Texture table
@@ -790,7 +658,7 @@ public class MainFrame extends MainFrameDesign {
 		}, false);
 
 		// table settings
-		String[] headers = { t("j.name"), "1", "2", "3", "4", "Frus", "", "" };
+		String[] headers = { "Name", "1", "2", "3", "4", "Frus", "", "" };
 		for (int i = 0; i < headers.length; i++) {
 			TableColumn column = texInfoTable.getColumnModel().getColumn(i);
 			column.setHeaderValue(headers[i]);
@@ -823,7 +691,7 @@ public class MainFrame extends MainFrameDesign {
 			}
 		}, true);
 
-		ButtonCellEditor genReloadCellEditor = new ButtonCellEditor(t("j.reload"), new CellEventListener() {
+		ButtonCellEditor genReloadCellEditor = new ButtonCellEditor("Reload", new CellEventListener() {
 			@Override
 			public void actionPerformed(JTable table, int row, int column, boolean check) {
 				try {
@@ -836,11 +704,11 @@ public class MainFrame extends MainFrameDesign {
 					glPanel.repaint();
 				} catch (Exception ex) {
 					Logger.Error(ex);
-					String msg = t("j.noopen") + "\n";
+					String msg = "Failed to open files. \n";
 					if (ex.getMessage() != null) {
 						msg += "[" + ex.getMessage() + "]";
 					}
-					JOptionPane.showMessageDialog(MainFrame.this, msg, t("j.error"), JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(MainFrame.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
 				}
 
 			}
@@ -852,7 +720,7 @@ public class MainFrame extends MainFrameDesign {
 		general3DTable.setModel(g3dModel);
 		general3DTable.setRowHeight(24);
 
-		String[] general3DHeaders = { t("j.view"), t("j.filename"), "" };
+		String[] general3DHeaders = { "Show", "FileName", "" };
 		for (int i = 0; i < general3DHeaders.length; i++) {
 			TableColumn column = general3DTable.getColumnModel().getColumn(i);
 			column.setHeaderValue(general3DHeaders[i]);
@@ -878,18 +746,19 @@ public class MainFrame extends MainFrameDesign {
 	 * open the file at startup
 	 */
 	public void openFirst() {
-		if (!openFile(true)) {
+		if (!openFile(true, false)) {
 //			System.exit(0);
 		}
 	}
 
 	/**
 	 * Open the file based on the setting property file.
-	 * 
+	 *
 	 * @param isStartUp
+	 * @param newScene open the folder as a new scene
 	 * @return
 	 */
-	private boolean openFile(boolean isStartUp) {
+	private boolean openFile(boolean isStartUp, boolean newScene) {
 		// get path from property
 		String defaultDataPath = App.getProp(Const.DATA_PATH_KEY);
 		File checkedfile = null;
@@ -903,15 +772,15 @@ public class MainFrame extends MainFrameDesign {
 			if (App.isMacExe) {
 				workingDirectory = workingDirectory.getParentFile().getParentFile().getParentFile();
 			}
-			return openDialog(workingDirectory);
+			return openDialog(workingDirectory, newScene);
 		} else {
 			// Whether there is SETTING_TXT in the directory
 			File file = new File(defaultDataPath);
 			String files[] = file.list();
 
-			if (files != null && Arrays.asList(files).contains(Const.SETTING_TXT)) {
+			if (Arrays.asList(files).contains(Const.SETTING_TXT)) {
 				if (isStartUp) {
-					loadFile(file);
+					loadFile(file, newScene);
 					return true;
 				} else {
 					String parentPath;
@@ -922,10 +791,10 @@ public class MainFrame extends MainFrameDesign {
 						parentPath = file.getParent();
 					}
 					File workingDirectory = new File(parentPath);
-					return openDialog(workingDirectory);
+					return openDialog(workingDirectory, newScene);
 				}
 			} else {
-				return openDialog(file);
+				return openDialog(file, newScene);
 			}
 		}
 	}
@@ -944,7 +813,7 @@ public class MainFrame extends MainFrameDesign {
 			}
 		}
 		// If there is no directory, it opens from the home directory
-		if (path == null || path.isEmpty()) {
+		if (path == null || path == "") {
 			path = System.getProperty("user.home");
 		}
 		// Save with a time name
@@ -958,12 +827,12 @@ public class MainFrame extends MainFrameDesign {
 			window.screenshot(workingDirectory);
 		} catch (Exception e) {
 			Logger.Error(e);
-			JOptionPane.showMessageDialog(MainFrame.this, t("j.nosnapshot") + "\n[" + e.getMessage() + "]",
-					t("j.error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(MainFrame.this, "Failed to take a snapshot. \n[" + e.getMessage() + "]",
+					"Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
-		JOptionPane.showMessageDialog(this, t("j.savesnapshot") + "\n'" + path + "'", t("j.completed"),
+		JOptionPane.showMessageDialog(this, "The snapshot was saved successfully.\n'" + path + "'", "Done",
 				JOptionPane.INFORMATION_MESSAGE);
 
 	}
@@ -974,11 +843,11 @@ public class MainFrame extends MainFrameDesign {
 	 * @param dir
 	 * @return
 	 */
-	private boolean openDialog(File dir) {
+	private boolean openDialog(File dir, boolean newScene) {
 		JFileChooser chooser = App.showOpenDialog(this, dir.getAbsolutePath(), JFileChooser.DIRECTORIES_ONLY, null,
 				true);
 		if (chooser != null) {
-			loadFile(chooser.getSelectedFile());
+			loadFile(chooser.getSelectedFile(), newScene);
 			return true;
 		}
 		return false;
@@ -1027,7 +896,9 @@ public class MainFrame extends MainFrameDesign {
 	 */
 	private void loadLookUpTable() {
 		try {
-			this.scene.loadLookUpTable();
+			for (Scene s : sceneManager.getScenes()) {
+				s.loadLookUpTable();
+			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -1057,15 +928,15 @@ public class MainFrame extends MainFrameDesign {
 			buttonGroupLookUp.add(item);
 		}
 		buttonGroupLookUp.getElements().nextElement().setSelected(true);
-		
 	}
 
 	/**
 	 * Load files.
-	 * 
+	 *
 	 * @param file
+	 * @param newScene open the folder as a new scene
 	 */
-	private void loadFile(File file) {
+	private void loadFile(File file, boolean newScene) {
 		Logger.Debug(file.getAbsolutePath());
 		LoadingDialog dialog = new LoadingDialog(this);
 		setEnabled(false);
@@ -1073,11 +944,13 @@ public class MainFrame extends MainFrameDesign {
 		// show loading dialog
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				for (ChartFrame frame : chartFrames.values()) {
-					frame.setVisible(false);
+				if (!newScene) {
+					for (ChartFrame frame : chartFrames.values()) {
+						frame.setVisible(false);
+					}
+					chartFrames.clear();
+					window.textures.clearTextures();
 				}
-				chartFrames.clear();
-				window.textures.clearTextures();
 
 				dialog.setLocationRelativeTo(MainFrame.this);
 				dialog.setVisible(true);
@@ -1086,13 +959,24 @@ public class MainFrame extends MainFrameDesign {
 					@Override
 					public void run() {
 						try {
-							setTitle("AiGIS");
-							clearModelList();
-							updateMapInfo(-1, null, null);
-							mapModel.clear();
 							JCheckBoxMenuItem mapSortByName = getChckbxmntmByName();
-							scene.load(file, dialog, mapSortByName.isSelected());
-							window.resetRenderer(true, scene.getModelSize());
+							if (newScene) {
+								// load into a new scene and show it in the active view
+								Scene loaded = sceneManager.loadNewScene(file, dialog, mapSortByName.isSelected());
+								setTitle("AiGIS");
+								clearModelList();
+								updateMapInfo(-1, null, null);
+								mapModel.clear();
+								scene = loaded;
+								window.setSceneToActiveView(loaded, loaded.getModelSize());
+							} else {
+								setTitle("AiGIS");
+								clearModelList();
+								updateMapInfo(-1, null, null);
+								mapModel.clear();
+								scene.load(file, dialog, mapSortByName.isSelected());
+								window.resetRenderer(true, scene.getModelSize());
+							}
 							getPanelGL().repaint();
 						} catch (Exception e) {
 							Logger.Error(e);
@@ -1101,7 +985,7 @@ public class MainFrame extends MainFrameDesign {
 									setEnabled(true);
 									dialog.setVisible(false);
 									JOptionPane.showMessageDialog(MainFrame.this,
-											t("j.noload") + "\n[" + e.getMessage() + "]", t("j.error"),
+											"Can't load the data. \n[" + e.getMessage() + "]", "Error",
 											JOptionPane.ERROR_MESSAGE);
 								}
 							});
@@ -1162,7 +1046,7 @@ public class MainFrame extends MainFrameDesign {
 									setEnabled(true);
 									dialog.setVisible(false);
 									JOptionPane.showMessageDialog(MainFrame.this,
-											t("j.noload") + "\n[" + e.getMessage() + "]", t("j.error"),
+											"Can't load the data. \n[" + e.getMessage() + "]", "Error",
 											JOptionPane.ERROR_MESSAGE);
 								}
 							});
@@ -1308,7 +1192,7 @@ public class MainFrame extends MainFrameDesign {
 		public Object getValueAt(int row, int col) {
 			SpectrumMap spec = spectrums.get(row).getValue();
 			if (col == 0) {
-				return spectrums.get(row).getKey();
+				return spec.getName();
 			}
 			if (col == 1) {
 				Renderer rendere = window.getActiveRenderer();
@@ -1372,5 +1256,6 @@ public class MainFrame extends MainFrameDesign {
 		public boolean isCellEditable(int row, int col) {
 			return col != 1;
 		}
+
 	}
 }
