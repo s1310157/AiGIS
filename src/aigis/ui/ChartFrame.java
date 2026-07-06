@@ -4,14 +4,11 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-import aigis.i18n.I18n;
-import static aigis.i18n.I18n.t;
-
 import aigis.Const;
 
 public class ChartFrame {
 
-	private JFrame frame = new JFrame("AiGIS " + t("j.chart"));
+	private JFrame frame = new JFrame("AiGIS -Chart-");
 	private MainChartPanel chartPanel = new MainChartPanel();
 
 	public ChartFrame() {

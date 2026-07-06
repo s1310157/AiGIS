@@ -1,2 +1,0 @@
-NIRS_Albedo
-Albedo (reflectance) measured by NIRS (near-infrared spectrometer). It indicates the surface's reflectance characteristics, particularly in the near-infrared wavelength range, and is used to estimate mineral composition.

@@ -52,6 +52,7 @@ import aigis.App;
 import aigis.Const;
 import aigis.Logger;
 import aigis.Scene;
+import aigis.SceneManager;
 import aigis.gl.Renderer;
 import aigis.gl.Textures.Setting;
 import aigis.model.CameraInfo;
@@ -80,7 +81,8 @@ import java.io.InputStreamReader;
 @SuppressWarnings("serial")
 public class MainFrame extends MainFrameDesign {
 
-	private Scene scene = new Scene();
+	private SceneManager sceneManager = new SceneManager();
+	private Scene scene = sceneManager.getActiveScene();
 	private GLSplitWindow window;
 	private MapTableModel mapModel;
 	private TexTableModel texModel;
@@ -138,6 +140,7 @@ public class MainFrame extends MainFrameDesign {
 
 		// Menu Components
 		JMenuItem fileOpen = this.getMntmOpen();
+		JMenuItem fileOpenNewScene = this.getMntmOpenNewScene();
 		JMenuItem fileSaveSS = this.getMntmSaveSS();
 		JMenuItem fileAbout = this.getMntmAbout();
 		JMenuItem fileSettings = this.getMntmSettings();
@@ -185,7 +188,7 @@ public class MainFrame extends MainFrameDesign {
 
 		// gl
 		GLJPanel glPanel = this.getPanelGL();
-		window = new GLSplitWindow(glPanel, scene);
+		window = new GLSplitWindow(glPanel, sceneManager);
 
 		///// setting events ///
 
@@ -215,6 +218,15 @@ public class MainFrame extends MainFrameDesign {
 			@Override
 			public void screenChanged(int index) {
 				Renderer rendere = window.getActiveRenderer();
+				// switch UI to the scene displayed in the active view
+				if (rendere.getScene() != scene) {
+					scene = rendere.getScene();
+					sceneManager.setActiveScene(scene);
+					clearModelList();
+					buildModelList();
+					String title = scene.getTitle();
+					setTitle("AiGIS" + (title == null ? "" : " -" + title + "-"));
+				}
 				int polygonID = rendere.getPolygonID();
 				LatLon info = rendere.selectPolygon(polygonID, false);
 				String rowKey = rendere.getCurrentSpectrumKey();
@@ -349,7 +361,10 @@ public class MainFrame extends MainFrameDesign {
 		ActionListener fileAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == fileOpen) {
-					openFile(false);
+					openFile(false, false);
+				}
+				if (e.getSource() == fileOpenNewScene) {
+					openFile(false, true);
 				}
 				if (e.getSource() == fileSaveSS) {
 					saveSS();
@@ -381,6 +396,7 @@ public class MainFrame extends MainFrameDesign {
 			}
 		};
 		fileOpen.addActionListener(fileAction);
+		fileOpenNewScene.addActionListener(fileAction);
 		fileSaveSS.addActionListener(fileAction);
 		fileAbout.addActionListener(fileAction);
 		fileSettings.addActionListener(fileAction);
@@ -592,7 +608,8 @@ public class MainFrame extends MainFrameDesign {
 				}
 				String title = (String) table.getModel().getValueAt(row, 0);
 				ModelSelection selection = rendere.getCuttentSelection();
-				String key = selection.index + "-" + title + "-" + selection.resolution;
+				String key = sceneManager.indexOf(scene) + ":" + selection.index + "-" + title + "-"
+						+ selection.resolution;
 				ChartData data = scene.getChartData(title, selection);
 				ChartFrame frame;
 				if (chartFrames.containsKey(key)) {
@@ -835,7 +852,7 @@ public class MainFrame extends MainFrameDesign {
 	 * open the file at startup
 	 */
 	public void openFirst() {
-		if (!openFile(true)) {
+		if (!openFile(true, false)) {
 //			System.exit(0);
 		}
 	}
@@ -844,9 +861,10 @@ public class MainFrame extends MainFrameDesign {
 	 * Open the file based on the setting property file.
 	 * 
 	 * @param isStartUp
+	 * @param newScene open the folder as a new scene
 	 * @return
 	 */
-	private boolean openFile(boolean isStartUp) {
+	private boolean openFile(boolean isStartUp, boolean newScene) {
 		// get path from property
 		String defaultDataPath = App.getProp(Const.DATA_PATH_KEY);
 		File checkedfile = null;
@@ -860,7 +878,7 @@ public class MainFrame extends MainFrameDesign {
 			if (App.isMacExe) {
 				workingDirectory = workingDirectory.getParentFile().getParentFile().getParentFile();
 			}
-			return openDialog(workingDirectory);
+			return openDialog(workingDirectory, newScene);
 		} else {
 			// Whether there is SETTING_TXT in the directory
 			File file = new File(defaultDataPath);
@@ -868,7 +886,7 @@ public class MainFrame extends MainFrameDesign {
 
 			if (files != null && Arrays.asList(files).contains(Const.SETTING_TXT)) {
 				if (isStartUp) {
-					loadFile(file);
+					loadFile(file, newScene);
 					return true;
 				} else {
 					String parentPath;
@@ -879,10 +897,10 @@ public class MainFrame extends MainFrameDesign {
 						parentPath = file.getParent();
 					}
 					File workingDirectory = new File(parentPath);
-					return openDialog(workingDirectory);
+					return openDialog(workingDirectory, newScene);
 				}
 			} else {
-				return openDialog(file);
+				return openDialog(file, newScene);
 			}
 		}
 	}
@@ -931,11 +949,11 @@ public class MainFrame extends MainFrameDesign {
 	 * @param dir
 	 * @return
 	 */
-	private boolean openDialog(File dir) {
+	private boolean openDialog(File dir, boolean newScene) {
 		JFileChooser chooser = App.showOpenDialog(this, dir.getAbsolutePath(), JFileChooser.DIRECTORIES_ONLY, null,
 				true);
 		if (chooser != null) {
-			loadFile(chooser.getSelectedFile());
+			loadFile(chooser.getSelectedFile(), newScene);
 			return true;
 		}
 		return false;
@@ -984,7 +1002,9 @@ public class MainFrame extends MainFrameDesign {
 	 */
 	private void loadLookUpTable() {
 		try {
-			this.scene.loadLookUpTable();
+			for (Scene s : sceneManager.getScenes()) {
+				s.loadLookUpTable();
+			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -1019,10 +1039,11 @@ public class MainFrame extends MainFrameDesign {
 
 	/**
 	 * Load files.
-	 * 
+	 *
 	 * @param file
+	 * @param newScene open the folder as a new scene
 	 */
-	private void loadFile(File file) {
+	private void loadFile(File file, boolean newScene) {
 		this.parentFileName = file.getName();
 		Logger.Debug(file.getAbsolutePath());
 		LoadingDialog dialog = new LoadingDialog(this);
@@ -1031,11 +1052,13 @@ public class MainFrame extends MainFrameDesign {
 		// show loading dialog
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				for (ChartFrame frame : chartFrames.values()) {
-					frame.setVisible(false);
+				if (!newScene) {
+					for (ChartFrame frame : chartFrames.values()) {
+						frame.setVisible(false);
+					}
+					chartFrames.clear();
+					window.textures.clearTextures();
 				}
-				chartFrames.clear();
-				window.textures.clearTextures();
 
 				dialog.setLocationRelativeTo(MainFrame.this);
 				dialog.setVisible(true);
@@ -1044,13 +1067,24 @@ public class MainFrame extends MainFrameDesign {
 					@Override
 					public void run() {
 						try {
-							setTitle("AiGIS");
-							clearModelList();
-							updateMapInfo(-1, null, null);
-							mapModel.clear();
 							JCheckBoxMenuItem mapSortByName = getChckbxmntmByName();
-							scene.load(file, dialog, mapSortByName.isSelected());
-							window.resetRenderer(true, scene.getModelSize());
+							if (newScene) {
+								// load into a new scene and show it in the active view
+								Scene loaded = sceneManager.loadNewScene(file, dialog, mapSortByName.isSelected());
+								setTitle("AiGIS");
+								clearModelList();
+								updateMapInfo(-1, null, null);
+								mapModel.clear();
+								scene = loaded;
+								window.setSceneToActiveView(loaded, loaded.getModelSize());
+							} else {
+								setTitle("AiGIS");
+								clearModelList();
+								updateMapInfo(-1, null, null);
+								mapModel.clear();
+								scene.load(file, dialog, mapSortByName.isSelected());
+								window.resetRenderer(true, scene.getModelSize());
+							}
 							getPanelGL().repaint();
 						} catch (Exception e) {
 							Logger.Error(e);

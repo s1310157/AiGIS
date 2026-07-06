@@ -20,8 +20,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import aigis.i18n.I18n;
-import static aigis.i18n.I18n.t;
 
 @SuppressWarnings("serial")
 public class RescaleRangeDialog extends JDialog {
@@ -64,7 +62,7 @@ public class RescaleRangeDialog extends JDialog {
 				}
 			}
 		});
-		setTitle(t("j.rescaling"));
+		setTitle("Rescale Range");
 		setResizable(false);
 		setBounds(100, 100, 370, 200);
 		getContentPane().setLayout(new BorderLayout());
@@ -77,7 +75,7 @@ public class RescaleRangeDialog extends JDialog {
 		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
-			JLabel lblMinimum = new JLabel(t("j.min"));
+			JLabel lblMinimum = new JLabel("Minimum");
 			GridBagConstraints gbc_lblMinimum = new GridBagConstraints();
 			gbc_lblMinimum.fill = GridBagConstraints.HORIZONTAL;
 			gbc_lblMinimum.insets = new Insets(0, 0, 5, 5);
@@ -99,7 +97,7 @@ public class RescaleRangeDialog extends JDialog {
 			textMinimum.setColumns(10);
 		}
 		{
-			JLabel lblMaximum = new JLabel(t("j.max"));
+			JLabel lblMaximum = new JLabel("Maximum");
 			GridBagConstraints gbc_lblMaximum = new GridBagConstraints();
 			gbc_lblMaximum.anchor = GridBagConstraints.WEST;
 			gbc_lblMaximum.insets = new Insets(0, 0, 0, 5);
@@ -127,7 +125,7 @@ public class RescaleRangeDialog extends JDialog {
 			buttonPane.setLayout(fl_buttonPane);
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton btnApply = new JButton(t("j.apply"));
+				JButton btnApply = new JButton("Apply");
 				btnApply.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						applay();
@@ -136,7 +134,7 @@ public class RescaleRangeDialog extends JDialog {
 				buttonPane.add(btnApply);
 			}
 			{
-				JButton btnReset = new JButton(t("j.reset"));
+				JButton btnReset = new JButton("Reset");
 				btnReset.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if (eventListener != null) {
@@ -159,13 +157,13 @@ public class RescaleRangeDialog extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton(t("j.cancel"));
+				JButton cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						close();
 					}
 				});
-				cancelButton.setActionCommand(t("j.cancel"));
+				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
@@ -189,7 +187,7 @@ public class RescaleRangeDialog extends JDialog {
 				eventListener.applay(dMax, dMin);
 			}
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, t("j.invalidnumber"), t("j.error"),
+			JOptionPane.showMessageDialog(null, "Invalid data. Please input numerical value!!", "Error",
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}

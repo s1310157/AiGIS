@@ -12,8 +12,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import aigis.i18n.I18n;
-import static aigis.i18n.I18n.t;
 
 import aigis.Const;
 
@@ -69,7 +67,7 @@ public class AboutDialog extends JDialog {
 			contentPanel.add(verticalGlue);
 		}
 		{
-			JLabel lblVersion = new JLabel(t("j.version") + Const.APP_VER);
+			JLabel lblVersion = new JLabel("Version " + Const.APP_VER);
 			lblVersion.setAlignmentX(Component.CENTER_ALIGNMENT);
 			contentPanel.add(lblVersion);
 		}

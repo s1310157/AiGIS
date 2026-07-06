@@ -71,6 +71,7 @@ public class MainFrameDesign extends JFrame {
 	private JTable mapTable;
 	private GLJPanel panelGL;
 	private JMenuItem mntmOpen;
+	private JMenuItem mntmOpenNewScene;
 	private JTable infoTable;
 	private JRadioButtonMenuItem radioDivision1;
 	private JRadioButtonMenuItem radioDivision2;
@@ -157,6 +158,9 @@ public class MainFrameDesign extends JFrame {
 
 		mntmOpen = new JMenuItem(t("j.open"));
 		mnFileMenu.add(mntmOpen);
+
+		mntmOpenNewScene = new JMenuItem(t("j.add"));
+		mnFileMenu.add(mntmOpenNewScene);
 
 		mntmSaveSS = new JMenuItem(t("j.save"));
 		mnFileMenu.add(mntmSaveSS);
@@ -684,6 +688,10 @@ public class MainFrameDesign extends JFrame {
 
 	protected JMenuItem getMntmOpen() {
 		return mntmOpen;
+	}
+
+	protected JMenuItem getMntmOpenNewScene() {
+		return mntmOpenNewScene;
 	}
 
 	protected JTable getMapTable() {
