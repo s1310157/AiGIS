@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: "Yu Gothic", "Meiryo", sans-serif; font-size: 12px; margin: 8px; color: #222; }
+  h1 { font-size: 14px; color: #8a3a1a; border-bottom: 2px solid #8a3a1a; padding-bottom: 4px; margin-bottom: 8px; }
+  h2 { font-size: 12px; color: #9a5a2a; border-left: 4px solid #9a5a2a; padding-left: 6px; margin: 8px 0 4px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; margin: 5px 0; }
+  th { background: #9a5a2a; color: white; padding: 3px 6px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 3px 6px; }
+  tr:nth-child(even) td { background: #fff4ee; }
+  p { margin: 3px 0; line-height: 1.6; }
+  .box { background: #fff0e8; border-left: 3px solid #9a5a2a; padding: 4px 8px; margin: 5px 0; }
+  .keyword { font-weight: bold; color: #8a3a1a; }
+  .note { font-size: 10px; color: #666; font-style: italic; }
+  .color-bar { height: 16px; width: 100%; background: linear-gradient(to right, #000000, #555555, #aaaaaa, #ffffff); border-radius: 3px; margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>AMICA輝度（AMICA brightness）</h1>
+<p>はやぶさ搭載カメラAMICAで撮影した光の反射率マップ</p>
+
+<h2>かんたん説明</h2>
+<div class="box">
+<p>「<span class="keyword">AMICA</span>（アミカ）」は、はやぶさ探査機に搭載された<b>多色撮像カメラ</b>（Asteroid Multiband Imaging Camera）の略称です。</p>
+<p>このマップは、イトカワの表面が太陽光を<b>どのくらい反射しているか</b>（明るさ）を色で表したものです。白い場所は明るく（よく反射）、黒い場所は暗い（あまり反射しない）ことを示します。</p>
+<p>この「明るさの違い」は、表面の<b>鉱物の種類・宇宙風化の度合い・表面の粗さ</b>を反映しています。</p>
+</div>
+
+<h2>カラーマップの見方</h2>
+<div class="color-bar"></div>
+<table>
+  <tr><th>色</th><th>意味</th><th>表面の状態</th></tr>
+  <tr><td>白〜明るい灰色</td><td>高反射率</td><td>新鮮な岩石表面・ボルダー (boulder) の露出面</td></tr>
+  <tr><td>中間の灰色</td><td>中程度</td><td>平均的な表面</td></tr>
+  <tr><td>暗い灰色〜黒</td><td>低反射率</td><td>宇宙風化が進んだ表面・細かいレゴリスが多い場所</td></tr>
+</table>
+
+<h2>注目ポイント</h2>
+<table>
+  <tr><th>場所</th><th>明るさ</th><th>意味</th></tr>
+  <tr><td>ミューゼスの海（MUSES Sea）</td><td>比較的均一</td><td>細かいレゴリスが厚く堆積 → はやぶさの採取地点</td></tr>
+  <tr><td>ボルダー（大きな岩）の表面</td><td>明るい部分あり</td><td>宇宙風化が浅く、新鮮な岩石が露出</td></tr>
+  <tr><td>全体的に暗い</td><td>幾何アルベド約0.30</td><td>Sタイプ小惑星の典型（リュウグウ0.047より明るい）</td></tr>
+</table>
+
+<h2>宇宙風化とは？</h2>
+<div class="box">
+<p>宇宙空間では、太陽風（太陽から飛んでくる粒子）や微小隕石が表面に当たり続けます。これにより表面の鉱物が変質して<b>暗くなったり赤みがかったりする</b>現象を「<span class="keyword">宇宙風化</span>」といいます。</p>
+<p>はやぶさが持ち帰ったイトカワの粒子の分析から、<b>表面の深さわずか数ナノメートル（原子数個分）</b>に金属鉄のナノ粒子が埋め込まれていることがわかり、宇宙風化の仕組みが初めて解明されました。</p>
+</div>
+
+<p class="note">※ AMICAは可視光〜近赤外線（0.38〜1.01μm）の8バンドで撮影。このマップはv帯（可視光）の反射率を使用。</p>
+
+<h2>出典・参考文献</h2>
+<p class="note">
+Saito, J., et al. (2006). "Detailed Images of Asteroid 25143 Itokawa from Hayabusa." <i>Science</i>, 312(5778), 1341–1344. doi:10.1126/science.1125974<br>
+Abe, M., et al. (2006). "Near-Infrared Spectral Results of Asteroid Itokawa from the Hayabusa Spacecraft." <i>Science</i>, 312(5778), 1334–1338. doi:10.1126/science.1125718<br>
+Ishiguro, M., et al. (2007). "Global mapping of the degree of space weathering on asteroid 25143 Itokawa by Hayabusa/AMICA observations." <i>Meteoritics &amp; Planetary Science</i>, 42(10), 1791–1800.
+</p>
+
+</body>
+</html>

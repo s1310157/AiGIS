@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: "Yu Gothic", "Meiryo", sans-serif; font-size: 12px; margin: 8px; color: #222; }
+  h1 { font-size: 14px; color: #8a3a1a; border-bottom: 2px solid #8a3a1a; padding-bottom: 4px; margin-bottom: 8px; }
+  h2 { font-size: 12px; color: #9a5a2a; border-left: 4px solid #9a5a2a; padding-left: 6px; margin: 8px 0 4px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; margin: 5px 0; }
+  th { background: #9a5a2a; color: white; padding: 3px 6px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 3px 6px; }
+  tr:nth-child(even) td { background: #fff4ee; }
+  p { margin: 3px 0; line-height: 1.6; }
+  .box { background: #fff0e8; border-left: 3px solid #9a5a2a; padding: 4px 8px; margin: 5px 0; }
+  .keyword { font-weight: bold; color: #8a3a1a; }
+  .note { font-size: 10px; color: #666; font-style: italic; }
+  .color-bar { height: 16px; width: 100%; background: linear-gradient(to right, #00008b, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000); border-radius: 3px; margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>重力斜度（itokawa_slope）</h1>
+<p>2011年1月11日基準の計算データ — 表面の傾き（斜面の急さ）マップ</p>
+
+<h2>かんたん説明</h2>
+<div class="box">
+<p>「<span class="keyword">重力斜度</span>（スロープ）」とは、イトカワの表面で<b>ものがどの方向に転がろうとするか</b>を角度で表したものです。</p>
+<p>急な場所（角度が大きい）ほど赤く、なだらかな場所（角度が小さい）ほど青く表示されます。</p>
+<p>重要なのは「重力」には自転の遠心力も含まれるということ。イトカワは細長い形のため、場所によって重力の向きが複雑に変わります。</p>
+</div>
+
+<h2>カラーマップの見方</h2>
+<div class="color-bar"></div>
+<table>
+  <tr><th>色</th><th>斜度の目安</th><th>地形の状態</th></tr>
+  <tr><td>青〜緑</td><td>0〜25°</td><td>なだらか — 砂が留まりやすい。着地に適した地形</td></tr>
+  <tr><td>黄</td><td>〜35°</td><td>砂の安息角（砂が積み上がれる限界）付近</td></tr>
+  <tr><td>赤</td><td>35°以上</td><td>急斜面 — 岩盤が露出か崩落地形</td></tr>
+</table>
+
+<h2>イトカワ特有の斜度の特徴</h2>
+<table>
+  <tr><th>場所</th><th>斜度</th><th>意味</th></tr>
+  <tr><td>ミューゼスの海</td><td>低い（なだらか）</td><td>砂が堆積しやすい → はやぶさの着地・採取地点</td></tr>
+  <tr><td>頭部と胴体のくびれ</td><td>高い（急）</td><td>コンタクトバイナリーの接合痕。不安定な斜面</td></tr>
+  <tr><td>ボルダー表面</td><td>非常に高い</td><td>垂直に近い岩の壁。砂が全く留まれない</td></tr>
+  <tr><td>頭部・胴体の頂部</td><td>中程度〜高い</td><td>ラブルパイルの岩が複雑に積み重なる</td></tr>
+</table>
+
+<div class="box">
+<p>・ミューゼスの海の<b>低い斜度</b>が、細かいレゴリスを保持できた理由<br>
+・くびれ部の<b>急な斜度</b>は2つの塊が合体したコンタクトバイナリーの証拠<br>
+・<b>20110111</b>はデータ作成日（2011年1月11日）を示すファイル名の一部</p>
+</div>
+
+<p class="note">※ 実効重力（引力＋遠心力）の方向に対する表面法線の傾き角。イトカワの自転周期12.132時間で計算。</p>
+
+<h2>出典・参考文献</h2>
+<p class="note">
+Fujiwara, A., et al. (2006). "The Rubble-Pile Asteroid Itokawa as Observed by Hayabusa." <i>Science</i>, 312(5778), 1330–1334. doi:10.1126/science.1125841<br>
+Scheeres, D.J., et al. (2006). "Hayabusa spacecraft orbit determination using differenced range data." <i>Science</i>, 312(5778), 1344–1347. doi:10.1126/science.1127521<br>
+Miyamoto, H., et al. (2007). "Regolith migration and sorting on asteroid Itokawa." <i>Science</i>, 316(5827), 1011–1014. doi:10.1126/science.1134390
+</p>
+
+</body>
+</html>

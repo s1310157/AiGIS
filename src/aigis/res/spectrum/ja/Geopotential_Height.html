@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: "Yu Gothic", "Meiryo", sans-serif; font-size: 12px; margin: 8px; color: #222; }
+  h1 { font-size: 14px; color: #1a4a8a; border-bottom: 2px solid #1a4a8a; padding-bottom: 4px; margin-bottom: 8px; }
+  h2 { font-size: 12px; color: #2a5a9a; border-left: 4px solid #2a5a9a; padding-left: 6px; margin: 8px 0 4px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; margin: 5px 0; }
+  th { background: #2a5a9a; color: white; padding: 3px 6px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 3px 6px; }
+  tr:nth-child(even) td { background: #f0f4ff; }
+  p { margin: 3px 0; line-height: 1.6; }
+  .box { background: #eef2ff; border-left: 3px solid #2a5a9a; padding: 4px 8px; margin: 5px 0; }
+  .keyword { font-weight: bold; color: #1a4a8a; }
+  .note { font-size: 10px; color: #666; font-style: italic; }
+  .color-bar { height: 16px; width: 100%; background: linear-gradient(to right, #00008b, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000); border-radius: 3px; margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>重力ポテンシャル高度（Geopotential Height）</h1>
+<p>「物が自然に転がっていく先」を可視化した地形マップ</p>
+
+<h2>かんたん説明</h2>
+<div class="box">
+<p>「<span class="keyword">重力ポテンシャル高度</span>」は少し難しい言葉ですが、こんなイメージです：</p>
+<p>地球でボールを転がすと、ボールは自然に山から谷へ転がっていきますよね。それと同じで、リュウグウの表面でも<b>「物が自然に流れていく先」（低いポテンシャルの場所）</b>と<b>「物が逃げていく場所」（高いポテンシャルの場所）</b>があります。</p>
+<p>ポイントは、これが<b>単純な「高さ」ではない</b>ということ。重力の引力＋自転の遠心力を合わせた「実効的な高さ」で、<b>赤道付近は自転による遠心力で「低い」場所</b>になります。</p>
+</div>
+
+<h2>カラーマップの見方</h2>
+<div class="color-bar"></div>
+<table>
+  <tr><th>色</th><th>ポテンシャルの高低</th><th>物質の振る舞い</th></tr>
+  <tr><td>青</td><td>低い（谷）</td><td>物が集まってくる → 砂・礫が堆積しやすい</td></tr>
+  <tr><td>緑〜黄</td><td>中程度</td><td>安定した中間地点</td></tr>
+  <tr><td>赤</td><td>高い（山）</td><td>物が流れ去る → 岩盤が露出しやすい</td></tr>
+</table>
+
+<h2>リュウグウで注目する場所</h2>
+<table>
+  <tr><th>場所</th><th>ポテンシャル</th><th>意味</th></tr>
+  <tr><td>赤道リッジ</td><td>低め</td><td>YORP効果で物質が集まった場所 — コマ型形成の核心</td></tr>
+  <tr><td>ウラシマクレーター内</td><td>最低域のひとつ</td><td>衝突で深くなった谷 → 周囲から物質が流入</td></tr>
+  <tr><td>極付近の高台</td><td>高め</td><td>ここから物質が赤道方向へ移動していった</td></tr>
+</table>
+
+<h2>このデータが教えてくれること</h2>
+<div class="box">
+<p>・<b>砂（レゴリス）の移動経路</b>：低ポテンシャルの場所に向かって、長い時間をかけて少しずつ移動<br>
+・<b>赤道リッジ形成の証拠</b>：赤道が低ポテンシャルになっているため、物質が自然に赤道へ集まった<br>
+・<b>着地安全性の評価</b>：低ポテンシャル域（砂が厚く堆積）は着地に適した「クッション」の役割</p>
+</div>
+
+<p class="note">※ 重力ポテンシャルU = 万有引力ポテンシャル + 遠心力ポテンシャル。「ポテンシャル高度」はU÷実効重力加速度で換算した仮想的な高さ（単位: m）。</p>
+
+<h2>出典・参考文献</h2>
+<p class="note">
+Watanabe, S., et al. (2019). "Hayabusa2 arrives at the carbonaceous asteroid 162173 Ryugu—A spinning top–shaped rubble pile." <i>Science</i>, 364, 268–272. doi:10.1126/science.aav8032<br>
+Scheeres, D.J., et al. (2019). "The dynamic geophysical environment of (162173) Ryugu based on Hayabusa2 measurements." <i>Nature Astronomy</i>, 3, 533–543. doi:10.1038/s41550-019-0721-3<br>
+Sugita, S., et al. (2019). "The geomorphology, color, and thermal properties of Ryugu." <i>Science</i>, 364, eaaw0422. doi:10.1126/science.aaw0422
+</p>
+
+</body>
+</html>

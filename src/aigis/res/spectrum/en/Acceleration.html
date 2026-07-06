@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: Arial, sans-serif; font-size: 12px; margin: 8px; color: #222; }
+  h1 { font-size: 14px; color: #1a4a8a; border-bottom: 2px solid #1a4a8a; padding-bottom: 4px; margin-bottom: 8px; }
+  h2 { font-size: 12px; color: #2a5a9a; border-left: 4px solid #2a5a9a; padding-left: 6px; margin: 8px 0 4px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; margin: 5px 0; }
+  th { background: #2a5a9a; color: white; padding: 3px 6px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 3px 6px; }
+  tr:nth-child(even) td { background: #f0f4ff; }
+  p { margin: 3px 0; line-height: 1.6; }
+  .box { background: #eef2ff; border-left: 3px solid #2a5a9a; padding: 4px 8px; margin: 5px 0; }
+  .note { font-size: 10px; color: #666; font-style: italic; }
+  .color-bar { height: 16px; width: 100%; background: linear-gradient(to right, #00008b, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000); border-radius: 3px; margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>Surface Acceleration</h1>
+<p>Magnitude of effective gravitational acceleration at each surface point</p>
+
+<div class="box">
+<p><b>Acceleration</b> here is the magnitude of the effective surface gravity — the vector sum of gravitational attraction and centrifugal acceleration from Ryugu's rotation. It varies across the surface because Ryugu is not a perfect sphere and rotation creates a latitude-dependent centrifugal component.</p>
+<p>Ryugu's surface gravity is roughly <b>0.11–0.15 mm/s²</b> — about 70,000× weaker than Earth's 9.8 m/s².</p>
+</div>
+
+<h2>Color Map</h2>
+<div class="color-bar"></div>
+<table>
+  <tr><th>Color</th><th>Acceleration</th><th>Region</th></tr>
+  <tr><td>Blue</td><td>Low</td><td>Equatorial region — centrifugal force partially cancels gravity</td></tr>
+  <tr><td>Green–Yellow</td><td>Medium</td><td>Mid-latitudes</td></tr>
+  <tr><td>Red</td><td>High</td><td>Polar regions — no centrifugal offset</td></tr>
+</table>
+
+<h2>Scientific Significance</h2>
+<table>
+  <tr><th>Aspect</th><th>Detail</th></tr>
+  <tr><td>Landing safety</td><td>Low-gravity equatorial regions → material escapes after impact (confirmed in Hayabusa2 touchdown)</td></tr>
+  <tr><td>Escape velocity</td><td>~0.37 m/s at equator — a gentle push can eject pebbles to space</td></tr>
+  <tr><td>Spinning-top formation</td><td>Weak equatorial gravity facilitated material migration toward equatorial ridge</td></tr>
+</table>
+
+<p class="note">Effective acceleration = surface-normal component of (gravitational + centrifugal) vector, in m/s².</p>
+
+<h2>References</h2>
+<p class="note">
+Watanabe, S., et al. (2019). "Hayabusa2 arrives at the carbonaceous asteroid 162173 Ryugu—A spinning top–shaped rubble pile." <i>Science</i>, 364, 268–272. doi:10.1126/science.aav8032<br>
+Scheeres, D.J., et al. (2019). "The dynamic geophysical environment of (162173) Ryugu based on Hayabusa2 measurements." <i>Nature Astronomy</i>, 3, 533–543. doi:10.1038/s41550-019-0721-3<br>
+Sugita, S., et al. (2019). "The geomorphology, color, and thermal properties of Ryugu." <i>Science</i>, 364, eaaw0422. doi:10.1126/science.aaw0422
+</p>
+
+</body>
+</html>

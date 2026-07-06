@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: Arial, sans-serif; font-size: 12px; margin: 8px; color: #222; }
+  h1 { font-size: 14px; color: #8a3a1a; border-bottom: 2px solid #8a3a1a; padding-bottom: 4px; margin-bottom: 8px; }
+  h2 { font-size: 12px; color: #9a5a2a; border-left: 4px solid #9a5a2a; padding-left: 6px; margin: 8px 0 4px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; margin: 5px 0; }
+  th { background: #9a5a2a; color: white; padding: 3px 6px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 3px 6px; }
+  tr:nth-child(even) td { background: #fff4ee; }
+  p { margin: 3px 0; line-height: 1.6; }
+  .box { background: #fff0e8; border-left: 3px solid #9a5a2a; padding: 4px 8px; margin: 5px 0; }
+  .note { font-size: 10px; color: #666; font-style: italic; }
+  .color-bar { height: 16px; width: 100%; background: linear-gradient(to right, #00008b, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000); border-radius: 3px; margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>Gravitational Slope (itokawa_slope 20110111)</h1>
+<p>Surface slope angle relative to effective gravity direction — computed 2011-01-11</p>
+
+<div class="box">
+<p><b>Gravitational slope</b> is the angle between the surface normal and the effective gravity vector (gravitation + centrifugal force). High slope → steep surface → material cannot remain. Low slope → flat → regolith settles. Itokawa's elongated shape creates a particularly complex gravity field with large slope variations.</p>
+</div>
+
+<h2>Color Map</h2>
+<div class="color-bar"></div>
+<table>
+  <tr><th>Color</th><th>Slope</th><th>Terrain</th></tr>
+  <tr><td>Blue–Green</td><td>0–25°</td><td>Flat — regolith stable, safe landing terrain</td></tr>
+  <tr><td>Yellow</td><td>~35°</td><td>Angle of repose — borderline stability</td></tr>
+  <tr><td>Red</td><td>&gt;35°</td><td>Steep — bare rock, active mass wasting</td></tr>
+</table>
+
+<h2>Key Features</h2>
+<table>
+  <tr><th>Region</th><th>Slope</th><th>Implication</th></tr>
+  <tr><td>MUSES Sea</td><td>Low</td><td>Stable, flat — Hayabusa landing and sample site</td></tr>
+  <tr><td>Neck (contact zone)</td><td>High</td><td>Scar of contact binary merger — unstable steep terrain</td></tr>
+  <tr><td>Boulder surfaces</td><td>Very high</td><td>Near-vertical — no regolith retention possible</td></tr>
+</table>
+
+<p class="note">20110111 = data creation date (January 11, 2011). Rotation period 12.132 hours used for centrifugal component.</p>
+
+<h2>References</h2>
+<p class="note">
+Fujiwara, A., et al. (2006). "The Rubble-Pile Asteroid Itokawa as Observed by Hayabusa." <i>Science</i>, 312(5778), 1330–1334. doi:10.1126/science.1125841<br>
+Scheeres, D.J., et al. (2006). "Hayabusa spacecraft orbit determination using differenced range data." <i>Science</i>, 312(5778), 1344–1347. doi:10.1126/science.1127521<br>
+Miyamoto, H., et al. (2007). "Regolith migration and sorting on asteroid Itokawa." <i>Science</i>, 316(5827), 1011–1014. doi:10.1126/science.1134390
+</p>
+
+</body>
+</html>

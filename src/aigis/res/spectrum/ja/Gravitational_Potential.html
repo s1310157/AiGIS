@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: "Yu Gothic", "Meiryo", sans-serif; font-size: 12px; margin: 8px; color: #222; }
+  h1 { font-size: 14px; color: #8a3a1a; border-bottom: 2px solid #8a3a1a; padding-bottom: 4px; margin-bottom: 8px; }
+  h2 { font-size: 12px; color: #9a5a2a; border-left: 4px solid #9a5a2a; padding-left: 6px; margin: 8px 0 4px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; margin: 5px 0; }
+  th { background: #9a5a2a; color: white; padding: 3px 6px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 3px 6px; }
+  tr:nth-child(even) td { background: #fff4ee; }
+  p { margin: 3px 0; line-height: 1.6; }
+  .box { background: #fff0e8; border-left: 3px solid #9a5a2a; padding: 4px 8px; margin: 5px 0; }
+  .keyword { font-weight: bold; color: #8a3a1a; }
+  .note { font-size: 10px; color: #666; font-style: italic; }
+  .color-bar { height: 16px; width: 100%; background: linear-gradient(to right, #00008b, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000); border-radius: 3px; margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>重力ポテンシャル高度（itokawa_Gpotential）</h1>
+<p>2011年1月11日基準の計算データ — 「物が自然に転がっていく先」マップ</p>
+
+<h2>かんたん説明</h2>
+<div class="box">
+<p>「<span class="keyword">重力ポテンシャル高度</span>」は、イトカワの表面でものを置いたとき<b>どの方向へ「下り坂」になるか</b>を表す数字です。</p>
+<p>イメージ：ウォータースライダーのように、水（砂）は自然に低いポテンシャルの場所へ流れます。ミューゼスの海のようなくぼみは「重力ポテンシャルが低い谷」なので、周囲から砂が集まってきたのです。</p>
+<p>イトカワの自転速度（12.132時間）と形状・密度から計算された「実効的な高さ」で、単純な「物理的な高さ（標高）」とは異なります。</p>
+</div>
+
+<h2>カラーマップの見方</h2>
+<div class="color-bar"></div>
+<table>
+  <tr><th>色</th><th>ポテンシャルの高低</th><th>物質の振る舞い</th></tr>
+  <tr><td>青</td><td>低い（谷）</td><td>物が集まってくる → 砂・細粒が堆積</td></tr>
+  <tr><td>緑〜黄</td><td>中程度</td><td>安定した地点</td></tr>
+  <tr><td>赤</td><td>高い（山）</td><td>物が流れ去る → 岩盤が露出</td></tr>
+</table>
+
+<h2>イトカワでの特徴</h2>
+<table>
+  <tr><th>場所</th><th>ポテンシャル</th><th>意味</th></tr>
+  <tr><td>ミューゼスの海</td><td>最低域のひとつ</td><td>周囲からレゴリスが自然に集まった → 平坦な砂地形</td></tr>
+  <tr><td>頭部・胴体の山頂</td><td>高い</td><td>砂が留まれず岩が露出 → ボルダー密集地帯</td></tr>
+  <tr><td>くびれ部（ネック）</td><td>低め</td><td>合体後に砂が少し集まった可能性</td></tr>
+</table>
+
+<div class="box">
+<p>・ミューゼスの海がなぜ平滑なのか → <b>ポテンシャルの谷</b>だからレゴリスが集まりやすかった<br>
+・ボルダーが頭部・胴体に多い理由 → <b>ポテンシャルが高い</b>場所では細かい砂が逃げてしまう<br>
+・<b>20110111</b>はデータ作成日（2011年1月11日）を示すファイル名の一部</p>
+</div>
+
+<p class="note">※ リュウグウの「Geopotential_Height」と同じ概念。イトカワは細長い形状のため、重力場が特に複雑で場所による差が大きい。</p>
+
+<h2>出典・参考文献</h2>
+<p class="note">
+Fujiwara, A., et al. (2006). "The Rubble-Pile Asteroid Itokawa as Observed by Hayabusa." <i>Science</i>, 312(5778), 1330–1334. doi:10.1126/science.1125841<br>
+Scheeres, D.J., et al. (2006). "Hayabusa spacecraft orbit determination using differenced range data." <i>Science</i>, 312(5778), 1344–1347. doi:10.1126/science.1127521<br>
+Hirata, N., et al. (2009). "A survey of possible impact structures on 25143 Itokawa." <i>Icarus</i>, 200(2), 486–502. doi:10.1016/j.icarus.2008.10.027
+</p>
+
+</body>
+</html>

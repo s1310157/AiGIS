@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: "Yu Gothic", "Meiryo", sans-serif; font-size: 12px; margin: 8px; color: #222; }
+  h1 { font-size: 14px; color: #8a3a1a; border-bottom: 2px solid #8a3a1a; padding-bottom: 4px; margin-bottom: 8px; }
+  h2 { font-size: 12px; color: #9a5a2a; border-left: 4px solid #9a5a2a; padding-left: 6px; margin: 8px 0 4px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; margin: 5px 0; }
+  th { background: #9a5a2a; color: white; padding: 3px 6px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 3px 6px; }
+  tr:nth-child(even) td { background: #fff4ee; }
+  p { margin: 3px 0; line-height: 1.6; }
+  .box { background: #fff0e8; border-left: 3px solid #9a5a2a; padding: 4px 8px; margin: 5px 0; }
+  .keyword { font-weight: bold; color: #8a3a1a; }
+  .note { font-size: 10px; color: #666; font-style: italic; }
+  .color-bar { height: 16px; width: 100%; background: linear-gradient(to right, #00008b, #0000ff, #00ffff, #00ff00, #ffff00, #ff8800, #ff0000); border-radius: 3px; margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>標高（Itokawa elevation）</h1>
+<p>イトカワ表面の高さ（起伏）マップ — 64面体基準形状からの偏差</p>
+
+<h2>かんたん説明</h2>
+<div class="box">
+<p>「<span class="keyword">標高</span>」は、ある基準面からの高さのことです。地球では海面（海の水面）が基準。</p>
+<p>イトカワには海がないので、「<b>64面体（64facet）の基準形状</b>」という単純化した楕円体を基準にして、各点が基準よりどのくらい出っ張っているか（高い）、へこんでいるか（低い）を表します。</p>
+<p>ボルダー（大きな岩）の場所は高く、ミューゼスの海などの平坦地形は低く表示されます。</p>
+</div>
+
+<h2>カラーマップの見方</h2>
+<div class="color-bar"></div>
+<table>
+  <tr><th>色</th><th>標高</th><th>典型的な地形</th></tr>
+  <tr><td>青</td><td>低い（くぼんでいる）</td><td>ミューゼスの海などの平坦地形</td></tr>
+  <tr><td>緑〜黄</td><td>平均的</td><td>一般的な表面</td></tr>
+  <tr><td>赤〜白</td><td>高い（出っ張っている）</td><td>大きなボルダー・ヨシノダイなどの隆起</td></tr>
+</table>
+
+<h2>注目ポイント</h2>
+<table>
+  <tr><th>地形</th><th>特徴</th><th>形成要因</th></tr>
+  <tr><td>ミューゼスの海</td><td>低い・平坦</td><td>細かいレゴリスが堆積してくぼみを埋めた</td></tr>
+  <tr><td>ヨシノダイ</td><td>高い（50m×20m）</td><td>母天体破壊時の大型破片が残存</td></tr>
+  <tr><td>頭部と胴体のくびれ</td><td>低い谷状</td><td>コンタクトバイナリーの接合部</td></tr>
+</table>
+
+<h2>地形の意味</h2>
+<div class="box">
+<p>・標高が<b>低いくぼみ</b>にはレゴリスが集まりやすい。ミューゼスの海の平滑地形はこうして形成された<br>
+・<b>大きな高台（ヨシノダイなど）</b>は衝突破壊で飛んできた巨大岩塊の生き残り<br>
+・「くびれ」部の低標高は、2つの塊が合体した痕跡（コンタクトバイナリーの証拠）</p>
+</div>
+
+<p class="note">※ 「64」は64面体（64-facet polyhedron）の意味。AMICA画像からの立体視計測により作成した形状モデルに基づく。</p>
+
+<h2>出典・参考文献</h2>
+<p class="note">
+Fujiwara, A., et al. (2006). "The Rubble-Pile Asteroid Itokawa as Observed by Hayabusa." <i>Science</i>, 312(5778), 1330–1334. doi:10.1126/science.1125841<br>
+Demura, H., et al. (2006). "Pole and Global Shape of 25143 Itokawa." <i>Science</i>, 312(5778), 1347–1349. doi:10.1126/science.1126574<br>
+Barnouin-Jha, O.S., et al. (2008). "Small-scale topography of 25143 Itokawa from the Hayabusa laser altimeter." <i>Icarus</i>, 198(1), 108–124. doi:10.1016/j.icarus.2008.05.026
+</p>
+
+</body>
+</html>

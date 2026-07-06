@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: Arial, sans-serif; font-size: 12px; margin: 8px; color: #222; }
+  h1 { font-size: 14px; color: #8a3a1a; border-bottom: 2px solid #8a3a1a; padding-bottom: 4px; margin-bottom: 8px; }
+  h2 { font-size: 12px; color: #9a5a2a; border-left: 4px solid #9a5a2a; padding-left: 6px; margin: 8px 0 4px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; margin: 5px 0; }
+  th { background: #9a5a2a; color: white; padding: 3px 6px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 3px 6px; }
+  tr:nth-child(even) td { background: #fff4ee; }
+  p { margin: 3px 0; line-height: 1.6; }
+  .box { background: #fff0e8; border-left: 3px solid #9a5a2a; padding: 4px 8px; margin: 5px 0; }
+  .note { font-size: 10px; color: #666; font-style: italic; }
+  .color-bar { height: 16px; width: 100%; background: linear-gradient(to right, #00008b, #0000ff, #00ffff, #00ff00, #ffff00, #ff8800, #ff0000); border-radius: 3px; margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>Itokawa Elevation (64-facet reference)</h1>
+<p>Surface relief map — deviation from a simplified 64-facet reference ellipsoid</p>
+
+<div class="box">
+<p><b>Elevation</b> here is the deviation of the actual surface from a simplified 64-facet polyhedron reference shape. Unlike geopotential height, this is purely geometric — how much the surface protrudes above or sinks below the reference shape. Boulders appear as high points; MUSES Sea appears as a low depression.</p>
+</div>
+
+<h2>Color Map</h2>
+<div class="color-bar"></div>
+<table>
+  <tr><th>Color</th><th>Elevation</th><th>Terrain type</th></tr>
+  <tr><td>Blue</td><td>Below reference</td><td>Flat depressions — regolith-filled areas (MUSES Sea)</td></tr>
+  <tr><td>Green–Yellow</td><td>Near reference</td><td>Average surface</td></tr>
+  <tr><td>Red–White</td><td>Above reference</td><td>Boulders, ridges, Yoshinodai</td></tr>
+</table>
+
+<h2>Key Landforms</h2>
+<table>
+  <tr><th>Feature</th><th>Elevation</th><th>Formation</th></tr>
+  <tr><td>MUSES Sea</td><td>Low, flat</td><td>Regolith accumulated in low-geopotential depression</td></tr>
+  <tr><td>Yoshinodai (~50×20 m)</td><td>Very high</td><td>Surviving fragment from parent body disruption</td></tr>
+  <tr><td>Neck (contact zone)</td><td>Low valley</td><td>Contact surface from binary merger</td></tr>
+</table>
+
+<p class="note">"64" refers to the 64-facet polyhedron reference shape. Derived from AMICA stereo imaging of the Gaskell shape model.</p>
+
+<h2>References</h2>
+<p class="note">
+Fujiwara, A., et al. (2006). "The Rubble-Pile Asteroid Itokawa as Observed by Hayabusa." <i>Science</i>, 312(5778), 1330–1334. doi:10.1126/science.1125841<br>
+Demura, H., et al. (2006). "Pole and Global Shape of 25143 Itokawa." <i>Science</i>, 312(5778), 1347–1349. doi:10.1126/science.1126574<br>
+Barnouin-Jha, O.S., et al. (2008). "Small-scale topography of 25143 Itokawa from the Hayabusa laser altimeter." <i>Icarus</i>, 198(1), 108–124. doi:10.1016/j.icarus.2008.05.026
+</p>
+
+</body>
+</html>
