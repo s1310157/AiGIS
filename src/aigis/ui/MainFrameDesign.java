@@ -159,7 +159,7 @@ public class MainFrameDesign extends JFrame {
 		mntmOpen = new JMenuItem(t("j.open"));
 		mnFileMenu.add(mntmOpen);
 
-		mntmOpenNewScene = new JMenuItem("Open in New Scene...");
+		mntmOpenNewScene = new JMenuItem(t("j.add"));
 		mnFileMenu.add(mntmOpenNewScene);
 
 		mntmSaveSS = new JMenuItem(t("j.save"));
