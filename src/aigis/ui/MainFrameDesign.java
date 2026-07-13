@@ -261,8 +261,8 @@ public class MainFrameDesign extends JFrame {
             ButtonGroup langGroup = new ButtonGroup();
             Locale current = I18n.getLocale();
 
-			Locale[] supportedLocales = { Locale.JAPANESE, Locale.ENGLISH };
-			String[] langKeys = { "j.lang.ja", "j.lang.en" };
+			Locale[] supportedLocales = { Locale.JAPANESE, Locale.ENGLISH, Locale.CHINESE};
+			String[] langKeys = { "j.lang.ja", "j.lang.en", "j.lang.zh"};
 
             for (int i = 0; i < supportedLocales.length; i++) {
                 Locale locale = supportedLocales[i];
