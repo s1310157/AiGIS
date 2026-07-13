@@ -226,6 +226,13 @@ public class MainFrame extends MainFrameDesign {
 					buildModelList();
 					String title = scene.getTitle();
 					setTitle("AiGIS" + (title == null ? "" : " -" + title + "-"));
+					// the texture table shows the textures of the active scene
+					if (texModel != null) {
+						if (getTexInfoTable().getCellEditor() != null) {
+							getTexInfoTable().getCellEditor().stopCellEditing();
+						}
+						texModel.fireTableDataChanged();
+					}
 				}
 				int polygonID = rendere.getPolygonID();
 				LatLon info = rendere.selectPolygon(polygonID, false);
@@ -492,7 +499,7 @@ public class MainFrame extends MainFrameDesign {
 		ActionListener imageAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == imageOpen || e.getSource() == MainFrame.this.getBtnAddTex()) {
-					if (!window.textures.canAddTexture()) {
+					if (!scene.textures.canAddTexture()) {
 						String msg = t("j.noadd");
 						JOptionPane.showMessageDialog(MainFrame.this, msg, t("j.warning"), JOptionPane.WARNING_MESSAGE);
 						return;
@@ -504,7 +511,7 @@ public class MainFrame extends MainFrameDesign {
 						return;
 					}
 					try {
-						window.textures.addTexture(dialog.imageFile, dialog.infoFile, dialog.rotateAngle,
+						scene.textures.addTexture(dialog.imageFile, dialog.infoFile, dialog.rotateAngle,
 								dialog.flipType);
 						texModel.fireTableDataChanged();
 					} catch (Exception ex) {
@@ -718,7 +725,7 @@ public class MainFrame extends MainFrameDesign {
 					if (idx < 0)
 						return;
 					int row = texInfoTable.convertRowIndexToModel(idx);
-					Setting tex = window.textures.getTexsInfo().get(row);
+					Setting tex = scene.textures.getTexsInfo().get(row);
 					dialog.setTextureSetting(tex);
 					dialog.setVisible(true);
 				}
@@ -730,9 +737,9 @@ public class MainFrame extends MainFrameDesign {
 			@Override
 			public void actionPerformed(JTable table, int row, int column, boolean check) {
 				if (column == 5) {
-					window.textures.getTexsInfo().get(row).showFrustum = check;
+					scene.textures.getTexsInfo().get(row).showFrustum = check;
 				} else {
-					window.textures.activate(row, column - 1, check);
+					scene.textures.activate(row, column - 1, check);
 				}
 				glPanel.repaint();
 			}
@@ -742,7 +749,7 @@ public class MainFrame extends MainFrameDesign {
 		ButtonCellEditor texUpCellEditor = new ButtonCellEditor("↑", new CellEventListener() {
 			@Override
 			public void actionPerformed(JTable table, int row, int column, boolean check) {
-				window.textures.upOrder(row);
+				scene.textures.upOrder(row);
 				texInfoTable.changeSelection(row, 0, true, false);
 				texInfoTable.changeSelection(row - 1, 0, true, false);
 				glPanel.repaint();
@@ -753,7 +760,7 @@ public class MainFrame extends MainFrameDesign {
 		ButtonCellEditor texDelCellEditor = new ButtonCellEditor("x", new CellEventListener() {
 			@Override
 			public void actionPerformed(JTable table, int row, int column, boolean check) {
-				window.textures.removeTexture(row);
+				scene.textures.removeTexture(row);
 				glPanel.repaint();
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
@@ -1057,7 +1064,7 @@ public class MainFrame extends MainFrameDesign {
 						frame.setVisible(false);
 					}
 					chartFrames.clear();
-					window.textures.clearTextures();
+					scene.textures.clearTextures();
 				}
 
 				dialog.setLocationRelativeTo(MainFrame.this);
@@ -1233,15 +1240,15 @@ public class MainFrame extends MainFrameDesign {
 
 		@Override
 		public int getRowCount() {
-			if (window.textures == null)
+			if (scene.textures == null)
 				return 0;
-			ArrayList<Setting> texs = window.textures.getTexsInfo();
+			ArrayList<Setting> texs = scene.textures.getTexsInfo();
 			return texs.size();
 		}
 
 		@Override
 		public Object getValueAt(int row, int col) {
-			Setting tex = window.textures.getTexsInfo().get(row);
+			Setting tex = scene.textures.getTexsInfo().get(row);
 			if (col == 0) {
 				return tex.imageFile.getName();
 			} else {

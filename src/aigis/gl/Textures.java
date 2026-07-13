@@ -91,8 +91,31 @@ public class Textures {
 	private LinkedList<Integer> uvs = new LinkedList<>();
 	/** Max texture units */
 	private int maxTex = 0;
+	/** Whether init(gl) has been called */
+	private boolean initialized = false;
+
+	/**
+	 * Create textures without GL. Call init(gl) before use.
+	 * A Scene owns its Textures, but the GL context is not
+	 * available when a Scene is created.
+	 */
+	public Textures() {
+	}
 
 	public Textures(GL2 gl) {
+		init(gl);
+	}
+
+	/**
+	 * Initialize with the GL context. Does nothing after the first call.
+	 *
+	 * @param gl
+	 */
+	public void init(GL2 gl) {
+		if (initialized) {
+			return;
+		}
+		initialized = true;
 		int max[] = new int[1];
 		gl.glGetIntegerv(GL2.GL_MAX_TEXTURE_UNITS, max, 0);
 		maxTex = max[0];

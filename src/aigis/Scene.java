@@ -10,6 +10,7 @@ import java.util.List;
 import com.jogamp.opengl.GL2;
 
 import aigis.gl.ColorBar;
+import aigis.gl.Textures;
 import aigis.model.ChartData;
 import aigis.model.General3D;
 import aigis.model.Model;
@@ -30,6 +31,9 @@ import aigis.ui.LoadingDialog;
 public class Scene {
 
 	public ColorBar colorbar = new ColorBar();
+
+	/** Textures projected on the models of this scene. Initialized with GL on first display. */
+	public Textures textures = new Textures();
 
 	private SettingModel settings = new SettingModel();
 	private Models registeredModels = new Models();
