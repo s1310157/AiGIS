@@ -47,11 +47,9 @@ import aigis.Logger;
 import aigis.Scene;
 import aigis.SceneManager;
 import aigis.gl.Renderer;
-import aigis.gl.Textures;
 import aigis.model.CameraInfo;
 import aigis.model.LatLon;
 import aigis.model.ModelSelection.Resolution;
-import aigis.model.Models;
 
 /***
  * 4 parts window.
@@ -72,7 +70,6 @@ public class GLSplitWindow {
 
 	private GL2 gl;
 	private Renderer renderers[] = new Renderer[4];
-	public Textures textures;
 	private GLJPanel glPanel = null;
 	private int division = 1;
 	private Dimension divideSize;
@@ -328,22 +325,25 @@ public class GLSplitWindow {
 
 				try {
 					sceneManager.compile(gl);
-					Models models = sceneManager.getActiveScene().getRegisteredModels();
 
-					try {
-						textures.initTexture(gl, models);
-					} catch (RuntimeException e) {
-						Logger.Error(e);
-						String msg = e.getMessage();
-						JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), t("j.error"),
-								JOptionPane.WARNING_MESSAGE);
+					// each scene owns its textures; build UVs against its own models
+					for (Scene s : sceneManager.getScenes()) {
+						s.textures.init(gl);
+						try {
+							s.textures.initTexture(gl, s.getRegisteredModels());
+						} catch (RuntimeException e) {
+							Logger.Error(e);
+							String msg = e.getMessage();
+							JOptionPane.showMessageDialog(null, msg != null ? msg : e.getClass(), t("j.error"),
+									JOptionPane.WARNING_MESSAGE);
+						}
 					}
 
 					gl.glMatrixMode(GL_MODELVIEW);
 
 					for (int i = 0; i < division; i++) {
 						setViewPort(i);
-						renderers[i].render(gl, textures, i);
+						renderers[i].render(gl, renderers[i].getScene().textures, i);
 					}
 					drawFrame();
 				} catch (Exception e) {
@@ -565,7 +565,6 @@ public class GLSplitWindow {
 		FloatBuffer glGetBuf = com.jogamp.common.nio.Buffers.newDirectFloatBuffer(2);
 		gl.glGetFloatv(GL2.GL_LINE_WIDTH_RANGE, glGetBuf);
 		Logger.Debug("LINE_WIDTH: " + glGetBuf.get(0) + "~" + glGetBuf.get(1));
-		textures = new Textures(gl);
 
 		// VBOが使えない場合は終了
 		if (enabledVBO == false) {
