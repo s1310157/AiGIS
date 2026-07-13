@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: Arial, sans-serif; font-size: 12px; margin: 8px; color: #222; }
+  h1 { font-size: 14px; color: #1a4a8a; border-bottom: 2px solid #1a4a8a; padding-bottom: 4px; margin-bottom: 8px; }
+  h2 { font-size: 12px; color: #2a5a9a; border-left: 4px solid #2a5a9a; padding-left: 6px; margin: 8px 0 4px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; margin: 5px 0; }
+  th { background: #2a5a9a; color: white; padding: 3px 6px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 3px 6px; }
+  tr:nth-child(even) td { background: #f0f4ff; }
+  p { margin: 3px 0; line-height: 1.6; }
+  .box { background: #eef2ff; border-left: 3px solid #2a5a9a; padding: 4px 8px; margin: 5px 0; }
+  .note { font-size: 10px; color: #666; font-style: italic; }
+  .color-bar { height: 16px; width: 100%; background: linear-gradient(to right, #00008b, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000); border-radius: 3px; margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>Gravitational Slope</h1>
+<p>Current rotation period (7.63 hours)</p>
+
+<div class="box">
+<p><b>Gravitational slope</b> is the angle between the surface normal and the direction of the effective gravity vector (gravitational attraction + centrifugal force from rotation). It indicates how "steep" the surface is from a particle's perspective — the direction a ball would roll.</p>
+<p>High slope (red) → steep surface, material cannot accumulate.<br>
+Low slope (blue) → flat surface, regolith settles and accumulates.</p>
+</div>
+
+<h2>Color Map</h2>
+<div class="color-bar"></div>
+<table>
+  <tr><th>Color</th><th>Slope</th><th>Terrain</th></tr>
+  <tr><td>Blue–Green</td><td>0–20°</td><td>Flat — regolith accumulates</td></tr>
+  <tr><td>Yellow</td><td>~35°</td><td>Angle of repose — material at equilibrium</td></tr>
+  <tr><td>Red</td><td>&gt;35°</td><td>Steep — bare rock, active erosion</td></tr>
+</table>
+
+<h2>Key Features on Ryugu</h2>
+<table>
+  <tr><th>Region</th><th>Characteristic</th></tr>
+  <tr><td>Equatorial ridge</td><td>High slope — evidence of YORP spin-up piling material at equator</td></tr>
+  <tr><td>Flat mid-latitude regions</td><td>Low slope — Hayabusa2 landing site candidates</td></tr>
+  <tr><td>Urashima crater rim</td><td>Complex slope distribution from impact</td></tr>
+</table>
+
+<p class="note">Data computed from SFM shape model (Hayabusa2). Effective gravity = gravitational + centrifugal acceleration at 7.63-hr rotation.</p>
+
+<h2>References</h2>
+<p class="note">
+Watanabe, S., et al. (2019). "Hayabusa2 arrives at the carbonaceous asteroid 162173 Ryugu." <i>Science</i>, 364, 268–272. doi:10.1126/science.aav8032<br>
+Scheeres, D.J., et al. (2019). "The dynamic geophysical environment of (162173) Ryugu based on Hayabusa2 measurements." <i>Nature Astronomy</i>, 3, 533–543. doi:10.1038/s41550-019-0721-3<br>
+Sugita, S., et al. (2019). "The geomorphology, color, and thermal properties of Ryugu." <i>Science</i>, 364, eaaw0422. doi:10.1126/science.aaw0422
+</p>
+
+</body>
+</html>

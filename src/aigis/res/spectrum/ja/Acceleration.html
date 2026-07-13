@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: "Yu Gothic", "Meiryo", sans-serif; font-size: 12px; margin: 8px; color: #222; }
+  h1 { font-size: 14px; color: #1a4a8a; border-bottom: 2px solid #1a4a8a; padding-bottom: 4px; margin-bottom: 8px; }
+  h2 { font-size: 12px; color: #2a5a9a; border-left: 4px solid #2a5a9a; padding-left: 6px; margin: 8px 0 4px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; margin: 5px 0; }
+  th { background: #2a5a9a; color: white; padding: 3px 6px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 3px 6px; }
+  tr:nth-child(even) td { background: #f0f4ff; }
+  p { margin: 3px 0; line-height: 1.6; }
+  .box { background: #eef2ff; border-left: 3px solid #2a5a9a; padding: 4px 8px; margin: 5px 0; }
+  .keyword { font-weight: bold; color: #1a4a8a; }
+  .note { font-size: 10px; color: #666; font-style: italic; }
+  .color-bar { height: 16px; width: 100%; background: linear-gradient(to right, #00008b, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000); border-radius: 3px; margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>重力加速度（Acceleration）</h1>
+<p>表面の各点で感じる重力の強さのマップ</p>
+
+<h2>かんたん説明</h2>
+<div class="box">
+<p>「<span class="keyword">重力加速度</span>」とは、物体が重力で引っ張られる強さです。</p>
+<p>地球では約<b>9.8 m/s²</b>（毎秒9.8 m/sずつ速くなる）。リュウグウではなんと<b>約0.00011〜0.00015 m/s²</b>しかなく、地球の約<b>7〜9万分の1</b>！</p>
+<p>なぜ場所によって違うの？　→　リュウグウは球体ではなく「コマ型」なので、赤道付近では自転の遠心力が重力を打ち消し、極付近では遠心力が小さいため重力が相対的に強く感じます。</p>
+</div>
+
+<h2>カラーマップの見方</h2>
+<div class="color-bar"></div>
+<table>
+  <tr><th>色</th><th>加速度の大きさ</th><th>場所の特徴</th></tr>
+  <tr><td>青</td><td>小（弱い重力）</td><td>赤道付近 — 遠心力で重力が相殺されやすい</td></tr>
+  <tr><td>緑〜黄</td><td>中程度</td><td>中緯度</td></tr>
+  <tr><td>赤</td><td>大（強い重力）</td><td>極付近・くぼみの底 — 重力が集中</td></tr>
+</table>
+
+<h2>地球との比較</h2>
+<table>
+  <tr><th>天体</th><th>表面重力加速度</th><th>体重60 kgの人の「重さ」</th></tr>
+  <tr><td>地球</td><td>9.8 m/s²</td><td>60 kg</td></tr>
+  <tr><td>月</td><td>1.6 m/s²</td><td>約10 kg</td></tr>
+  <tr><td><b>リュウグウ</b></td><td><b>約0.00013 m/s²</b></td><td><b>約0.8 g（はがき1枚分）</b></td></tr>
+</table>
+
+<h2>このデータが教えてくれること</h2>
+<div class="box">
+<p>・<b>探査機着地の安全評価</b>：重力が弱い場所では着地後にバウンドしやすい（実際はやぶさ2も複数回バウンド）<br>
+・<b>物質エスケープ速度</b>：重力が弱い赤道付近では、砂粒が衝突の弾みで宇宙へ飛び出しやすい<br>
+・<b>コマ型形成の証拠</b>：赤道の弱重力域と極の強重力域の分布が、自転加速による物質移動を示す</p>
+</div>
+
+<p class="note">※ ここでの「加速度」は重力引力と自転遠心力を合成した「実効重力加速度（表面法線方向成分）」の絶対値。単位はm/s²。</p>
+
+<h2>出典・参考文献</h2>
+<p class="note">
+Watanabe, S., et al. (2019). "Hayabusa2 arrives at the carbonaceous asteroid 162173 Ryugu—A spinning top–shaped rubble pile." <i>Science</i>, 364, 268–272. doi:10.1126/science.aav8032<br>
+Scheeres, D.J., et al. (2019). "The dynamic geophysical environment of (162173) Ryugu based on Hayabusa2 measurements." <i>Nature Astronomy</i>, 3, 533–543. doi:10.1038/s41550-019-0721-3<br>
+Sugita, S., et al. (2019). "The geomorphology, color, and thermal properties of Ryugu." <i>Science</i>, 364, eaaw0422. doi:10.1126/science.aaw0422
+</p>
+
+</body>
+</html>

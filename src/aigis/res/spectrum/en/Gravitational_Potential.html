@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: Arial, sans-serif; font-size: 12px; margin: 8px; color: #222; }
+  h1 { font-size: 14px; color: #8a3a1a; border-bottom: 2px solid #8a3a1a; padding-bottom: 4px; margin-bottom: 8px; }
+  h2 { font-size: 12px; color: #9a5a2a; border-left: 4px solid #9a5a2a; padding-left: 6px; margin: 8px 0 4px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; margin: 5px 0; }
+  th { background: #9a5a2a; color: white; padding: 3px 6px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 3px 6px; }
+  tr:nth-child(even) td { background: #fff4ee; }
+  p { margin: 3px 0; line-height: 1.6; }
+  .box { background: #fff0e8; border-left: 3px solid #9a5a2a; padding: 4px 8px; margin: 5px 0; }
+  .note { font-size: 10px; color: #666; font-style: italic; }
+  .color-bar { height: 16px; width: 100%; background: linear-gradient(to right, #00008b, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000); border-radius: 3px; margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>Geopotential Height (itokawa_Gpotential 20110111)</h1>
+<p>Where material naturally flows — computed 2011-01-11</p>
+
+<div class="box">
+<p><b>Geopotential height</b> is the effective topographic height accounting for both gravity and rotation. Material spontaneously flows from high to low geopotential, like water flowing downhill. On Itokawa (rotation period 12.132 hours), the complex elongated shape creates a highly irregular potential field.</p>
+</div>
+
+<h2>Color Map</h2>
+<div class="color-bar"></div>
+<table>
+  <tr><th>Color</th><th>Geopotential</th><th>Material behavior</th></tr>
+  <tr><td>Blue</td><td>Low (valley)</td><td>Material converges — regolith accumulates (e.g., MUSES Sea)</td></tr>
+  <tr><td>Green–Yellow</td><td>Intermediate</td><td>Stable surface</td></tr>
+  <tr><td>Red</td><td>High (hill)</td><td>Material disperses — bare rock, boulder exposure</td></tr>
+</table>
+
+<h2>Key Features</h2>
+<table>
+  <tr><th>Region</th><th>Geopotential</th><th>Implication</th></tr>
+  <tr><td>MUSES Sea</td><td>Lowest</td><td>Regolith natural convergence point → Hayabusa sampling site</td></tr>
+  <tr><td>Head &amp; body summits</td><td>High</td><td>Fine particles escape → boulder-rich terrain</td></tr>
+  <tr><td>Neck region</td><td>Relatively low</td><td>Possible regolith inflow after contact binary merger</td></tr>
+</table>
+
+<p class="note">20110111 = data creation date (January 11, 2011). Geopotential = gravitational + centrifugal potential, converted to height (m) via g_eff.</p>
+
+<h2>References</h2>
+<p class="note">
+Fujiwara, A., et al. (2006). "The Rubble-Pile Asteroid Itokawa as Observed by Hayabusa." <i>Science</i>, 312(5778), 1330–1334. doi:10.1126/science.1125841<br>
+Scheeres, D.J., et al. (2006). "Hayabusa spacecraft orbit determination using differenced range data." <i>Science</i>, 312(5778), 1344–1347. doi:10.1126/science.1127521<br>
+Hirata, N., et al. (2009). "A survey of possible impact structures on 25143 Itokawa." <i>Icarus</i>, 200(2), 486–502. doi:10.1016/j.icarus.2008.10.027
+</p>
+
+</body>
+</html>

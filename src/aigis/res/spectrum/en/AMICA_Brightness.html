@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: Arial, sans-serif; font-size: 12px; margin: 8px; color: #222; }
+  h1 { font-size: 14px; color: #8a3a1a; border-bottom: 2px solid #8a3a1a; padding-bottom: 4px; margin-bottom: 8px; }
+  h2 { font-size: 12px; color: #9a5a2a; border-left: 4px solid #9a5a2a; padding-left: 6px; margin: 8px 0 4px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; margin: 5px 0; }
+  th { background: #9a5a2a; color: white; padding: 3px 6px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 3px 6px; }
+  tr:nth-child(even) td { background: #fff4ee; }
+  p { margin: 3px 0; line-height: 1.6; }
+  .box { background: #fff0e8; border-left: 3px solid #9a5a2a; padding: 4px 8px; margin: 5px 0; }
+  .note { font-size: 10px; color: #666; font-style: italic; }
+  .color-bar { height: 16px; width: 100%; background: linear-gradient(to right, #000000, #555555, #aaaaaa, #ffffff); border-radius: 3px; margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>AMICA Brightness</h1>
+<p>Surface reflectance map from Hayabusa's AMICA multiband imager</p>
+
+<div class="box">
+<p><b>AMICA</b> (Asteroid Multiband Imaging Camera) on Hayabusa captured images in 8 bands (0.38–1.01 μm). This map shows the <b>reflectance (brightness)</b> of Itokawa's surface in the v-band (visible light). Bright areas reflect more sunlight; dark areas absorb more.</p>
+<p>Brightness variations reveal <b>mineralogy, space weathering degree, and surface texture</b> differences across the surface.</p>
+</div>
+
+<h2>Color Map</h2>
+<div class="color-bar"></div>
+<table>
+  <tr><th>Color</th><th>Brightness</th><th>Surface Interpretation</th></tr>
+  <tr><td>White–Light gray</td><td>High reflectance</td><td>Fresh rock surfaces, boulder faces with less weathering</td></tr>
+  <tr><td>Medium gray</td><td>Average</td><td>Typical regolith-covered terrain</td></tr>
+  <tr><td>Dark gray–Black</td><td>Low reflectance</td><td>Heavily space-weathered surface, fine-grained regolith</td></tr>
+</table>
+
+<h2>Key Findings</h2>
+<table>
+  <tr><th>Feature</th><th>Significance</th></tr>
+  <tr><td>MUSES Sea uniformity</td><td>Thick regolith deposit — Hayabusa sample collection site</td></tr>
+  <tr><td>Boulder surfaces</td><td>Brighter patches — fresher material exposed by seismic shaking or impacts</td></tr>
+  <tr><td>Overall albedo ~0.30</td><td>Typical S-type (silicate) asteroid — much brighter than Ryugu (0.047)</td></tr>
+</table>
+
+<div class="box">
+<p><b>Space weathering</b>: Hayabusa returned particles confirmed nanoscale metallic iron inclusions at the outermost surface (few nm depth), formed by solar wind implantation. These particles cause spectral reddening and darkening — the mechanism of space weathering revealed for the first time.</p>
+</div>
+
+<p class="note">v-band reflectance (visual), normalized per Hapke photometric model. AMICA instrument: 8-band filter wheel, field of view 5.83° × 5.69°.</p>
+
+<h2>References</h2>
+<p class="note">
+Saito, J., et al. (2006). "Detailed Images of Asteroid 25143 Itokawa from Hayabusa." <i>Science</i>, 312(5778), 1341–1344. doi:10.1126/science.1125974<br>
+Abe, M., et al. (2006). "Near-Infrared Spectral Results of Asteroid Itokawa from the Hayabusa Spacecraft." <i>Science</i>, 312(5778), 1334–1338. doi:10.1126/science.1125718<br>
+Ishiguro, M., et al. (2007). "Global mapping of the degree of space weathering on asteroid 25143 Itokawa by Hayabusa/AMICA observations." <i>Meteoritics &amp; Planetary Science</i>, 42(10), 1791–1800.
+</p>
+
+</body>
+</html>
