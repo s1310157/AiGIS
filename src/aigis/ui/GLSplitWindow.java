@@ -326,8 +326,15 @@ public class GLSplitWindow {
 				try {
 					sceneManager.compile(gl);
 
-					// each scene owns its textures; build UVs against its own models
-					for (Scene s : sceneManager.getScenes()) {
+					// each scene owns its textures; only build UVs for scenes a view is
+					// actually displaying, not every scene ever loaded this session
+					java.util.Set<Scene> visibleScenes = new java.util.LinkedHashSet<>();
+					for (Renderer r : renderers) {
+						if (r != null) {
+							visibleScenes.add(r.getScene());
+						}
+					}
+					for (Scene s : visibleScenes) {
 						s.textures.init(gl);
 						try {
 							s.textures.initTexture(gl, s.getRegisteredModels());

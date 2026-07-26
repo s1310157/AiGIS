@@ -140,7 +140,6 @@ public class MainFrame extends MainFrameDesign {
 
 		// Menu Components
 		JMenuItem fileOpen = this.getMntmOpen();
-		JMenuItem fileOpenNewScene = this.getMntmOpenNewScene();
 		JMenuItem fileSaveSS = this.getMntmSaveSS();
 		JMenuItem fileAbout = this.getMntmAbout();
 		JMenuItem fileSettings = this.getMntmSettings();
@@ -368,9 +367,6 @@ public class MainFrame extends MainFrameDesign {
 		ActionListener fileAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == fileOpen) {
-					openFile(false, false);
-				}
-				if (e.getSource() == fileOpenNewScene) {
 					openFile(false, true);
 				}
 				if (e.getSource() == fileSaveSS) {
@@ -403,7 +399,6 @@ public class MainFrame extends MainFrameDesign {
 			}
 		};
 		fileOpen.addActionListener(fileAction);
-		fileOpenNewScene.addActionListener(fileAction);
 		fileSaveSS.addActionListener(fileAction);
 		fileAbout.addActionListener(fileAction);
 		fileSettings.addActionListener(fileAction);
