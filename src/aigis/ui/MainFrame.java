@@ -1071,6 +1071,9 @@ public class MainFrame extends MainFrameDesign {
 						try {
 							JCheckBoxMenuItem mapSortByName = getChckbxmntmByName();
 							if (newScene) {
+								// free the replaced scene's GPU memory before parsing the
+								// new one, so the two don't have to fit in memory at once
+								window.releaseActiveSceneIfOrphaned();
 								// load into a new scene and show it in the active view
 								Scene loaded = sceneManager.loadNewScene(file, dialog, mapSortByName.isSelected());
 								setTitle("AiGIS");

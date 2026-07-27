@@ -150,6 +150,21 @@ public class Textures {
 		return texs;
 	}
 
+	/***
+	 * Release all texture objects.
+	 *
+	 * @param gl
+	 */
+	public void dispose(GL2 gl) {
+		for (Setting st : texs) {
+			if (st.tex != null) {
+				st.tex.destroy(gl);
+				st.tex = null;
+			}
+		}
+		texs.clear();
+	}
+
 	/**
 	 * 
 	 * @return

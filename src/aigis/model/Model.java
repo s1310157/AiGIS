@@ -540,6 +540,19 @@ public class Model {
 	public float getShiness() {
 		return shiness;
 	}
+
+	/***
+	 * Release the VBOs held by this model.
+	 *
+	 * @param gl
+	 */
+	public void dispose(GL2 gl) {
+		int[] ids = { vboIdVertex, vboIdNormal, vboIdColor };
+		gl.glDeleteBuffers(ids.length, ids, 0);
+		if (vboIdUVs != null) {
+			gl.glDeleteBuffers(vboIdUVs.length, vboIdUVs, 0);
+		}
+	}
 }
 
 // EOF
