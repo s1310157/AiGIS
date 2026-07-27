@@ -39,6 +39,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
+import com.jogamp.opengl.GLRunnable;
 import com.jogamp.opengl.awt.GLJPanel;
 
 import static aigis.i18n.I18n.t;
@@ -324,16 +325,30 @@ public class GLSplitWindow {
 				gl.glBindTexture(GL.GL_TEXTURE_2D, 0);
 
 				try {
-					sceneManager.compile(gl);
-
-					// each scene owns its textures; only build UVs for scenes a view is
-					// actually displaying, not every scene ever loaded this session
+					// determine which scenes are actually shown by a view right now
 					java.util.Set<Scene> visibleScenes = new java.util.LinkedHashSet<>();
 					for (Renderer r : renderers) {
 						if (r != null) {
 							visibleScenes.add(r.getScene());
 						}
 					}
+
+					// release scenes no longer displayed by any view
+					for (Scene s : new java.util.ArrayList<>(sceneManager.getScenes())) {
+						if (!visibleScenes.contains(s)) {
+							sceneManager.removeScene(s);
+							try {
+								s.dispose(gl);
+							} catch (Exception e) {
+								Logger.Error(e);
+							}
+						}
+					}
+
+					sceneManager.compile(gl);
+
+					// each scene owns its textures; only build UVs for scenes a view is
+					// actually displaying, not every scene ever loaded this session
 					for (Scene s : visibleScenes) {
 						s.textures.init(gl);
 						try {
@@ -518,6 +533,40 @@ public class GLSplitWindow {
 			eventListener.cameraMoved(renderers[0].getCameraInfo());
 		}
 		glPanel.repaint();
+	}
+
+	/***
+	 * Release the GPU resources of the scene currently shown by the active
+	 * view, if no other view is displaying it. Call this before loading a
+	 * replacement scene so the old and new scene's data don't both have to
+	 * fit in memory at the same time. Safe to call from a background thread;
+	 * the actual GL calls are dispatched onto the render thread and this
+	 * call blocks until they finish.
+	 */
+	public void releaseActiveSceneIfOrphaned() {
+		if (sceneManager.getScenes().size() <= 1) {
+			// never dispose the last remaining scene
+			return;
+		}
+		final Scene current = renderers[currentScreen].getScene();
+		for (int i = 0; i < renderers.length; i++) {
+			if (i != currentScreen && renderers[i] != null && renderers[i].getScene() == current) {
+				// still displayed by another view
+				return;
+			}
+		}
+		sceneManager.removeScene(current);
+		glPanel.invoke(true, new GLRunnable() {
+			@Override
+			public boolean run(GLAutoDrawable drawable) {
+				try {
+					current.dispose(drawable.getGL().getGL2());
+				} catch (Exception e) {
+					Logger.Error(e);
+				}
+				return true;
+			}
+		});
 	}
 
 	/***

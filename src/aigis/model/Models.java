@@ -50,6 +50,18 @@ public class Models {
 		return compiled;
 	}
 
+	/***
+	 * Release the VBOs held by all models.
+	 *
+	 * @param gl
+	 */
+	public void dispose(GL2 gl) {
+		for (Model model : models.values()) {
+			model.dispose(gl);
+		}
+		compiled = false;
+	}
+
 }
 
 // EOF

@@ -348,4 +348,14 @@ public class Scene {
 	public double getModelSize() {
 		return modelSize;
 	}
+
+	/***
+	 * Release the GPU resources (VBOs and textures) held by this scene.
+	 *
+	 * @param gl
+	 */
+	public void dispose(GL2 gl) {
+		registeredModels.dispose(gl);
+		textures.dispose(gl);
+	}
 }

@@ -46,6 +46,26 @@ public class SceneManager {
 	}
 
 	/***
+	 * Remove a scene that is no longer displayed by any view.
+	 * The last remaining scene is never removed.
+	 *
+	 * @param scene
+	 */
+	public void removeScene(Scene scene) {
+		if (scenes.size() <= 1) {
+			return;
+		}
+		int index = scenes.indexOf(scene);
+		if (index < 0) {
+			return;
+		}
+		scenes.remove(index);
+		if (activeIndex >= scenes.size()) {
+			activeIndex = scenes.size() - 1;
+		}
+	}
+
+	/***
 	 * Get the index of the scene.
 	 *
 	 * @param scene
